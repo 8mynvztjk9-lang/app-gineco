@@ -39,7 +39,9 @@
       "Bash(rm -f /Users/alessandroferrero/Desktop/qr-PRUEBA-movil.png /Users/alessandroferrero/Desktop/qr-VIEJO-no-usar.png /Users/alessandroferrero/Desktop/qr-app-gineco.png)",
       "Bash(grep -oiE '.{30}\\(corre al ba|al ba.o|urgencia.{0,30}ba.o|🚽|🏃|running|corriendo|llega al ba\\).{30}' anim-incontinencia-urgencia.html)",
       "Bash(grep -oiE 'position:\\\\s*\\(absolute|fixed\\)[^\"]{0,80}' anim-incontinencia-urgencia.html)",
-      "Bash(grep -oiE 'display:\\\\s*grid[^\"]{0,90}|grid-template-columns:[^\";]{0,80}|display:\\\\s*flex[^\"]{0,60}' simulador-kegel.html)"
+      "Bash(grep -oiE 'display:\\\\s*grid[^\"]{0,90}|grid-template-columns:[^\";]{0,80}|display:\\\\s*flex[^\"]{0,60}' simulador-kegel.html)",
+      "Bash(grep -oE '.{120}🏃[^<]{0,10}' anim-incontinencia-urgencia.html)",
+      "Bash(grep -oE '<div[^>]*>[^<]*🏃[^<]*<[^>]*>[^<]{0,60}' anim-incontinencia-urgencia.html)"
     ]
   }
 }

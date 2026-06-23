@@ -679,7 +679,10 @@
                     // la fila de los 4 pasos (01-04) se reorganiza si no cabe
                     'div[style*="gap:10px"],div[style*="gap: 10px"]{flex-wrap:wrap !important;}' +
                     'div[style*="gap:10px"]>*,div[style*="gap: 10px"]>*{flex:1 1 40% !important;min-width:0 !important;}' +
-                    'html,body{overflow-x:hidden !important;overflow-y:auto !important;height:auto !important;}';
+                    // que TODO fluya y se desplace (el temporizador no se corta abajo)
+                    'html,body{overflow-x:hidden !important;overflow-y:auto !important;height:auto !important;min-height:0 !important;}' +
+                    'body>div,.sc-host,.sc-host>div{height:auto !important;min-height:0 !important;max-height:none !important;overflow:visible !important;}' +
+                    'main,section,aside{height:auto !important;min-height:0 !important;max-height:none !important;overflow:visible !important;}';
                 d.head.appendChild(st);
             } catch (e) {}
         }

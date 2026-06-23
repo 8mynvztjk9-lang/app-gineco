@@ -2235,11 +2235,20 @@
             const st = doc.createElement("style");
             st.id = "psp-apilar";
             st.textContent =
-                "main{flex-direction:column !important;}" +
+                "main{flex-direction:column !important;height:auto !important;}" +
                 "main>*{width:100% !important;flex:1 1 auto !important;min-width:0 !important;}" +
-                // Urgencia: la tarjeta emergente (🏃‍♀️) se posiciona sobre el diagrama y
-                // en móvil lo tapa entero; la sacamos al flujo normal (debajo).
-                'div[style*="width:188px"][style*="z-index:5"]{position:static !important;width:auto !important;margin:10px 8px 0 !important;animation:none !important;}';
+                // Que la animación FLUYA y se desplace toda la página (en vez de tener
+                // cajas internas con scroll y altura fija de 100vh). Así el texto de
+                // "El mecanismo" (prolapso) se lee cómodo al deslizar hacia abajo.
+                "html,body{height:auto !important;min-height:0 !important;overflow-y:auto !important;}" +
+                "body>div,.sc-host{height:auto !important;}" +
+                ".sc-host>div{height:auto !important;min-height:0 !important;overflow:visible !important;}" +
+                "aside{height:auto !important;max-height:none !important;overflow:visible !important;}" +
+                // Urgencia: en móvil la ventana emergente es demasiado grande y tapa el
+                // diagrama. La reducimos a SOLO el emoji (sin marco, fondo ni cabecera).
+                'div[style*="width:188px"][style*="z-index:5"]{position:static !important;width:auto !important;max-width:120px !important;margin:6px auto 0 !important;background:transparent !important;border:none !important;box-shadow:none !important;padding:0 !important;animation:none !important;text-align:center !important;}' +
+                'div[style*="width:188px"][style*="z-index:5"]>div:first-child{display:none !important;}' +
+                'div[style*="width:188px"][style*="z-index:5"]>div{height:auto !important;background:transparent !important;border:none !important;padding:0 !important;}';
             doc.head.appendChild(st);
         }
 
