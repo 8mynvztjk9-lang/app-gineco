@@ -662,30 +662,41 @@
 
         const esMovil = function () { return window.innerWidth < 760; };
 
-        // En móvil el simulador (diseñado para escritorio) no cabe: lo renderizamos
-        // a su anchura de escritorio (820 px) y lo ESCALAMOS para que quepa entero
-        // en el ancho del móvil, ocupando toda la pantalla y siendo usable.
+        // En MÓVIL el simulador se ve VERTICAL: apilamos su fila de 2 columnas
+        // (diagrama/temporizador + controles) y dejamos que se desplace.
+        function apilarSimulador() {
+            try {
+                const d = frame.contentDocument;
+                if (!d || !d.head || d.getElementById("psp-sim-col")) return;
+                const st = d.createElement("style");
+                st.id = "psp-sim-col";
+                st.textContent =
+                    // fila principal (diagrama + controles) → vertical
+                    'div[style*="gap:26px"],div[style*="gap: 26px"]{flex-direction:column !important;padding:14px !important;gap:16px !important;align-items:stretch !important;}' +
+                    'div[style*="gap:26px"]>*,div[style*="gap: 26px"]>*{width:100% !important;max-width:100% !important;flex:0 0 auto !important;}' +
+                    // que el contenido se ciña al ancho del móvil (no 700px)
+                    '[style*="max-width: 700px"],[style*="max-width:700px"]{max-width:100% !important;}' +
+                    // la fila de los 4 pasos (01-04) se reorganiza si no cabe
+                    'div[style*="gap:10px"],div[style*="gap: 10px"]{flex-wrap:wrap !important;}' +
+                    'div[style*="gap:10px"]>*,div[style*="gap: 10px"]>*{flex:1 1 40% !important;min-width:0 !important;}' +
+                    'html,body{overflow-x:hidden !important;overflow-y:auto !important;height:auto !important;}';
+                d.head.appendChild(st);
+            } catch (e) {}
+        }
         function ajustarMovil() {
-            if (esMovil()) {
-                const vw = overlay.clientWidth || window.innerWidth;
-                const vh = overlay.clientHeight || window.innerHeight;
-                const DESIGN = 820;
-                const k = vw / DESIGN;
-                frame.style.right = "auto"; frame.style.bottom = "auto";
-                frame.style.width = DESIGN + "px";
-                frame.style.height = Math.ceil(vh / k) + "px";
-                frame.style.transformOrigin = "top left";
-                frame.style.transform = "scale(" + k + ")";
-            } else {
-                frame.style.right = ""; frame.style.bottom = "";
-                frame.style.width = ""; frame.style.height = ""; frame.style.transform = "";
-            }
+            // El iframe siempre a tamaño completo (sin escalar).
+            frame.style.right = ""; frame.style.bottom = "";
+            frame.style.width = ""; frame.style.height = ""; frame.style.transform = "";
+            if (esMovil()) apilarSimulador();
         }
 
         function abrir() {
             const t = (window.kegelTiempo && window.kegelTiempo()) || { c: 5, r: 10 };
             frame.onload = function () {
                 ajustarMovil();
+                // El simulador se dibuja por JS tras cargar: reintentamos el apilado.
+                let n = 0;
+                const iv = setInterval(function () { ajustarMovil(); if (++n > 14) clearInterval(iv); }, 200);
                 setTimeout(function () { ajustarTiempo(t.c, t.r); }, 250);
             };
             frame.setAttribute("src", SRC + "?t=" + Date.now());

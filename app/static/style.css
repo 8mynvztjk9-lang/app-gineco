@@ -34,7 +34,22 @@ header {
 /* Lado derecho de la cabecera: navegación + logo del hospital (grande y visible) */
 .header-acciones { display: flex; align-items: center; gap: 1.4rem; flex-wrap: wrap; }
 .logo-hospital-cab { height: 92px; width: auto; display: block; }
-@media (max-width: 600px) { .logo-hospital-cab { height: 60px; } }
+
+/* --- Cabecera en móvil: fila 1 = PSSP (izq) + Son Llàtzer (der); fila 2 = menú --- */
+@media (max-width: 640px) {
+    header { padding: 0.45rem 1rem; row-gap: 0.35rem; }
+    /* "contents" disuelve la caja para colocar nav y logo como hijos del header */
+    .header-acciones { display: contents; }
+    .marca { order: 0; }
+    .logo-cabecera { height: 42px; }
+    .logo-hospital-cab { order: 1; margin-left: auto; height: 40px; }
+    header nav {
+        order: 2; flex-basis: 100%; width: 100%;
+        display: flex; justify-content: space-between; align-items: center;
+        flex-wrap: nowrap; gap: 0.1rem;
+    }
+    header nav a { margin-left: 0; padding: 0.15rem 0.1rem; font-size: 0.72rem; white-space: nowrap; }
+}
 
 header nav a {
     color: #6f5fb3;

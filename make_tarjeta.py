@@ -14,7 +14,7 @@ W, H = round(85 * MMpx), round(55 * MMpx)
 CW, CH = W * S, H * S
 def mm(v): return round(v * MMpx * S)
 
-URL = "https://65dca11464a331.lhr.life"
+URL = "https://app-gineco.onrender.com/"
 IMG = "app/static/images/"
 DESK = "/Users/alessandroferrero/Desktop/"
 

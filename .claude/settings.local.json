@@ -27,7 +27,19 @@
       "Bash(grep -E \"\\\\.db$|\\\\.venv|__pycache__|\\\\.DS_Store\")",
       "Bash(git rm *)",
       "Bash(git commit -q --amend -m 'App PSSP: web FastAPI + área pacientes/profesionales, móvil y despliegue Render *)",
-      "Bash(grep -E \"\\\\.db$|\\\\.DS_Store\")"
+      "Bash(grep -E \"\\\\.db$|\\\\.DS_Store\")",
+      "Bash(curl -s -o /dev/null -w \"Inicio: HTTP %{http_code} en %{time_total}s\\\\n\" -L --max-time 90 https://app-gineco.onrender.com/)",
+      "Bash(curl -s -o /dev/null -w \"Pacientes: HTTP %{http_code}\\\\n\" -L --max-time 60 https://app-gineco.onrender.com/suelo-pelvico)",
+      "Bash(curl -s -o /dev/null -w \"Panel: HTTP %{http_code}\\\\n\" -L --max-time 60 https://app-gineco.onrender.com/panel)",
+      "Bash(curl -s -L --max-time 60 https://app-gineco.onrender.com/)",
+      "Bash(curl -s -o /dev/null -w 'POST /login -> HTTP %{http_code} \\(303 = login OK y redirige\\)\\\\n' --max-time 60 -X POST https://app-gineco.onrender.com/login -d 'username=medico&password=clave1234' -H 'Content-Type: application/x-www-form-urlencoded')",
+      "Bash(sed -i '' 's#^URL = .*#URL = \"https://app-gineco.onrender.com/\"#' make_tarjeta.py)",
+      "Bash(.venv/bin/python make_tarjeta.py)",
+      "Bash(.venv/bin/python -c \"import segno; segno.make\\('https://app-gineco.onrender.com/', error='h'\\).save\\('/Users/alessandroferrero/Desktop/qr-DEFINITIVO.png', scale=14, border=3, dark='#5a4f9c', light='#ffffff'\\); print\\('QR definitivo -> https://app-gineco.onrender.com/'\\)\")",
+      "Bash(rm -f /Users/alessandroferrero/Desktop/qr-PRUEBA-movil.png /Users/alessandroferrero/Desktop/qr-VIEJO-no-usar.png /Users/alessandroferrero/Desktop/qr-app-gineco.png)",
+      "Bash(grep -oiE '.{30}\\(corre al ba|al ba.o|urgencia.{0,30}ba.o|🚽|🏃|running|corriendo|llega al ba\\).{30}' anim-incontinencia-urgencia.html)",
+      "Bash(grep -oiE 'position:\\\\s*\\(absolute|fixed\\)[^\"]{0,80}' anim-incontinencia-urgencia.html)",
+      "Bash(grep -oiE 'display:\\\\s*grid[^\"]{0,90}|grid-template-columns:[^\";]{0,80}|display:\\\\s*flex[^\"]{0,60}' simulador-kegel.html)"
     ]
   }
 }

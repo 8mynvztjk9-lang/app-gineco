@@ -2225,13 +2225,32 @@
             });
         }
 
+        // En MÓVIL, fuerza que las columnas internas de la animación se apilen
+        // (algunas, como el prolapso, dejan el diagrama con ancho 0 al no apilarse).
+        function apilarMovil() {
+            if (window.innerWidth >= 700) return;
+            let doc;
+            try { doc = frame.contentDocument; } catch (e) { return; }
+            if (!doc || !doc.head || doc.getElementById("psp-apilar")) return;
+            const st = doc.createElement("style");
+            st.id = "psp-apilar";
+            st.textContent =
+                "main{flex-direction:column !important;}" +
+                "main>*{width:100% !important;flex:1 1 auto !important;min-width:0 !important;}" +
+                // Urgencia: la tarjeta emergente (🏃‍♀️) se posiciona sobre el diagrama y
+                // en móvil lo tapa entero; la sacamos al flujo normal (debajo).
+                'div[style*="width:188px"][style*="z-index:5"]{position:static !important;width:auto !important;margin:10px 8px 0 !important;animation:none !important;}';
+            doc.head.appendChild(st);
+        }
+
         // Repetimos un rato: el contenido se dibuja por JS después de "load".
         function reajustar() {
+            apilarMovil();
             agrandarEtiquetas();
             ajustar();
             let n = 0;
             clearInterval(fitTimer);
-            fitTimer = setInterval(function () { agrandarEtiquetas(); ajustar(); if (++n > 14) clearInterval(fitTimer); }, 200);
+            fitTimer = setInterval(function () { apilarMovil(); agrandarEtiquetas(); ajustar(); if (++n > 14) clearInterval(fitTimer); }, 200);
         }
 
         function abrir(src) {
