@@ -3137,6 +3137,14 @@ body.inicio main {
 .diag-ejer-flecha { font-size: 1.4rem; flex: 0 0 auto; transition: transform 0.16s; }
 .diag-ejer-banner:hover .diag-ejer-flecha { transform: translateX(4px); }
 
+/* Variante de descarga (guía del embarazo): tono rosado, acorde a la sección. */
+.diag-pdf-banner {
+    background: linear-gradient(135deg, #f0865c 0%, #ef7aa6 55%, #d6567f 100%);
+    box-shadow: 0 12px 26px -12px rgba(214,86,127,0.75);
+}
+.diag-pdf-banner:hover { box-shadow: 0 18px 34px -12px rgba(214,86,127,0.9); }
+.diag-pdf-banner:hover .diag-ejer-flecha { transform: translateY(3px); }
+
 /* --- Enlace inline "Ver animación" + overlay a pantalla completa --- */
 .anim-link {
     display: inline-flex; align-items: center; gap: 5px; margin: 0 0 0 8px;

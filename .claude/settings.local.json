@@ -46,7 +46,9 @@
       "Bash(.venv/bin/python -)",
       "Bash(git commit -q -m 'Móvil: '\\\\''Estimula tu suelo pélvico'\\\\'' a 1 columna; popup urgencia reducido a solo emoji \\(clase urge-popup en las 3 animaciones\\) *)",
       "Bash(git commit -q -m 'Portada móvil: logo en el hueco que dejan las cifras + banner de ejercicios al final *)",
-      "Bash(git commit -q -m 'Portada: logo+banner solo en móvil; en escritorio se mantiene la isla de ejercicios como antes *)"
+      "Bash(git commit -q -m 'Portada: logo+banner solo en móvil; en escritorio se mantiene la isla de ejercicios como antes *)",
+      "Bash(cd /Users/alessandroferrero/Desktop/app-gineco; cp \"/Users/alessandroferrero/Desktop/Suelo pelvico/Material WEB/guia_embarazo.pdf\" app/static/pdf/guia_embarazo.pdf && ls -la app/static/pdf/guia_embarazo.pdf && echo \"copiado OK\")",
+      "Bash(git commit -q -m 'Embarazo: banner para descargar la guía del embarazo en PDF \\(web y móvil\\) *)"
     ]
   }
 }
