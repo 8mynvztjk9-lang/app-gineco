@@ -1,0 +1,721 @@
+<!--
+  ejercicios.html
+  ---------------
+  Página de ejercicios de suelo pélvico en DOS COLUMNAS:
+    · Izquierda: cómo reconocer la musculatura + cómo hacerlos bien.
+    · Derecha: cronómetro guiado por PROGRAMAS (incontinencia/prolapso,
+      embarazo, posparto), con secuencia de contracciones lentas + rápidas y
+      un nivel avanzado ("Sube de nivel").
+  Todo ocurre en el navegador. ⚠️ Texto BORRADOR pendiente de revisión clínica.
+-->
+{% extends "base.html" %}
+
+{% block body_class %}ejercicios-page{% endblock %}
+
+{% block contenido %}
+<style>
+  /* En esta página ensanchamos el área central para que quepan las 2 columnas */
+  body.ejercicios-page main { max-width: 1240px; margin-top: 0.25rem; margin-bottom: 0.2rem; }
+  body.ejercicios-page footer { display: none; }
+  .ejer-wrap { max-width: 1240px; margin: 0 auto; padding: 0; }
+  .ejer-wrap .migas { margin: 0 0 0.15rem; }
+  .ejer-cabecera { text-align: center; margin: 0.05rem 0 0.3rem; }
+  .ejer-eyebrow { display: inline-block; font-size: 0.72rem; letter-spacing: 0.14em;
+      text-transform: uppercase; font-weight: 700; color: #b48aa6; }
+  .ejer-wrap h1 {
+      font-family: Georgia, "Times New Roman", serif; font-weight: 700;
+      font-size: clamp(1.7rem, 3vw, 2.15rem); color: #403a63; margin: 0.1rem 0 0; line-height: 1.1;
+  }
+  .ejer-wrap h1::after { content: ""; display: block; width: 64px; height: 3px;
+      margin: 0.4rem auto 0; border-radius: 2px; background: linear-gradient(90deg, #c4b3ef, #aec9f0); }
+  .ejer-wrap .volver { margin: 0; }
+  .ejer-pie { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 0.3rem; }
+  .ejer-firma { height: 28px; width: auto; opacity: 0.9; }
+
+  .ejer-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; align-items: stretch; }
+  @media (max-width: 860px) { .ejer-layout { grid-template-columns: 1fr; } }
+  /* La columna del cronómetro estira su tarjeta para igualar la altura de la izquierda */
+  .ejer-info { display: flex; flex-direction: column; }
+  .ejer-crono { display: flex; flex-direction: column; }
+  /* Tarjetas en su tamaño natural (arriba) y el CTA al fondo de cada columna,
+     para que ambas columnas queden simétricas y con los banners alineados. */
+  .ejer-crono > #cronometro { flex: 0 0 auto; }
+  /* El banner del simulador rellena el resto de la columna derecha */
+  .ejer-crono > .sim-banner { flex: 1 1 auto; margin: 0.6rem 0 0; min-height: 64px; }
+  .ejer-info > .biofb-cta { margin-top: auto; }
+  .ejer-info > .ejer-card:first-child, .ejer-crono > #cronometro { margin-top: 0; }
+
+  .ejer-card {
+      background: #fff; border: 1px solid #ece8f7; border-radius: 16px;
+      padding: 0.5rem 0.9rem; margin-bottom: 0.5rem;
+      box-shadow: 0 10px 26px -20px rgba(90,83,136,0.5);
+  }
+  .ejer-card h2 { margin: 0 0 0.2rem; font-size: 1rem; color: #6f5fb3; }
+  .ejer-card p { font-size: 0.83rem; color: #4a5468; line-height: 1.3; margin: 0.18rem 0; }
+  .ejer-card ul, .ejer-card ol { margin: 0.25rem 0; padding-left: 1.1rem; }
+  .ejer-card li { font-size: 0.83rem; color: #4a5468; line-height: 1.3; margin: 0.13rem 0; }
+  .ejer-pos { background: #eef4fb !important; border: 1px solid #d6e6f5; border-radius: 10px;
+      padding: 0.4rem 0.65rem !important; font-size: 0.83rem !important; color: #2f5a86 !important; margin: 0.15rem 0 0.4rem !important; }
+  .ejer-pos strong { color: #2f5a86; }
+  .ejer-card strong { color: #534d77; }
+  .ejer-nota { background: #fdeef0; border: 1px solid #f6cdd4; border-radius: 10px;
+      padding: 0.45rem 0.7rem !important; font-size: 0.85rem !important; color: #b23b4e !important; }
+  .ejer-nota strong { color: #b23b4e; }
+
+  /* Cronómetro a la derecha, compacto */
+  .ejer-crono #cronometro { margin: 0; }
+  .ejer-crono .crono-circulo { width: 132px; height: 132px; }
+  .ejer-crono .crono-zona { min-height: 150px; margin: 0.3rem 0; }
+  .ejer-crono .crono-fase { font-size: 0.95rem; }
+  .ejer-crono .crono-segundos { font-size: 1.9rem; }
+  .ejer-crono .crono-reps { margin: 0.25rem 0; }
+  .ejer-crono .crono-controles { margin: 0.45rem 0 0.25rem; }
+  .ejer-crono .crono-sonido { margin-top: 0.35rem; font-size: 0.82rem; }
+  .crono-paso { font-weight: 700; color: #6f5fb3; margin: 0.2rem 0 0.4rem; font-size: 0.9rem; }
+  .crono-avanzado {
+      display: flex; align-items: flex-start; gap: 0.5rem; margin: 0.8rem 0 0.2rem;
+      background: linear-gradient(120deg, #f3f0fc, #fbf2f7); border: 1px solid #e7e0f7;
+      border-radius: 12px; padding: 0.6rem 0.8rem; font-size: 0.85rem; color: #4a4470; cursor: pointer;
+  }
+  .crono-avanzado input { margin-top: 0.15rem; accent-color: #6f5fb3; }
+  .crono-avanzado strong { color: #6f5fb3; }
+  .nivel-btn small { display: block; font-weight: 400; font-size: 0.74rem; opacity: 0.85; margin-top: 0.15rem; }
+  .crono-bloque { display: inline-block; font-weight: 700; color: #6f5fb3; background: #f1eefb;
+      border-radius: 999px; padding: 0.12rem 0.65rem; font-size: 0.82rem; }
+  .prog-pauta { font-size: 0.82rem; color: #6c6790; margin-top: 0.35rem; min-height: 2.4em; }
+
+  /* Botón llamativo "Ejercicios con biofeedback" */
+  .biofb-cta {
+      position: relative; overflow: hidden; width: 100%;
+      display: flex; align-items: center; gap: 0.7rem; margin: 0.6rem 0 0;
+      padding: 0.6rem 0.9rem; cursor: pointer; text-align: left; border: none; border-radius: 14px;
+      color: #fff; background: linear-gradient(120deg, #2f9387, #6f5fb3 58%, #c264a0);
+      box-shadow: 0 10px 22px -10px rgba(111,95,179,0.7);
+      transition: transform 0.16s, box-shadow 0.16s, filter 0.16s;
+  }
+  .biofb-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -10px rgba(111,95,179,0.85); filter: brightness(1.05); }
+  .biofb-cta-ico { font-size: 1.45rem; line-height: 1; animation: biofbPulso 1.8s ease-in-out infinite; }
+  @keyframes biofbPulso { 0%,100% { transform: scale(1); } 50% { transform: scale(1.18) rotate(-6deg); } }
+  .biofb-cta-txt { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+  .biofb-cta-txt strong { font-size: 0.95rem; }
+  .biofb-cta-txt small { font-size: 0.77rem; opacity: 0.92; }
+  .biofb-cta-flecha { font-size: 1.25rem; transition: transform 0.16s; }
+  .biofb-cta:hover .biofb-cta-flecha { transform: translateX(4px); }
+  .biofb-cta-brillo { position: absolute; top: 0; left: -60%; width: 42%; height: 100%;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,0.45), transparent);
+      transform: skewX(-18deg); animation: biofbBrillo 3s ease-in-out infinite; }
+  @keyframes biofbBrillo { 0%,60% { left: -60%; } 100% { left: 130%; } }
+  @media (prefers-reduced-motion: reduce) { .biofb-cta-ico, .biofb-cta-brillo { animation: none; } }
+
+  /* Ventana modal de biofeedback */
+  .biofb-overlay { position: fixed; inset: 0; z-index: 120; display: flex; align-items: center;
+      justify-content: center; padding: 1.5rem; background: rgba(60,53,96,0.5); }
+  .biofb-overlay[hidden] { display: none; }
+  .biofb-dialog { position: relative; background: #fff; border-radius: 18px; max-width: 1020px; width: 100%;
+      max-height: 92vh; overflow-y: auto; padding: 1.5rem 1.7rem; box-shadow: 0 24px 60px rgba(60,53,96,0.4);
+      animation: biofbEntra 0.25s ease; }
+  @keyframes biofbEntra { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .biofb-cerrar { position: absolute; top: 0.8rem; right: 1rem; width: 2.1rem; height: 2.1rem; margin: 0;
+      border: none; border-radius: 50%; background: #f1eefb; color: #6b6494; font-size: 1.3rem; cursor: pointer; line-height: 1; }
+  .biofb-cerrar:hover { background: #e5e0f6; }
+  .biofb-cab { text-align: center; margin-bottom: 0.4rem; }
+  .biofb-eyebrow { display: inline-block; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+      font-weight: 700; color: #2f9387; margin-bottom: 0.2rem; }
+  .biofb-cab h2 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.6rem,3vw,2.1rem); color: #403a63; margin: 0; }
+  .biofb-lema { max-width: 700px; margin: 0.5rem auto 0; color: #6c6790; font-size: 0.95rem; line-height: 1.5; }
+  .biofb-lema strong { color: #6f5fb3; }
+  .biofb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; margin-top: 1.1rem; align-items: start; }
+  @media (max-width: 760px) { .biofb-grid { grid-template-columns: 1fr; } }
+  .biofb-card { background: #fff; border: 1px solid #ece8f7; border-top: 4px solid #6f5fb3; border-radius: 16px;
+      padding: 1rem 1.1rem; box-shadow: 0 12px 26px -18px rgba(90,83,136,0.5); }
+  .biofb-card:nth-child(1) { border-top-color: #3f9bb0; }
+  .biofb-card:nth-child(2) { border-top-color: #8f7cc8; }
+  .biofb-card:nth-child(3) { border-top-color: #c264a0; }
+  .biofb-card-ico { font-size: 1.85rem; display: block; margin-bottom: 0.2rem; }
+  .biofb-card h3 { margin: 0 0 0.45rem; color: #6f5fb3; font-size: 1.05rem; }
+  .biofb-card ul { margin: 0.3rem 0; padding-left: 1.15rem; }
+  .biofb-card li { font-size: 0.88rem; color: #514c70; line-height: 1.45; margin: 0.25rem 0; }
+  .biofb-card strong { color: #b06a93; }
+  .biofb-link { display: inline-block; margin-top: 0.5rem; font-weight: 700; font-size: 0.88rem; color: #c264a0; text-decoration: none; }
+  .biofb-link:hover { text-decoration: underline; }
+  .biofb-pie { margin-top: 1.1rem; font-size: 0.85rem; color: #6c6790; background: #f6f3fc; border-radius: 10px; padding: 0.6rem 0.9rem; }
+
+  /* Banner que abre el simulador de Kegel a pantalla completa */
+  .sim-banner {
+      display: flex; align-items: center; gap: 15px; width: 100%; margin: 0.5rem 0 1.2rem;
+      padding: 16px 22px; cursor: pointer; text-align: left; color: #fff;
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #7b5fd0 0%, #b34db0 52%, #ff7e9d 100%);
+      border: none; border-radius: 16px;
+      box-shadow: 0 14px 32px -10px rgba(150,90,160,0.8);
+      animation: simPulso 2.6s ease-in-out infinite;
+      transition: transform 0.16s, box-shadow 0.16s;
+  }
+  .sim-banner:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 22px 40px -10px rgba(150,90,160,0.95); }
+  .sim-banner::after { content: ""; position: absolute; top: 0; left: -60%; width: 45%; height: 100%;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,0.4), transparent);
+      transform: skewX(-18deg); animation: simBrillo 3.6s ease-in-out infinite; }
+  @keyframes simPulso { 0%,100% { box-shadow: 0 14px 32px -10px rgba(150,90,160,0.7); }
+      50% { box-shadow: 0 18px 40px -8px rgba(255,126,157,0.92); } }
+  @keyframes simBrillo { 0%,55% { left: -60%; } 100% { left: 130%; } }
+  @media (prefers-reduced-motion: reduce) { .sim-banner, .sim-banner::after { animation: none; } }
+  .sim-banner-ico { font-size: 1.5rem; width: 2.7rem; height: 2.7rem; flex: none; display: grid; place-items: center;
+      background: rgba(255,255,255,0.26); border-radius: 50%; }
+  .sim-banner-txt { display: flex; flex-direction: column; flex: 1; min-width: 0; line-height: 1.3; gap: 2px; }
+  .sim-banner-txt strong { font-size: 1.05rem; }
+  .sim-banner-txt small { font-size: 0.82rem; opacity: 0.95; }
+  .sim-banner-flecha { font-size: 1.55rem; flex: none; }
+
+  /* Overlay a pantalla completa con el simulador */
+  .sim-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(20,16,40,0.55); }
+  .sim-overlay[hidden] { display: none; }
+  .sim-overlay-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+  .sim-overlay-cerrar {
+      position: absolute; top: 14px; right: 16px; z-index: 2; width: 2.4rem; height: 2.4rem; margin: 0;
+      font-size: 1.4rem; line-height: 1; cursor: pointer; color: #6b6494;
+      background: rgba(255,255,255,0.95); border: 1px solid #ddd2f3; border-radius: 50%;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  }
+  .sim-overlay-cerrar:hover { background: #fff; }
+
+  /* === Compactar para que TODO quepa sin scroll en pantallas no muy altas === */
+  @media (min-width: 861px) and (max-height: 860px) {
+      body.ejercicios-page main { margin-top: 0.1rem; }
+      .ejer-cabecera { margin: 0 0 0.1rem; }
+      .ejer-wrap h1 { font-size: clamp(1.45rem, 2.4vw, 1.75rem); }
+      .ejer-wrap h1::after { margin-top: 0.2rem; height: 2px; }
+      .ejer-layout { gap: 1.5rem; }
+      .ejer-card { padding: 0.55rem 1rem; margin-bottom: 0.5rem; }
+      .ejer-card h2 { font-size: 0.96rem; margin-bottom: 0.18rem; }
+      .ejer-card p, .ejer-card li { font-size: 0.8rem; line-height: 1.32; margin: 0.12rem 0; }
+      .ejer-card ul, .ejer-card ol { margin: 0.25rem 0; }
+      .ejer-pos { padding: 0.35rem 0.6rem !important; font-size: 0.79rem !important; margin: 0.1rem 0 0.3rem !important; }
+      .crono-paso { margin: 0.1rem 0 0.25rem; font-size: 0.86rem; }
+      .crono-avanzado { margin: 0.35rem 0 0.1rem; }
+      .crono-avanzado span { font-size: 0.78rem; }
+      .ejer-crono .crono-circulo { width: 104px; height: 104px; }
+      .ejer-crono .crono-zona { min-height: 112px; margin: 0.15rem 0; }
+      .ejer-crono .crono-fase { font-size: 0.88rem; }
+      .ejer-crono .crono-segundos { font-size: 1.55rem; }
+      .ejer-crono .crono-controles { margin: 0.35rem 0 0.15rem; }
+      .ejer-crono .crono-sonido { margin-top: 0.25rem; font-size: 0.78rem; }
+      .sim-banner { margin: 0.3rem 0 0.8rem; padding: 13px 18px; }   /* visible, separado del título */
+      .biofb-cta { padding: 0.5rem 0.85rem; }
+      .biofb-cta-txt strong { font-size: 0.9rem; }
+      .biofb-cta-txt small { font-size: 0.73rem; }
+      .nivel-selector .nivel-btn { padding: 0.4rem 0.55rem; }
+      /* En pantallas bajas, cabecera un poco más compacta (el logo sigue grande en monitores altos) */
+      body.ejercicios-page header { padding-top: 0.35rem; padding-bottom: 0.35rem; }
+      body.ejercicios-page header .logo-hospital-cab { height: 62px; }
+      .ejer-crono .crono-circulo { width: 90px; height: 90px; }
+      .ejer-crono .crono-zona { min-height: 78px; }
+      .crono-controles button { padding: 0.4rem 1rem; font-size: 0.92rem; margin-top: 0; }
+      .crono-avanzado { margin: 0.25rem 0 0.05rem; }
+      .crono-avanzado span { font-size: 0.75rem; line-height: 1.2; }
+      .ejer-info > .biofb-cta { margin-top: 0.3rem; }
+  }
+</style>
+
+    <article class="contenido-paciente ejer-wrap">
+
+        <p class="migas"><a href="/suelo-pelvico">Suelo pélvico</a> › Ejercicios</p>
+
+        <div class="ejer-cabecera">
+            <span class="ejer-eyebrow">Guía práctica con cronómetro</span>
+            <h1>Entrena tu suelo pélvico</h1>
+        </div>
+
+        <div class="ejer-layout">
+
+            <!-- ===== IZQUIERDA: reconocer + cómo hacerlos bien ===== -->
+            <div class="ejer-info">
+
+                <section class="ejer-card">
+                    <h2>🔎 ¿Cómo reconocer tu suelo pélvico?</h2>
+                    <p>
+                        La forma más sencilla es la <strong>autoobservación con un espejo</strong>,
+                        reconociendo las estructuras de la anatomía del suelo pélvico. Al cerebro
+                        le cuesta dar órdenes a una zona que no tiene clara:
+                    </p>
+                    <ul>
+                        <li><strong>Tócate el cuerpo perineal</strong> (la piel entre la abertura de la vagina y el ano). Al contraer bien —como para aguantar las ganas de orinar— notarás que se hunde <strong>hacia dentro y hacia arriba</strong>.</li>
+                        <li><strong>Introduce uno o dos dedos</strong> limpios y lubricados en la vagina e intenta apretarlos: deberías notar la presión, porque la vagina se <strong>cierra y se eleva</strong> ligeramente.</li>
+                    </ul>
+                </section>
+
+                <section class="ejer-card">
+                    <h2>✅ Cómo hacerlos bien</h2>
+                    <p class="ejer-pos">📍 <strong>Posición:</strong> túmbate <strong>boca arriba</strong>, con las rodillas flexionadas y las plantas de los pies apoyadas en la cama. Más adelante podrás hacerlos sentada o de pie.</p>
+                    <ol>
+                        <li><strong>Localiza los músculos:</strong> los que usarías para aguantar la orina o los gases. No muevas el abdomen ni las piernas.</li>
+                        <li><strong>Contracciones lentas:</strong> aprieta y sube hacia dentro, mantén la fuerza los segundos del círculo y suelta el aire; descansa lo indicado (relajar es tan importante como contraer).</li>
+                        <li><strong>Contracciones rápidas:</strong> aprieta y suelta con un ritmo claro de «activar y soltar».</li>
+                        <li><strong>Constancia:</strong> repite 2-3 veces al día. Cuando lo domines, activa «Sube de nivel».</li>
+                        <li>Si tienes dolor o dudas, consulta con <strong>fisioterapia de suelo pélvico</strong>.</li>
+                    </ol>
+                </section>
+
+                <button type="button" class="biofb-cta" id="abrir-biofb">
+                    <span class="biofb-cta-brillo" aria-hidden="true"></span>
+                    <span class="biofb-cta-ico" aria-hidden="true">🎮</span>
+                    <span class="biofb-cta-txt">
+                        <strong>Ejercicios con biofeedback</strong>
+                        <small>Entrenamiento avanzado con dispositivos · descúbrelo</small>
+                    </span>
+                    <span class="biofb-cta-flecha" aria-hidden="true">→</span>
+                </button>
+
+            </div>
+
+            <!-- ===== DERECHA: elige situación y abre el simulador ===== -->
+            <div class="ejer-crono">
+                <section id="cronometro" class="ejer-card" aria-label="Elige tu situación y abre el simulador">
+                    <h2 style="margin-bottom:0.6rem;">⏱️ Elige tu situación</h2>
+
+                    <p class="crono-paso">El simulador se abrirá con el tiempo de contracción y descanso recomendado para ti.</p>
+                    <div class="nivel-selector" id="prog-selector">
+                        <button type="button" class="nivel-btn activo" data-prog="general">
+                            💧 Incontinencia y prolapso
+                            <small>Lentas 5s/10s ×10 · Rápidas ×10</small>
+                        </button>
+                        <button type="button" class="nivel-btn" data-prog="embarazo">
+                            🤰 Embarazo
+                            <small>Lentas 6s/6s ×10 · Rápidas ×10</small>
+                        </button>
+                        <button type="button" class="nivel-btn" data-prog="posparto">
+                            👶 Posparto
+                            <small>Suaves 5s/5s ×5 · Rápidas ×5</small>
+                        </button>
+                    </div>
+
+                    <label class="crono-avanzado">
+                        <input type="checkbox" id="avanzado-check">
+                        <span>💪 <strong>Sube de nivel</strong>: contracciones más largas. Solo si <strong>ya controlas bien</strong> la musculatura y no notas molestias.</span>
+                    </label>
+                    <p class="prog-pauta" id="prog-pauta"></p>
+                </section>
+
+                <!-- Banner: abre el simulador con el tiempo de la situación elegida (CTA al fondo) -->
+                <button type="button" class="sim-banner" id="sim-banner">
+                    <span class="sim-banner-ico" aria-hidden="true">▶</span>
+                    <span class="sim-banner-txt">
+                        <strong>Abrir simulador guiado</strong>
+                        <small id="sim-banner-sub">Voz y animación · pantalla completa</small>
+                    </span>
+                    <span class="sim-banner-flecha" aria-hidden="true">⛶</span>
+                </button>
+            </div>
+
+        </div>
+
+    </article>
+
+    <!-- ====== Ventana: Ejercicios con biofeedback ====== -->
+    <div class="biofb-overlay" id="modal-biofeedback" hidden>
+      <div class="biofb-dialog" role="dialog" aria-modal="true" aria-label="Ejercicios con biofeedback">
+        <button type="button" class="biofb-cerrar" id="cerrar-biofb" aria-label="Cerrar">×</button>
+
+        <div class="biofb-cab">
+            <span class="biofb-eyebrow">Entrenamiento avanzado del suelo pélvico</span>
+            <h2>Ejercicios con biofeedback</h2>
+            <p class="biofb-lema">Dispositivos que <strong>miden tu contracción en tiempo real</strong> y te ayudan a entrenar de forma más precisa, motivadora y efectiva.</p>
+        </div>
+
+        <div class="biofb-grid">
+            <div class="biofb-card">
+                <span class="biofb-card-ico">📲</span>
+                <h3>¿Cómo funciona?</h3>
+                <ul>
+                    <li>Una <strong>sonda vaginal con sensores</strong> se conecta por Bluetooth a una <strong>app</strong> del móvil.</li>
+                    <li>Mide la <strong>fuerza y la calidad</strong> de tus contracciones y te las muestra en pantalla al instante (gráficos o juegos).</li>
+                    <li>Así compruebas si contraes <strong>la musculatura correcta</strong> y con la técnica adecuada.</li>
+                </ul>
+            </div>
+            <div class="biofb-card">
+                <span class="biofb-card-ico">✨</span>
+                <h3>¿Para qué sirve?</h3>
+                <ul>
+                    <li>Asegura que haces el ejercicio <strong>bien</strong> (corrige la técnica).</li>
+                    <li><strong>Motiva</strong> con juegos que controlas contrayendo el suelo pélvico.</li>
+                    <li>Mide tu <strong>progreso</strong> y adapta la dificultad.</li>
+                    <li>Ideal para un entrenamiento <strong>más avanzado y constante</strong>.</li>
+                </ul>
+            </div>
+            <div class="biofb-card">
+                <span class="biofb-card-ico">🎮</span>
+                <h3>Un ejemplo: Perifit</h3>
+                <ul>
+                    <li><strong>Perifit</strong> es un entrenador de Kegel con sonda + app de <strong>juegos</strong> que avanzan al contraer.</li>
+                    <li>Lo encuentras a la venta <strong>en internet</strong>.</li>
+                    <li>Existen otros dispositivos similares; tu profesional puede aconsejarte.</li>
+                </ul>
+                <a class="biofb-link" href="https://www.google.com/search?q=perifit+suelo+pelvico" target="_blank" rel="noopener">Buscar Perifit en internet →</a>
+            </div>
+        </div>
+
+        <p class="biofb-pie">
+            🧼 Úsalo con higiene y según las instrucciones del fabricante. No sustituye la valoración profesional: consúltalo con tu matrona o fisioterapeuta de suelo pélvico.
+        </p>
+      </div>
+    </div>
+
+    <!-- Overlay a pantalla completa con el simulador guiado de Kegel -->
+    <div class="sim-overlay" id="sim-overlay" hidden>
+        <button type="button" class="sim-overlay-cerrar" id="sim-overlay-cerrar" aria-label="Cerrar">×</button>
+        <iframe class="sim-overlay-frame" id="sim-overlay-frame" title="Simulador guiado de ejercicios de Kegel"></iframe>
+    </div>
+
+    <script>
+    // ====== Abrir/cerrar la ventana de biofeedback ======
+    (function () {
+        const overlay = document.getElementById("modal-biofeedback");
+        const abrir   = document.getElementById("abrir-biofb");
+        const cerrar  = document.getElementById("cerrar-biofb");
+        if (!overlay || !abrir) return;
+        function mostrar() { overlay.hidden = false; document.body.style.overflow = "hidden"; }
+        function ocultar() { overlay.hidden = true; document.body.style.overflow = ""; }
+        abrir.addEventListener("click", mostrar);
+        cerrar.addEventListener("click", ocultar);
+        overlay.addEventListener("click", function (e) { if (e.target === overlay) ocultar(); });
+        document.addEventListener("keydown", function (e) { if (e.key === "Escape") ocultar(); });
+    })();
+    </script>
+
+    <script>
+    (function () {
+        // --- Pautas por situación clínica (c=contraer, r=relajar, n=repeticiones) ---
+        const PROGRAMAS = {
+            general: {
+                lentas:   { c: 5,  r: 10, n: 10 },
+                lentasAv: { c: 10, r: 10, n: 10 },
+                rapidas:  { c: 1,  r: 1,  n: 10 },
+                pauta:    "Pauta: lentas 5 s / 10 s · 10 repeticiones. Después, 10 rápidas. Repite 2-3 veces al día.",
+                pautaAv:  "Nivel alto: lentas 10 s / 10 s · 10 repeticiones. Después, 10 rápidas. Repite 2-3 veces al día.",
+            },
+            embarazo: {
+                lentas:   { c: 6,  r: 6,  n: 10 },
+                lentasAv: { c: 10, r: 20, n: 10 },
+                rapidas:  { c: 1,  r: 1,  n: 10 },
+                pauta:    "Pauta: lentas 6 s / 6 s · 10 repeticiones. Después, 10 rápidas. Bloques de 5-7 min, integrados en tu rutina.",
+                pautaAv:  "Nivel alto: sostén 10 s y relaja el doble (20 s) · 10 repeticiones. Después, 10 rápidas.",
+            },
+            posparto: {
+                lentas:   { c: 5,  r: 5,  n: 5 },
+                lentasAv: { c: 10, r: 10, n: 10 },
+                rapidas:  { c: 1,  r: 1,  n: 5 },
+                pauta:    "Pauta: empieza suave, lentas 5 s / 5 s · 5 repeticiones. Después, 5 rápidas. Puedes empezar desde el primer día.",
+                pautaAv:  "Progresión (≈6 semanas): lentas 10 s / 10 s · 10 repeticiones. Después, rápidas.",
+            },
+        };
+
+        const circulo   = document.getElementById("circulo");
+        const faseEl    = document.getElementById("fase");
+        const segundosEl= document.getElementById("segundos");
+        const repActual = document.getElementById("rep-actual");
+        const repTotal  = document.getElementById("rep-total");
+        const bloqueNom = document.getElementById("bloque-nombre");
+        const btnEmpezar= document.getElementById("btn-empezar");
+        const btnReiniciar = document.getElementById("btn-reiniciar");
+        const progBtns  = document.querySelectorAll("#prog-selector .nivel-btn");
+        const avanzadoCheck = document.getElementById("avanzado-check");
+        const pautaEl   = document.getElementById("prog-pauta");
+        const sonidoCheck = document.getElementById("sonido-check");
+
+        // El cronómetro inline se sustituyó por el simulador: si no existe el
+        // círculo, este temporizador no hace nada (la lógica está en el IIFE de abajo).
+        if (!circulo) return;
+
+        let progActual = "general";
+        let bloques = [];
+        let bIdx = 0;
+        let intervalo = null;
+        let transTimeout = null;
+        let corriendo = false;
+
+        let audioCtx = null;
+        function prepararAudio() {
+            if (!audioCtx) {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (AC) audioCtx = new AC();
+            }
+            if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+        }
+        function pitido(frecuencia, duracion) {
+            if (!sonidoCheck.checked || !audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const vol = audioCtx.createGain();
+            osc.type = "sine";
+            osc.frequency.value = frecuencia;
+            const ahora = audioCtx.currentTime;
+            vol.gain.setValueAtTime(0, ahora);
+            vol.gain.linearRampToValueAtTime(0.15, ahora + 0.02);
+            vol.gain.linearRampToValueAtTime(0, ahora + duracion);
+            osc.connect(vol); vol.connect(audioCtx.destination);
+            osc.start(ahora); osc.stop(ahora + duracion);
+        }
+        function vibrar(patron) { if (sonidoCheck.checked && navigator.vibrate) navigator.vibrate(patron); }
+        function avisar(fase) {
+            if (fase === "contrae") { pitido(660, 0.18); } else { pitido(440, 0.18); }
+            vibrar(70);
+        }
+
+        function construirBloques() {
+            const p = PROGRAMAS[progActual];
+            const lentas = avanzadoCheck.checked ? p.lentasAv : p.lentas;
+            bloques = [
+                { nombre: "Lentas",  c: lentas.c,    r: lentas.r,    n: lentas.n },
+                { nombre: "Rápidas", c: p.rapidas.c, r: p.rapidas.r, n: p.rapidas.n },
+            ];
+        }
+        function actualizarPauta() {
+            const p = PROGRAMAS[progActual];
+            pautaEl.textContent = avanzadoCheck.checked ? p.pautaAv : p.pauta;
+        }
+        function aplicarPrograma() { construirBloques(); actualizarPauta(); reiniciar(); }
+
+        function reiniciar() {
+            clearInterval(intervalo);
+            clearTimeout(transTimeout);
+            corriendo = false;
+            circulo.classList.remove("contrae", "relaja", "prepara");
+            faseEl.textContent = "Listo";
+            segundosEl.textContent = "—";
+            repActual.textContent = "0";
+            bloqueNom.textContent = bloques[0].nombre;
+            repTotal.textContent = bloques[0].n;
+            btnEmpezar.textContent = "Empezar";
+            btnEmpezar.disabled = false;
+        }
+
+        function empezar() {
+            prepararAudio();
+            construirBloques();
+            corriendo = true;
+            btnEmpezar.textContent = "En marcha…";
+            btnEmpezar.disabled = true;
+
+            let restante = 3;
+            circulo.classList.remove("contrae", "relaja");
+            circulo.classList.add("prepara");
+            faseEl.textContent = "Prepárate";
+            segundosEl.textContent = restante;
+            pitido(520, 0.1);
+
+            intervalo = setInterval(function () {
+                restante = restante - 1;
+                if (restante > 0) { segundosEl.textContent = restante; pitido(520, 0.1); }
+                else { clearInterval(intervalo); circulo.classList.remove("prepara"); iniciarBloque(0); }
+            }, 1000);
+        }
+
+        function iniciarBloque(idx) {
+            bIdx = idx;
+            const b = bloques[idx];
+            bloqueNom.textContent = b.nombre;
+            repTotal.textContent = b.n;
+
+            let rep = 1, fase = "contrae", restante = b.c;
+            repActual.textContent = rep;
+            mostrarFase(fase, restante);
+
+            intervalo = setInterval(function () {
+                restante = restante - 1;
+                if (restante > 0) { segundosEl.textContent = restante; return; }
+                if (fase === "contrae") { fase = "relaja"; restante = b.r; mostrarFase(fase, restante); }
+                else {
+                    rep = rep + 1;
+                    if (rep > b.n) { clearInterval(intervalo); siguienteBloque(); return; }
+                    repActual.textContent = rep; fase = "contrae"; restante = b.c; mostrarFase(fase, restante);
+                }
+            }, 1000);
+        }
+
+        function siguienteBloque() {
+            if (bIdx + 1 < bloques.length) {
+                const sig = bloques[bIdx + 1];
+                circulo.classList.remove("contrae", "relaja");
+                faseEl.textContent = "Ahora: " + sig.nombre.toLowerCase();
+                segundosEl.textContent = "▶";
+                bloqueNom.textContent = sig.nombre;
+                repTotal.textContent = sig.n;
+                repActual.textContent = "0";
+                pitido(740, 0.18);
+                setTimeout(function () { pitido(880, 0.18); }, 180);
+                transTimeout = setTimeout(function () { iniciarBloque(bIdx + 1); }, 2600);
+            } else { terminar(); }
+        }
+
+        function mostrarFase(fase, segundos) {
+            segundosEl.textContent = segundos;
+            circulo.style.transitionDuration = segundos + "s, 0.4s";
+            if (fase === "contrae") {
+                faseEl.textContent = "Contrae";
+                circulo.classList.add("contrae"); circulo.classList.remove("relaja");
+            } else {
+                faseEl.textContent = "Relaja";
+                circulo.classList.add("relaja"); circulo.classList.remove("contrae");
+            }
+            avisar(fase);
+        }
+
+        function terminar() {
+            clearInterval(intervalo);
+            corriendo = false;
+            circulo.classList.remove("contrae", "relaja");
+            faseEl.textContent = "¡Bien hecho! 🎉";
+            segundosEl.textContent = "✔";
+            btnEmpezar.textContent = "Repetir";
+            btnEmpezar.disabled = false;
+            pitido(660, 0.15);
+            setTimeout(function () { pitido(880, 0.25); }, 160);
+            vibrar([90, 60, 90]);
+        }
+
+        btnEmpezar.addEventListener("click", function () { if (!corriendo) empezar(); });
+        btnReiniciar.addEventListener("click", reiniciar);
+        progBtns.forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                progBtns.forEach(b => b.classList.remove("activo"));
+                btn.classList.add("activo");
+                progActual = btn.dataset.prog;
+                aplicarPrograma();
+            });
+        });
+        avanzadoCheck.addEventListener("change", aplicarPrograma);
+
+        aplicarPrograma();
+    })();
+    </script>
+
+    <script>
+    // ====== Situación elegida -> tiempo recomendado (contracción / descanso) ======
+    (function () {
+        const PROGRAMAS = {
+            general:  { lentas:{c:5,r:10}, lentasAv:{c:10,r:10},
+                pauta:"Pauta: lentas 5 s / 10 s · 10 repeticiones. Después, 10 rápidas. Repite 2-3 veces al día.",
+                pautaAv:"Nivel alto: lentas 10 s / 10 s · 10 repeticiones. Después, 10 rápidas." },
+            embarazo: { lentas:{c:6,r:6},  lentasAv:{c:10,r:20},
+                pauta:"Pauta: lentas 6 s / 6 s · 10 repeticiones. Después, 10 rápidas. Bloques de 5-7 min en tu rutina.",
+                pautaAv:"Nivel alto: sostén 10 s y relaja el doble (20 s) · 10 repeticiones. Después, 10 rápidas." },
+            posparto: { lentas:{c:5,r:5},  lentasAv:{c:10,r:10},
+                pauta:"Pauta: empieza suave, lentas 5 s / 5 s · 5 repeticiones. Después, 5 rápidas. Desde el primer día.",
+                pautaAv:"Progresión (≈6 semanas): lentas 10 s / 10 s · 10 repeticiones. Después, rápidas." },
+        };
+        const btns = document.querySelectorAll("#prog-selector .nivel-btn");
+        const avanzado = document.getElementById("avanzado-check");
+        const pautaEl  = document.getElementById("prog-pauta");
+        const subEl    = document.getElementById("sim-banner-sub");
+        let prog = "general";
+
+        function tiempo() {
+            const p = PROGRAMAS[prog];
+            return (avanzado && avanzado.checked) ? p.lentasAv : p.lentas;
+        }
+        window.kegelTiempo = tiempo;   // lo usa el botón del simulador
+
+        function actualizar() {
+            const p = PROGRAMAS[prog], av = avanzado && avanzado.checked, t = tiempo();
+            if (pautaEl) pautaEl.textContent = av ? p.pautaAv : p.pauta;
+            if (subEl) subEl.textContent = "Contracción " + t.c + " s · descanso " + t.r + " s · pantalla completa";
+        }
+        btns.forEach(function (b) {
+            b.addEventListener("click", function () {
+                prog = b.dataset.prog;
+                btns.forEach(x => x.classList.toggle("activo", x === b));
+                actualizar();
+            });
+        });
+        if (avanzado) avanzado.addEventListener("change", actualizar);
+        if (btns.length) actualizar();
+    })();
+    </script>
+
+    <script>
+    // ====== Banner -> abre el simulador con el tiempo de la situación elegida ======
+    (function () {
+        const banner  = document.getElementById("sim-banner");
+        const overlay = document.getElementById("sim-overlay");
+        const frame   = document.getElementById("sim-overlay-frame");
+        const cerrar  = document.getElementById("sim-overlay-cerrar");
+        const SRC = "/static/simulador-kegel.html";
+        if (!banner || !overlay || !frame) return;
+
+        // Ajusta el simulador a (hold, rest) usando sus botones +/−:
+        // baja al mínimo y sube hasta el valor objetivo (los botones se topan solos).
+        function ajustarTiempo(hold, rest) {
+            try {
+                const d = frame.contentDocument;
+                if (!d) return;
+                const pm = [...d.querySelectorAll("button")].filter(function (b) {
+                    const t = (b.textContent || "").trim();
+                    return t === "−" || t === "-" || t === "+";
+                });
+                if (pm.length < 4) return;            // [hold−, hold+, rest−, rest+]
+                const drive = function (menos, mas, target, min) {
+                    for (let i = 0; i < 20; i++) menos.click();
+                    for (let i = 0; i < (target - min); i++) mas.click();
+                };
+                drive(pm[0], pm[1], hold, 3);          // contracción: rango 3–10 s
+                drive(pm[2], pm[3], rest, 2);          // descanso: rango 2–15 s
+            } catch (e) {}
+        }
+
+        const esMovil = function () { return window.innerWidth < 760; };
+
+        // En móvil el simulador (diseñado para escritorio) no cabe: lo renderizamos
+        // a su anchura de escritorio (820 px) y lo ESCALAMOS para que quepa entero
+        // en el ancho del móvil, ocupando toda la pantalla y siendo usable.
+        function ajustarMovil() {
+            if (esMovil()) {
+                const vw = overlay.clientWidth || window.innerWidth;
+                const vh = overlay.clientHeight || window.innerHeight;
+                const DESIGN = 820;
+                const k = vw / DESIGN;
+                frame.style.right = "auto"; frame.style.bottom = "auto";
+                frame.style.width = DESIGN + "px";
+                frame.style.height = Math.ceil(vh / k) + "px";
+                frame.style.transformOrigin = "top left";
+                frame.style.transform = "scale(" + k + ")";
+            } else {
+                frame.style.right = ""; frame.style.bottom = "";
+                frame.style.width = ""; frame.style.height = ""; frame.style.transform = "";
+            }
+        }
+
+        function abrir() {
+            const t = (window.kegelTiempo && window.kegelTiempo()) || { c: 5, r: 10 };
+            frame.onload = function () {
+                ajustarMovil();
+                setTimeout(function () { ajustarTiempo(t.c, t.r); }, 250);
+            };
+            frame.setAttribute("src", SRC + "?t=" + Date.now());
+            overlay.hidden = false;
+            document.body.style.overflow = "hidden";
+            ajustarMovil();
+            // Pantalla completa real SOLO en escritorio (en móvil da problemas).
+            if (!esMovil() && overlay.requestFullscreen) {
+                overlay.requestFullscreen().catch(function () {});
+            }
+        }
+        function ocultar() {
+            if (document.fullscreenElement) { document.exitFullscreen().catch(function () {}); }
+            overlay.hidden = true;
+            document.body.style.overflow = "";
+            frame.style.transform = ""; frame.style.width = ""; frame.style.height = "";
+            frame.style.right = ""; frame.style.bottom = "";
+            frame.setAttribute("src", "about:blank");   // reinicia el simulador
+        }
+        window.addEventListener("resize", function () { if (!overlay.hidden) ajustarMovil(); });
+
+        banner.addEventListener("click", abrir);
+        cerrar.addEventListener("click", ocultar);
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && !overlay.hidden) ocultar();
+        });
+        // Si el usuario sale de pantalla completa con Esc del navegador, cerramos el overlay.
+        document.addEventListener("fullscreenchange", function () {
+            if (!document.fullscreenElement && !overlay.hidden) ocultar();
+        });
+    })();
+    </script>
+{% endblock %}

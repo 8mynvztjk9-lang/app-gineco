@@ -1,0 +1,71 @@
+<!--
+  base.html
+  ---------
+  Plantilla "base" común a todas las páginas: la cabecera, el menú y el pie.
+  Las demás páginas la "heredan" y solo rellenan el bloque "contenido".
+  Así no repetimos el mismo HTML en cada archivo.
+-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ titulo }}</title>
+    <!-- ?v=... cambia automáticamente cuando se edita el CSS, para que el
+         navegador no muestre una versión antigua guardada en su caché. -->
+    <link rel="stylesheet" href="/static/style.css?v={{ css_v() }}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <!-- Cabecera por defecto (blanca). La portada la sustituye por su propio
+         diseño dejando este bloque vacío. -->
+    {% block cabecera %}
+    <header>
+        <!-- Logo del proyecto: SIEMPRE vuelve a la página anterior (un paso atrás),
+             tanto en el área de pacientes como en la de profesionales. -->
+        <a href="/suelo-pelvico" class="marca"
+           onclick="event.preventDefault(); history.back();">
+            <img class="logo-cabecera"
+                 src="/static/images/logo-pssp.png"
+                 alt="Promoción Salud Suelo Pélvico - Volver atrás">
+        </a>
+        <div class="header-acciones">
+            <nav>
+                <a href="/">Inicio</a>
+                <a href="/suelo-pelvico">Pacientes</a>
+                <a href="/suelo-pelvico/ejercicios">Ejercicios</a>
+                <a href="/panel">Profesionales</a>
+            </nav>
+            <!-- Logo del hospital, arriba a la derecha y bien visible.
+                 (En la página de inicio no aparece: tiene su propia cabecera.) -->
+            <img class="logo-hospital-cab"
+                 src="/static/images/logo-son-llatzer.png"
+                 alt="Hospital Universitari Son Llàtzer">
+        </div>
+    </header>
+    {% endblock %}
+
+    <main>
+        <!-- Aquí cada página inserta su contenido propio -->
+        {% block contenido %}{% endblock %}
+    </main>
+
+    <!-- Pie por defecto. La portada también puede dejarlo vacío. -->
+    {% block pie %}
+    <footer>
+        <p>Promoción de la Salud del Suelo Pélvico · Hospital Universitari Son Llàtzer</p>
+    </footer>
+    {% endblock %}
+
+    <!-- Calendario: al pulsar en CUALQUIER parte de un campo de fecha, abre el
+         selector (no solo en el iconito). Aplica a toda la web. -->
+    <script>
+    document.addEventListener("click", function (e) {
+        const el = e.target;
+        if (el && el.matches && el.matches('input[type="date"]') &&
+            typeof el.showPicker === "function") {
+            try { el.showPicker(); } catch (err) { /* ya abierto o no permitido */ }
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//private/tmp/**)",
+      "Bash(grep -oE '\"[A-ZÁÉÍÓÚ][^\"]{3,45}\"' kegel.html)",
+      "Bash(awk '{ print NR\": \"length\\($0\\) }' kegel.html)",
+      "Bash(sort -t: -k2 -rn)",
+      "Bash(grep -aoE '[A-Za-zÁÉÍÓÚáéíóúñÑ][A-Za-zÁÉÍÓÚáéíóúñÑ ]{6,40}' kegel.html)",
+      "Bash(cd /Users/alessandroferrero/Desktop/app-gineco *)",
+      "Bash(grep -aoE '\"[^\"]*\":[0-9]{1,2}|contraccion[^,}]{0,20}|descanso[^,}]{0,20}|sostenid[^,}]{0,20}|\"id\":\"[a-z_]+\"|hold[^,}]{0,12}|rest[^,}]{0,12}' app/static/simulador-kegel.html)",
+      "Bash(.venv/bin/python3 -c ' *)",
+      "Bash(sed -n '/const PROGRAMAS/,/};/p' app/templates/ejercicios.html)",
+      "WebFetch(domain:pop-q.netlify.app)",
+      "Bash(pkill -f \"localhost.run\")",
+      "Bash(pkill -f \"cloudflared\")",
+      "Bash(curl -s -o /dev/null -w \"reintento: HTTP %{http_code}\\\\n\" -L --max-time 20 https://aad095b6e4302a.lhr.life/)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" -L --max-time 20 https://aad095b6e4302a.lhr.life/)",
+      "Bash(.venv/bin/python -c \"import app.main; print\\('OK import + arranque'\\)\")",
+      "Bash(curl -s -o /dev/null -w \"localhost:8000 -> HTTP %{http_code}\\\\n\" --max-time 8 http://localhost:8000/)",
+      "Bash(curl -s -o /dev/null -w \"aad095b6e4302a.lhr.life -> HTTP %{http_code}\\\\n\" -L --max-time 15 https://aad095b6e4302a.lhr.life/)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(curl -s -o /dev/null -w \"local: HTTP %{http_code}\\\\n\" --max-time 8 http://localhost:8000/)",
+      "Bash(git init *)",
+      "Bash(git config *)",
+      "Bash(git add *)",
+      "Bash(git commit -q -m 'App PSSP: web FastAPI + área pacientes/profesionales, móvil y despliegue Render *)",
+      "Bash(grep -E \"\\\\.db$|\\\\.venv|__pycache__|\\\\.DS_Store\")",
+      "Bash(git rm *)",
+      "Bash(git commit -q --amend -m 'App PSSP: web FastAPI + área pacientes/profesionales, móvil y despliegue Render *)",
+      "Bash(grep -E \"\\\\.db$|\\\\.DS_Store\")"
+    ]
+  }
+}

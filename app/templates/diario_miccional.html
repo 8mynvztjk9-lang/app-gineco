@@ -1,0 +1,462 @@
+<!--
+  diario_miccional.html
+  ---------------------
+  Diario miccional rellenable. La paciente lo completa en el navegador; se
+  guarda SOLO en su dispositivo (localStorage), y puede imprimirlo o guardarlo
+  como PDF para enseñárselo al médico. No se envía a ningún servidor.
+  ⚠️ Contenido orientativo · pendiente de revisión clínica.
+-->
+{% extends "base.html" %}
+
+{% block contenido %}
+<style>
+  .diario-wrap { max-width: 1000px; margin: 0 auto; padding: 0 1rem 3rem; }
+  .diario-wrap h1 { color: #403a63; margin-bottom: 0.3rem; }
+  .diario-intro { color: #5b5676; font-size: 1rem; max-width: 760px; }
+  .diario-intro strong { color: #6f5fb3; }
+
+  .diario-acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 0.7rem; margin: 1.1rem 0; }
+  .diario-btn {
+      margin: 0; font: inherit; font-weight: 700; font-size: 0.95rem; cursor: pointer;
+      color: #fff; background: linear-gradient(135deg, #8f7cc8, #6f5fb3);
+      border: none; border-radius: 12px; padding: 0.65rem 1.15rem;
+      box-shadow: 0 8px 20px -8px rgba(111,95,179,0.7); transition: transform .15s, box-shadow .15s;
+  }
+  .diario-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 26px -8px rgba(111,95,179,0.85); }
+  .diario-btn--sec { background: #fff; color: #6f5fb3; border: 1px solid #d8d2ee; box-shadow: none; }
+  .diario-btn--sec:hover { background: #f3f0fc; }
+
+  /* Botón DESTACADO: la acción principal que queremos que pulse la paciente */
+  .diario-btn--cta {
+      background: linear-gradient(135deg, #7b5fd0 0%, #b34db0 55%, #ff7e9d 100%);
+      color: #fff; font-size: 1.02rem; padding: 0.72rem 1.5rem;
+      box-shadow: 0 12px 28px -8px rgba(150,70,170,0.85);
+      animation: diarioLatido 2.4s ease-in-out infinite;
+  }
+  .diario-btn--cta:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 16px 34px -8px rgba(179,77,176,0.95); }
+  @keyframes diarioLatido {
+      0%, 100% { box-shadow: 0 12px 28px -8px rgba(150,70,170,0.8); }
+      50%      { box-shadow: 0 14px 34px -6px rgba(255,126,157,0.95); }
+  }
+  @media (prefers-reduced-motion: reduce) { .diario-btn--cta { animation: none; } }
+  .diario-saved { font-size: 0.85rem; color: #46a173; font-weight: 600; }
+
+  .diario-papel {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem;
+      background: linear-gradient(120deg, #eef4fb, #f3f0fc); border: 1px solid #dbe6f3;
+      border-radius: 12px; padding: 0.7rem 1rem; margin: 0 0 1.1rem;
+  }
+  .diario-papel-txt { font-size: 0.9rem; color: #3a5070; flex: 1 1 280px; }
+  .diario-papel-txt strong { color: #2f5a86; }
+
+  .diario-firma { text-align: center; margin-top: 1.4rem; }
+  .diario-firma img { height: 34px; width: auto; opacity: 0.9; }
+
+  .diario-cabecera { display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; margin: 0.6rem 0 1rem; }
+  .diario-cabecera label { display: flex; flex-direction: column; font-size: 0.82rem; font-weight: 600; color: #6c6790; gap: 0.25rem; }
+  .diario-cabecera input { font: inherit; padding: 0.4rem 0.6rem; border: 1px solid #ddd6ef; border-radius: 8px; min-width: 220px; }
+
+  .diario-ayuda { background: #f6f3fc; border: 1px solid #e7e0f7; border-radius: 12px; padding: 0.6rem 1rem; margin-bottom: 1.2rem; }
+  .diario-ayuda summary { cursor: pointer; font-weight: 700; color: #6f5fb3; }
+  .diario-ayuda ul { margin: 0.6rem 0 0.2rem; padding-left: 1.2rem; }
+  .diario-ayuda li { margin: 0.25rem 0; color: #514c70; font-size: 0.9rem; }
+
+  .diario-dia { margin-bottom: 1.6rem; border: 1px solid #ece8f7; border-radius: 14px; overflow: hidden; }
+  .diario-dia-cab { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; background: linear-gradient(120deg, #f3f0fc, #fbf2f7); padding: 0.6rem 1rem; }
+  .diario-dia-cab strong { color: #403a63; font-size: 1.05rem; }
+  .diario-dia-cab label { font-size: 0.82rem; color: #6c6790; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; }
+  .diario-dia-cab input { font: inherit; padding: 0.3rem 0.5rem; border: 1px solid #ddd6ef; border-radius: 7px; }
+
+  .diario-tabla { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .diario-tabla th { background: #faf8fe; color: #534d77; font-weight: 700; font-size: 0.76rem; text-align: left; padding: 0.5rem 0.5rem; border-bottom: 1px solid #ece8f7; }
+  .diario-tabla td { padding: 0.2rem 0.35rem; border-bottom: 1px solid #f1eef9; }
+  .diario-tabla input, .diario-tabla select { width: 100%; font: inherit; font-size: 0.85rem; border: 1px solid transparent; background: transparent; padding: 0.35rem 0.4rem; border-radius: 6px; }
+  .diario-tabla input:focus, .diario-tabla select:focus { outline: none; border-color: #c9aee8; background: #fdfbff; }
+  .diario-tabla tr:hover input, .diario-tabla tr:hover select { background: #fcfaff; }
+  /* En móvil la tabla no cabe: se desplaza horizontalmente dentro de su caja. */
+  .diario-tabla-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  @media (max-width: 600px) {
+    .diario-tabla { min-width: 470px; }
+    .diario-tabla-scroll { margin: 0 -0.2rem; }
+  }
+  .diario-totales td { background: #f6f3fc; font-weight: 600; color: #4a4470; }
+  .diario-totales input { font-weight: 700; }
+  .diario-pie-dia { display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem; padding: 0.6rem 1rem; background: #fbfaff; }
+  .diario-pie-dia label { font-size: 0.82rem; color: #6c6790; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; }
+  .diario-pie-dia input { font: inherit; padding: 0.3rem 0.5rem; border: 1px solid #ddd6ef; border-radius: 7px; }
+
+  .diario-add-fila {
+      margin: 0.5rem 1rem; font: inherit; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+      color: #6f5fb3; background: #f3f0fc; border: 1px dashed #c9bdf0; border-radius: 9px;
+      padding: 0.4rem 0.9rem;
+  }
+  .diario-add-fila:hover { background: #ece5fb; border-style: solid; }
+  .diario-nota { font-size: 0.8rem; color: #8a85a5; margin-top: 1rem; }
+
+  @media print {
+      header, footer, .migas, .no-print { display: none !important; }
+      body { background: #fff; }
+      main { padding: 0; }
+      .diario-wrap { max-width: none; padding: 0; }
+      .diario-dia { break-inside: avoid; border-color: #bbb; }
+      .diario-tabla input, .diario-tabla select { border: none; }
+      .diario-tabla td { border-bottom: 1px solid #ccc; }
+      .diario-tabla th { border-bottom: 1px solid #999; }
+  }
+</style>
+
+<article class="diario-wrap">
+  <p class="migas no-print"><a href="/suelo-pelvico">Suelo pélvico</a> › Diario miccional</p>
+  <h1>Diario miccional</h1>
+  <p class="diario-intro">
+    Anota cómo funciona tu vejiga durante <strong>3 días</strong> (no tienen que ser
+    seguidos). Se guarda en este dispositivo mientras lo rellenas; cuando termines, pulsa
+    <strong>«Enviar a mi profesional»</strong> para que pueda verlo con tu NHC.
+    (También puedes imprimirlo o guardarlo en PDF.)
+  </p>
+
+  <div class="diario-acciones no-print">
+    <button type="button" class="diario-btn diario-btn--cta" id="diario-enviar">📤 Enviar a mi profesional</button>
+    <button type="button" class="diario-btn diario-btn--sec" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+    <button type="button" class="diario-btn diario-btn--sec" onclick="borrarDiario()">🗑️ Borrar todo</button>
+    <span id="diario-guardado" class="diario-saved">Se guarda automáticamente</span>
+  </div>
+  <p id="diario-envio-aviso" class="diario-saved" hidden></p>
+
+  <!-- Opción de rellenar a mano: descargar el diario en blanco para imprimir -->
+  <div class="diario-papel no-print">
+    <span class="diario-papel-txt">
+      🖊️ <strong>¿Prefieres rellenarlo a mano?</strong> Descarga el diario en blanco,
+      imprímelo y complétalo en papel.
+    </span>
+    <a class="diario-btn" href="/static/pdf/diario-miccional.pdf" download>
+      ⬇️ Descargar diario en blanco (PDF)
+    </a>
+  </div>
+
+  <div class="diario-cabecera">
+    <label>Nombre <input data-d id="diario-nombre" type="text" autocomplete="off"></label>
+    <label>N.º de historia (NHC) <input data-d id="diario-nhc" type="text" autocomplete="off" placeholder="Ej.: NHC-0001"></label>
+  </div>
+
+  <details class="diario-ayuda no-print">
+    <summary>¿Cómo se rellena? (consejos)</summary>
+    <ul>
+      <li><strong>Elige bien los días:</strong> 3 días en los que puedas medir cada micción con comodidad.</li>
+      <li><strong>Sé fiel a tu rutina:</strong> bebe y orina como siempre; no cambies hábitos por anotar.</li>
+      <li><strong>Anótalo al momento</strong>, sobre la marcha, no de memoria al final del día.</li>
+      <li><strong>Bebida:</strong> tipo y cantidad en ml (1 vaso ≈ 200 ml; 1 taza ≈ 150 ml).</li>
+      <li><strong>Orina:</strong> mide los ml con un vaso medidor cada vez que vayas al baño.</li>
+      <li><strong>Urgencia:</strong> ¿tuviste que correr al baño sin poder aguantar?</li>
+      <li><strong>Escape:</strong> si se te escapó orina, anota qué hacías y la protección usada.</li>
+    </ul>
+  </details>
+
+  {% for dia in range(1, 4) %}
+  <section class="diario-dia">
+    <div class="diario-dia-cab">
+      <strong>Día {{ dia }}</strong>
+      <label>Fecha <input data-d type="date"></label>
+    </div>
+    <div class="diario-tabla-scroll">
+    <table class="diario-tabla">
+      <thead>
+        <tr>
+          <th style="width:11%">⏱️ Hora</th>
+          <th style="width:22%">☕ Bebida (tipo y ml)</th>
+          <th style="width:12%">💧 Orina (ml)</th>
+          <th style="width:11%">⚡ Urgencia</th>
+          <th style="width:11%">⚠️ Escape</th>
+          <th style="width:20%">¿Qué hacías en el escape?</th>
+          <th style="width:13%">Protección</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for fila in range(8) %}
+        <tr>
+          <td><input data-d type="time"></td>
+          <td><input data-d type="text" placeholder="Agua · 200"></td>
+          <td><input data-d type="number" min="0" step="10" placeholder="ml"></td>
+          <td>
+            <select data-d>
+              <option value="">—</option>
+              <option>Sí</option>
+              <option>No</option>
+            </select>
+          </td>
+          <td>
+            <select data-d>
+              <option value="">—</option>
+              <option>Sí</option>
+              <option>No</option>
+            </select>
+          </td>
+          <td><input data-d type="text"></td>
+          <td><input data-d type="text" placeholder="salvaslip…"></td>
+        </tr>
+        {% endfor %}
+        <tr class="diario-totales">
+          <td><strong>TOTAL</strong></td>
+          <td><input data-d type="text" placeholder="Bebido: ___ ml"></td>
+          <td><input data-d type="text" placeholder="Orina: ___ ml"></td>
+          <td colspan="2"><input data-d type="text" placeholder="N.º escapes / micciones"></td>
+          <td colspan="2"><input data-d type="text" placeholder="N.º veces con urgencia"></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <button type="button" class="diario-add-fila no-print">➕ Añadir fila</button>
+    <div class="diario-pie-dia">
+      <label>🌙 Me acosté a las <input data-d type="time"></label>
+      <label>☀️ Me levanté a las <input data-d type="time"></label>
+    </div>
+  </section>
+  {% endfor %}
+
+  <p class="diario-nota">
+    Modelo basado en diarios miccionales validados (ICS, NIDDK).
+  </p>
+</article>
+
+<script>
+(function () {
+  const KEY = "diario-miccional-v1";
+  const KEY_FILAS = "diario-miccional-filas-v1";   // nº de filas extra por día
+  const FILAS_BASE = 8;
+  const campos = () => document.querySelectorAll("[data-d]");
+  const aviso = document.getElementById("diario-guardado");
+  let t;
+
+  // --- Filas extra (añadir más líneas si las 8 no bastan) ---
+  function nuevaFila() {
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td><input data-d type="time"></td>' +
+      '<td><input data-d type="text" placeholder="Agua · 200"></td>' +
+      '<td><input data-d type="number" min="0" step="10" placeholder="ml"></td>' +
+      '<td><select data-d><option value="">—</option><option>Sí</option><option>No</option></select></td>' +
+      '<td><select data-d><option value="">—</option><option>Sí</option><option>No</option></select></td>' +
+      '<td><input data-d type="text"></td>' +
+      '<td><input data-d type="text" placeholder="salvaslip…"></td>';
+    return tr;
+  }
+  function añadirFila(seccion) {
+    const tbody = seccion.querySelector("tbody");
+    const totales = tbody.querySelector(".diario-totales");
+    tbody.insertBefore(nuevaFila(), totales);
+  }
+  function guardarNumFilas() {
+    const extra = [...document.querySelectorAll(".diario-dia")].map(function (s) {
+      return s.querySelectorAll("tbody tr:not(.diario-totales)").length - FILAS_BASE;
+    });
+    try { localStorage.setItem(KEY_FILAS, JSON.stringify(extra)); } catch (e) {}
+  }
+  function restaurarNumFilas() {
+    let extra = [];
+    try { extra = JSON.parse(localStorage.getItem(KEY_FILAS) || "[]"); } catch (e) {}
+    document.querySelectorAll(".diario-dia").forEach(function (s, i) {
+      const n = Math.max(0, Number(extra[i]) || 0);
+      for (let k = 0; k < n; k++) añadirFila(s);
+    });
+  }
+
+  function guardar() {
+    const vals = [...campos()].map(c => c.value);
+    try { localStorage.setItem(KEY, JSON.stringify(vals)); } catch (e) {}
+    if (aviso) {
+      aviso.textContent = "✓ Guardado";
+      clearTimeout(t);
+      t = setTimeout(() => { aviso.textContent = "Se guarda automáticamente"; }, 1200);
+    }
+  }
+  function cargar() {
+    let vals = [];
+    try { vals = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) {}
+    const cs = campos();
+    cs.forEach((c, i) => { if (vals[i] != null && vals[i] !== "") c.value = vals[i]; });
+  }
+  window.borrarDiario = function () {
+    if (confirm("¿Seguro que quieres borrar todo el diario? No se puede deshacer.")) {
+      try { localStorage.removeItem(KEY); localStorage.removeItem(KEY_FILAS); } catch (e) {}
+      // Quita las filas extra que se hubieran añadido
+      document.querySelectorAll(".diario-dia tbody").forEach(function (tb) {
+        const filas = tb.querySelectorAll("tr:not(.diario-totales)");
+        for (let i = FILAS_BASE; i < filas.length; i++) filas[i].remove();
+      });
+      campos().forEach(c => { c.value = ""; });
+    }
+  };
+
+  // Botones "➕ Añadir fila" de cada día
+  document.querySelectorAll(".diario-add-fila").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      añadirFila(btn.closest(".diario-dia"));
+      guardarNumFilas();
+      guardar();
+    });
+  });
+
+  document.addEventListener("input", function (e) {
+    if (e.target.matches("[data-d]")) guardar();
+  });
+  restaurarNumFilas();   // primero recreamos las filas extra…
+  cargar();              // …y luego volcamos los valores guardados (índices alineados)
+
+  // ====================================================================
+  //  Envío al profesional: calcula métricas, interpreta y guarda en BD
+  // ====================================================================
+  function hhmmAMin(s) {
+    if (!s || s.indexOf(":") < 0) return null;
+    const p = s.split(":"); return Number(p[0]) * 60 + Number(p[1]);
+  }
+  // ¿La hora t (min) cae en el periodo de sueño [acostarse, levantarse)?
+  function esNocturna(t, bed, wake) {
+    if (t == null) return false;
+    if (bed == null || wake == null) { return (t >= 23 * 60 || t < 7 * 60); } // fallback
+    if (bed <= wake) return (t >= bed && t < wake);     // sueño sin cruzar medianoche
+    return (t >= bed || t < wake);                       // cruza medianoche (lo normal)
+  }
+
+  function calcularMetricas() {
+    const dias = [];
+    document.querySelectorAll(".diario-dia").forEach(sec => {
+      const filas = sec.querySelectorAll("tbody tr:not(.diario-totales)");
+      const pies = sec.querySelectorAll(".diario-pie-dia input");
+      const bed = hhmmAMin(pies[0] ? pies[0].value : "");
+      const wake = hhmmAMin(pies[1] ? pies[1].value : "");
+      let voids = 0, volDia = 0, volNoc = 0, micDiurnas = 0, micNocturnas = 0,
+          urg = 0, esc = 0, maxVol = 0, sumVol = 0, nVol = 0, conDatos = false;
+      filas.forEach(tr => {
+        const c = tr.querySelectorAll("input, select");
+        // c[0]=hora c[1]=bebida c[2]=orina c[3]=urgencia c[4]=escape c[5]=qué c[6]=protección
+        const t = hhmmAMin(c[0].value);
+        const ml = c[2].value ? Number(c[2].value) : null;
+        const urgencia = c[3].value, escape = c[4].value;
+        if (ml != null && ml > 0) {
+          conDatos = true; voids++; sumVol += ml; nVol++;
+          if (ml > maxVol) maxVol = ml;
+          if (esNocturna(t, bed, wake)) { micNocturnas++; volNoc += ml; }
+          else { micDiurnas++; volDia += ml; }
+        }
+        if (urgencia === "Sí") { urg++; conDatos = true; }
+        if (escape === "Sí") { esc++; conDatos = true; }
+      });
+      if (conDatos) {
+        dias.push({ voids, micDiurnas, micNocturnas, urg, esc,
+                    maxVol, mediaVol: nVol ? Math.round(sumVol / nVol) : 0,
+                    vol24: volDia + volNoc, volNoc });
+      }
+    });
+
+    const n = dias.length;
+    if (!n) return null;
+    const prom = (k) => dias.reduce((a, d) => a + d[k], 0) / n;
+    const maxGlobal = Math.max(...dias.map(d => d.maxVol));
+    const vol24 = prom("vol24"), volNoc = prom("volNoc");
+    return {
+      dias: n,
+      micciones_dia: +prom("voids").toFixed(1),
+      micciones_diurnas: +prom("micDiurnas").toFixed(1),
+      nicturia: +prom("micNocturnas").toFixed(1),
+      urgencia_dia: +prom("urg").toFixed(1),
+      escapes_dia: +prom("esc").toFixed(1),
+      capacidad_funcional: maxGlobal,            // máximo volumen miccional (ml)
+      volumen_medio: Math.round(prom("mediaVol")),
+      volumen_24h: Math.round(vol24),
+      indice_poliuria_nocturna: vol24 ? +(volNoc / vol24).toFixed(2) : null
+    };
+  }
+
+  function interpretar(m) {
+    const L = [];
+    // Frecuencia diurna (ICS: normal ≤7-8/día)
+    if (m.micciones_diurnas > 8) L.push("Aumento de la frecuencia miccional diurna (" + m.micciones_diurnas + "/día; referencia ≤7-8).");
+    else L.push("Frecuencia miccional diurna dentro de lo normal (" + m.micciones_diurnas + "/día).");
+    // Nicturia (≥2 clínicamente relevante)
+    if (m.nicturia >= 2) L.push("Nicturia significativa (" + m.nicturia + " micciones nocturnas/noche; ≥2 relevante).");
+    else if (m.nicturia >= 1) L.push("Nicturia leve (" + m.nicturia + " micción nocturna/noche).");
+    else L.push("Sin nicturia.");
+    // Capacidad funcional (máx volumen; normal ~300-600 ml)
+    if (m.capacidad_funcional && m.capacidad_funcional < 250) L.push("Capacidad vesical funcional reducida (" + m.capacidad_funcional + " ml; referencia 300-600), sugestiva de vejiga hiperactiva / hipersensibilidad.");
+    else if (m.capacidad_funcional > 600) L.push("Capacidad vesical funcional elevada (" + m.capacidad_funcional + " ml), valorar hiposensibilidad/vaciado incompleto.");
+    else if (m.capacidad_funcional) L.push("Capacidad vesical funcional normal (" + m.capacidad_funcional + " ml).");
+    // Urgencia
+    if (m.urgencia_dia >= 1) L.push("Episodios de urgencia presentes (" + m.urgencia_dia + "/día), compatibles con vejiga hiperactiva.");
+    // Escapes
+    if (m.escapes_dia >= 1) L.push("Episodios de incontinencia (" + m.escapes_dia + " escapes/día).");
+    else L.push("Sin escapes de orina registrados.");
+    // Poliuria 24 h y poliuria nocturna
+    if (m.volumen_24h > 2800) L.push("Volumen urinario de 24 h elevado (" + m.volumen_24h + " ml), valorar poliuria (>40 ml/kg/24h).");
+    if (m.indice_poliuria_nocturna != null && m.indice_poliuria_nocturna > 0.33) L.push("Índice de poliuria nocturna " + m.indice_poliuria_nocturna + " (>0,33): poliuria nocturna.");
+    return L;
+  }
+
+  document.getElementById("diario-enviar").addEventListener("click", function () {
+    const nhc = (document.getElementById("diario-nhc").value || "").trim();
+    const nombre = (document.getElementById("diario-nombre").value || "").trim();
+    const aviso = document.getElementById("diario-envio-aviso");
+    aviso.hidden = false;
+    if (!nhc) {
+      aviso.style.color = "#b00020";
+      aviso.textContent = "Para enviarlo, escribe tu N.º de historia (NHC).";
+      const campo = document.getElementById("diario-nhc");
+      campo.scrollIntoView({ behavior: "smooth", block: "center" });
+      campo.focus({ preventScroll: true });
+      campo.classList.add("cpop-resaltado");
+      setTimeout(() => campo.classList.remove("cpop-resaltado"), 1600);
+      return;
+    }
+    const m = calcularMetricas();
+    if (!m) {
+      aviso.style.color = "#b00020";
+      aviso.textContent = "Rellena al menos un día del diario (con horas y ml) antes de enviarlo.";
+      return;
+    }
+    const interp = interpretar(m);
+    const informe = [
+      "DIARIO MICCIONAL — RESUMEN E INTERPRETACIÓN",
+      "Paciente: " + (nombre || "No consta") + "   ·   NHC: " + nhc,
+      "Días registrados: " + m.dias,
+      "",
+      "MÉTRICAS (promedio por día):",
+      "- Micciones totales/día: " + m.micciones_dia + "  (diurnas " + m.micciones_diurnas + " · nocturnas " + m.nicturia + ")",
+      "- Capacidad vesical funcional (máx. volumen): " + (m.capacidad_funcional || "—") + " ml",
+      "- Volumen miccional medio: " + (m.volumen_medio || "—") + " ml",
+      "- Volumen urinario 24 h: " + (m.volumen_24h || "—") + " ml",
+      "- Episodios de urgencia/día: " + m.urgencia_dia,
+      "- Episodios de escape (incontinencia)/día: " + m.escapes_dia,
+      "- Índice de poliuria nocturna: " + (m.indice_poliuria_nocturna != null ? m.indice_poliuria_nocturna : "—"),
+      "",
+      "INTERPRETACIÓN ORIENTATIVA:",
+      ...interp.map(s => "- " + s),
+      "",
+      "Valores de referencia: ICS (Haylen 2010), Abrams 2002; frecuencia diurna ≤7-8/día,",
+      "capacidad funcional 300-600 ml, nicturia ≥2 relevante, índice de poliuria nocturna >0,33."
+    ].join("\n");
+
+    const datos = [...campos()].map(c => c.value);
+    const fd = new FormData();
+    fd.append("nhc", nhc);
+    fd.append("nombre", nombre);
+    fd.append("datos_json", JSON.stringify(datos));
+    fd.append("metricas_json", JSON.stringify(m));
+    fd.append("informe", informe);
+
+    aviso.style.color = "#6c6790";
+    aviso.textContent = "Enviando…";
+    fetch("/diario-miccional", { method: "POST", body: fd })
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.ok) {
+          aviso.style.color = "#46a173";
+          aviso.textContent = "✓ Enviado a tu profesional. Lo verá buscando tu NHC (" + nhc + ").";
+        } else {
+          aviso.style.color = "#b00020";
+          aviso.textContent = "No se pudo enviar. Inténtalo de nuevo.";
+        }
+      })
+      .catch(() => { aviso.style.color = "#b00020"; aviso.textContent = "No se pudo enviar (sin conexión)."; });
+  });
+})();
+</script>
+{% endblock %}

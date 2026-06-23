@@ -1,0 +1,75 @@
+<!--
+  algoritmo_iu.html
+  -----------------
+  Guía de consulta rápida de INCONTINENCIA URINARIA (esquema ICS) mostrada
+  directamente como imagen, adaptada al estilo de la web. Ayuda diagnóstica
+  en consulta de primaria o ginecología general.
+  Solo herramienta de apoyo · verificar dosis y CI con la ficha técnica vigente.
+-->
+{% extends "base.html" %}
+
+{% block body_class %}guia-page{% endblock %}
+
+{% block contenido %}
+<style>
+  /* En esta página el contenido principal puede ser muy ancho (lámina grande) */
+  body.guia-page main { max-width: 1680px; padding: 0 1rem; }
+  /* Ancho amplio para que la lámina se lea con comodidad (hasta su tamaño nativo) */
+  .guia-wrap { max-width: 1786px; margin: 0 auto; padding: 0 0.6rem 2.5rem; }
+  .guia-head h1 { color: #1f4e63; margin: 0.3rem 0 0.2rem; font-size: clamp(1.4rem, 3.6vw, 1.9rem); }
+  .guia-head .guia-sub { color: #4a6b78; margin: 0; font-size: 0.98rem; }
+  .guia-aviso {
+      margin: 0.9rem 0 1rem; font-size: 0.84rem; color: #6a5a2f; line-height: 1.5;
+      background: #fdf6e3; border: 1px solid #f0e2b8; border-radius: 9px; padding: 0.55rem 0.85rem;
+  }
+  .guia-acciones { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1rem; }
+  .guia-btn {
+      margin: 0; font: inherit; font-weight: 700; font-size: 0.92rem; cursor: pointer;
+      color: #1f4e63; background: #fff; border: 1px solid #bcd9e2; border-radius: 10px;
+      padding: 0.55rem 1rem; text-decoration: none; transition: background 0.15s;
+  }
+  .guia-btn:hover { background: #eef6f8; }
+  .guia-btn--azul { background: linear-gradient(135deg, #2f6fb2, #3f9bb0); color: #fff; border: none; }
+
+  /* La lámina de la guía, enmarcada y centrada */
+  .guia-lamina {
+      display: block; width: 100%; height: auto; border-radius: 12px;
+      border: 1px solid #e2e9ef; box-shadow: 0 12px 34px -16px rgba(31,78,99,0.45);
+      background: #fff;
+  }
+  .guia-zoom { display: block; }
+  .guia-pista { text-align: center; font-size: 0.82rem; color: #7a8590; margin: 0.6rem 0 0; }
+
+  @media print {
+      header, footer, .guia-acciones, .guia-head, .guia-aviso, .guia-pista, .no-print { display: none !important; }
+      .guia-wrap { max-width: none; padding: 0; }
+      .guia-lamina { border: none; box-shadow: none; border-radius: 0; }
+  }
+</style>
+
+<article class="guia-wrap">
+  <div class="guia-head">
+    <h1>Incontinencia urinaria en la mujer</h1>
+    <p class="guia-sub">Guía de consulta rápida (esquema ICS) · ayuda al diagnóstico y manejo en consulta</p>
+  </div>
+
+  <p class="guia-aviso">
+    ⚠️ <strong>Herramienta de apoyo a la decisión clínica.</strong> No sustituye el juicio profesional.
+    Verifica dosis y contraindicaciones con la ficha técnica vigente.
+  </p>
+
+  <div class="guia-acciones no-print">
+    <a class="guia-btn guia-btn--azul" href="/static/images/guia-iu.png" target="_blank" rel="noopener">🔍 Ver a tamaño completo</a>
+    <button type="button" class="guia-btn" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+    <a class="guia-btn" href="/panel">← Volver al panel</a>
+  </div>
+
+  <a class="guia-zoom" href="/static/images/guia-iu.png" target="_blank" rel="noopener"
+     title="Abrir a tamaño completo">
+    <img class="guia-lamina"
+         src="/static/images/guia-iu.png?v={{ css_v() }}"
+         alt="Guía de consulta rápida: incontinencia urinaria en la mujer (algoritmo ICS, diagnóstico y tratamiento)">
+  </a>
+  <p class="guia-pista no-print">Pulsa la imagen para abrirla a tamaño completo.</p>
+</article>
+{% endblock %}

@@ -1,0 +1,3116 @@
+/*
+  style.css
+  ---------
+  Estilos visuales sencillos para toda la aplicación.
+  No es necesario entenderlo a fondo ahora; puedes cambiar colores y tamaños.
+*/
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: system-ui, -apple-system, Arial, sans-serif;
+    margin: 0;
+    color: #1f2d3d;
+    background: #f5f4fb;
+    line-height: 1.5;
+}
+
+header {
+    background: white;
+    padding: 0.6rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    border-bottom: 1px solid #e3e8ef;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Logo en la cabecera */
+.marca { display: inline-flex; align-items: center; }
+.logo-cabecera { height: 52px; width: auto; display: block; }
+
+/* Lado derecho de la cabecera: navegación + logo del hospital (grande y visible) */
+.header-acciones { display: flex; align-items: center; gap: 1.4rem; flex-wrap: wrap; }
+.logo-hospital-cab { height: 92px; width: auto; display: block; }
+@media (max-width: 600px) { .logo-hospital-cab { height: 60px; } }
+
+header nav a {
+    color: #6f5fb3;
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-weight: 600;
+}
+
+header nav a:hover { text-decoration: underline; }
+
+main {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+footer {
+    text-align: center;
+    color: #7a8aa0;
+    font-size: 0.85rem;
+    padding: 2rem;
+}
+
+h1 { color: #403a63; }
+
+/* Formularios */
+.formulario {
+    display: flex;
+    flex-direction: column;
+    max-width: 420px;
+    gap: 0.4rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.formulario label { font-weight: 600; margin-top: 0.6rem; }
+
+.formulario input,
+.formulario textarea {
+    padding: 0.55rem;
+    border: 1px solid #c4ced9;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+button, .boton {
+    display: inline-block;
+    margin-top: 1rem;
+    background: #6f5fb3;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.1rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+button:hover, .boton:hover { background: #5a4f9c; }
+
+/* Tabla de procesos */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+th, td {
+    text-align: left;
+    padding: 0.7rem 0.9rem;
+    border-bottom: 1px solid #e3e8ef;
+}
+
+th { background: #efeafb; }
+
+/* Mensajes */
+.error {
+    color: #b00020;
+    background: #fde8e8;
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+}
+
+.ayuda { color: #7a8aa0; font-size: 0.9rem; }
+
+.cabecera-panel { margin-bottom: 1rem; }
+
+/* ---------- Páginas informativas para pacientes ---------- */
+
+/* Distintivo de "borrador": marca el texto redactado de forma automática
+   y todavía pendiente de revisión por un profesional sanitario. */
+/* Etiqueta "Borrador — pendiente de revisión clínica": retirada de todas las
+   páginas. Se oculta de golpe; para recuperarla, basta con quitar esta regla. */
+.borrador { display: none !important; }
+
+/* Hace que al pulsar un enlace del índice el desplazamiento sea suave. */
+html { scroll-behavior: smooth; }
+
+.contenido-paciente {
+    max-width: 720px;   /* líneas más cortas = lectura más cómoda */
+}
+
+.contenido-paciente .intro {
+    font-size: 1.1rem;
+    color: #44546a;
+}
+
+/* Cada apartado, con un poco de aire y una línea separadora arriba. */
+.contenido-paciente section {
+    margin-top: 2.2rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid #e3e8ef;
+}
+
+.contenido-paciente h2 {
+    color: #6f5fb3;
+    font-size: 1.4rem;
+}
+
+.contenido-paciente p { font-size: 1.05rem; }
+
+/* El índice de contenidos, dentro de una tarjeta. */
+.indice {
+    background: white;
+    border: 1px solid #e3e8ef;
+    border-left: 4px solid #6f5fb3;
+    border-radius: 8px;
+    padding: 1rem 1.4rem;
+    margin: 1.5rem 0;
+}
+
+.indice h2 { font-size: 1.1rem; margin-top: 0; }
+.indice ul { margin: 0; padding-left: 1.2rem; }
+.indice li { margin: 0.3rem 0; }
+
+/* Aviso destacado al final de la página. */
+.aviso {
+    background: #efeafb;
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    color: #44546a;
+}
+
+.volver { margin-top: 2rem; }
+
+/* Migas de navegación (ej: Suelo pélvico › Prolapso) */
+.migas {
+    font-size: 0.9rem;
+    color: #7a8aa0;
+    margin-bottom: 0.3rem;
+}
+
+/* Tarjetas para elegir según el diagnóstico */
+.tarjetas-diagnostico {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 1.2rem 0;
+}
+
+.tarjeta {
+    display: block;
+    width: 100%;
+    margin: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    background: white;
+    border: 1px solid #e3e8ef;
+    border-radius: 10px;
+    padding: 1.1rem 1.2rem;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.15s, transform 0.15s;
+}
+
+.tarjeta:hover {
+    box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+    transform: translateY(-2px);
+}
+
+.tarjeta h3 {
+    margin: 0 0 0.4rem;
+    color: #6f5fb3;
+    font-size: 1.1rem;
+}
+
+.tarjeta p { margin: 0 0 0.8rem; font-size: 0.98rem; color: #44546a; }
+
+.enlace-tarjeta { color: #6f5fb3; font-weight: 600; font-size: 0.95rem; }
+
+/* ============================================================
+   ÁREA DE PACIENTES: encabezado, post-its e iconos
+   ============================================================ */
+
+/* --- Encabezado pastel de la página --- */
+.pac-hero {
+    position: relative;
+    overflow: hidden;
+    display: block;                 /* anula el flex del <header> global, por si acaso */
+    background: linear-gradient(135deg, #ece9fb 0%, #e7f1f6 55%, #e9f4ec 100%);
+    border: none;
+    box-shadow: none;
+    border-radius: 22px;
+    padding: clamp(1.5rem, 4vw, 2.6rem);
+    margin-bottom: 1.6rem;
+}
+.pac-hero .borrador { margin-bottom: 0.8rem; }
+.pac-hero h1 { margin: 0.2rem 0 0.5rem; color: #403a63; }
+.pac-hero .intro { margin: 0; color: #5a6470; max-width: 60ch; }
+
+/* Detalle difuminado (acuarela) en la esquina derecha del encabezado */
+.pac-hero-deco {
+    position: absolute;
+    top: 50%;
+    right: -40px;
+    transform: translateY(-50%);
+    width: 240px;
+    height: 240px;
+    background: url('/static/images/portada-anatomia.png') no-repeat center / contain;
+    opacity: 0.5;
+    mix-blend-mode: multiply;
+    -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent 100%);
+            mask-image: radial-gradient(closest-side, #000 55%, transparent 100%);
+    pointer-events: none;
+}
+.pac-hero-texto { position: relative; z-index: 1; }
+
+/* ============================================================
+   PORTADA del área de pacientes (a pantalla completa)
+   ============================================================ */
+
+/* En esta página el contenido ocupa todo el ancho (sin el margen central) */
+body.pac-portada-page main { max-width: none; margin: 0; padding: 0; }
+
+/* El resto del contenido (tras la portada) recupera un ancho de lectura cómodo */
+.pac-cuerpo {
+    margin: 0 auto;
+    padding: 0 1.5rem 3rem;
+}
+
+/* La portada: ocupa (casi) toda la primera pantalla */
+.pac-portada {
+    position: relative;
+    min-height: calc(100svh - 76px);   /* alto de pantalla menos la cabecera */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1.8rem 1.5rem 2rem;
+    overflow: hidden;
+    background: linear-gradient(160deg, #e9ecfb 0%, #e7f1f8 38%, #e6f4ed 68%, #f7f2ec 100%);
+}
+
+/* Motivo geométrico (estilo PSSP) de fondo, en lila pastel y bien visible.
+   El tamaño (vmin) garantiza que se vea ENTERO en cualquier pantalla. */
+.pac-portada-motivo {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: url('/static/images/motivo-pssp-lila.png') no-repeat center center;
+    background-size: min(90vmin, 760px);
+    opacity: 0.55;
+}
+
+/* Titular de página (arriba); deja el centro y la imagen despejados */
+.pac-portada-cabecera {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 660px;
+    text-align: center;
+}
+.pac-portada-cabecera h1 {
+    color: #403a63;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.12;
+    margin: 0.4rem 0 0;
+}
+/* El menú se centra verticalmente en el espacio que queda bajo el titular.
+   El menú principal y el bloque de recursos forman un grupo centrado. */
+.pac-portada .portada-menu {
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+    margin-bottom: 0;
+}
+
+/* ====== Bloque "Recursos para pacientes" (color delicado distinto) ====== */
+.portada-recursos {
+    position: relative; z-index: 2; width: 100%; max-width: 760px;
+    margin: 0.8rem auto auto; text-align: center;
+}
+.recursos-titulo {
+    display: inline-block; font-size: 0.72rem; letter-spacing: 0.14em;
+    text-transform: uppercase; font-weight: 700; color: #2f9387; margin-bottom: 0.35rem;
+}
+.recursos-menu { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem; }
+/* (mayor especificidad para ganar a .portada-opcion, definido más abajo) */
+.recursos-menu .recurso-opcion {
+    flex: 1 1 210px; text-decoration: none;
+    background: rgba(228,247,243,0.78);
+    border-color: rgba(184,224,216,0.95);
+    padding: 0.6rem 0.95rem;
+}
+.recursos-menu .recurso-opcion:hover { background: #effbf8; }
+.recursos-menu .recurso-opcion .portada-opcion-ico {
+    background: linear-gradient(135deg, #a6dccf, #b3d7ee); color: #2f7d72;
+}
+.recursos-menu .recurso-opcion .portada-opcion-txt strong { color: #2c5a52; }
+
+/* --- Apartado DESTACADO "Cuestionarios" (bien visible para la paciente) --- */
+.portada-cuestionarios {
+    position: relative; z-index: 2;
+    width: 100%; max-width: 760px;
+    margin: 1.3rem auto 0;
+    padding: 1.1rem 1.3rem 1.3rem;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(244,240,253,0.92), rgba(236,244,251,0.92));
+    border: 1.5px solid #d8cdf2;
+    border-radius: 20px;
+    box-shadow: 0 14px 34px -18px rgba(111,95,179,0.65);
+}
+.cuestionarios-titulo {
+    display: inline-block;
+    font-size: 1.35rem; font-weight: 800; letter-spacing: 0.01em;
+    color: #5a4f9c;
+}
+.cuestionarios-sub {
+    margin: 0.25rem auto 0; max-width: 560px;
+    font-size: 0.92rem; color: #6c6790; line-height: 1.45;
+}
+.portada-cuestionarios .cuest-orientador { margin-top: 1rem; }
+.cuestionarios-cards { margin-top: 0.9rem; }
+
+/* --- Pregunta orientadora para elegir cuestionario (ancho completo) --- */
+.cuest-orientador {
+    flex: 1 1 100%; width: 100%;
+    background: linear-gradient(135deg, #f3f0fc, #eef4fb);
+    border: 1px solid #e0d8f3; border-radius: 14px;
+    padding: 0.85rem 1.1rem; margin-top: 0.3rem;
+}
+.cuest-orientador-q { margin: 0 0 0.7rem; color: #4a4470; font-size: 0.98rem; }
+.cuest-orientador-q strong { color: #6f5fb3; }
+.cuest-orientador-ico { margin-right: 0.2rem; }
+.cuest-orientador-ops { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+.cuest-op {
+    display: flex; align-items: center; gap: 0.5rem; flex: 1 1 220px;
+    text-align: left; text-decoration: none; cursor: pointer; margin: 0;
+    background: #fff; color: #3d3860;
+    border: 1.5px solid #e2dbf3; border-radius: 11px;
+    padding: 0.6rem 0.8rem; font-size: 0.9rem; font-weight: 500;
+    transition: border-color 0.15s, background 0.15s, transform 0.12s, box-shadow 0.15s;
+}
+.cuest-op:hover {
+    border-color: #b49fe0; background: #faf7ff;
+    transform: translateY(-2px); box-shadow: 0 6px 16px rgba(143,124,200,0.16);
+}
+.cuest-op--sel { border-color: #8f7cc8; background: #efe9fb; }
+.cuest-op strong { color: #6f5fb3; font-weight: 700; }
+.cuest-op-ico { font-size: 1.2rem; line-height: 1; flex: 0 0 auto; }
+.cuest-orientador-hint {
+    margin: 0.7rem 0 0; font-size: 0.9rem; color: #46557a; line-height: 1.5;
+    background: #fff; border-left: 3px solid #8f7cc8; border-radius: 8px;
+    padding: 0.55rem 0.8rem;
+}
+.cuest-orientador-hint a { color: #6f5fb3; font-weight: 600; }
+
+/* En la portada, las tarjetas de datos son translúcidas (efecto cristal)
+   para que el motivo del fondo se vea a través de ellas. */
+.pac-portada .sabias-card {
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    border-color: rgba(255,255,255,0.7);
+}
+.pac-portada .sabias-card--lila {
+    background: linear-gradient(160deg, rgba(239,233,252,0.62), rgba(227,217,247,0.55));
+}
+.pac-portada .sabias-card--azul {
+    background: linear-gradient(160deg, rgba(228,238,251,0.62), rgba(211,228,246,0.55));
+}
+
+/* Indicador "Descubre más ↓" al pie de la portada */
+.pac-scroll {
+    margin-top: 2.2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #6b6494;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.pac-scroll:hover { color: #4a4470; }
+.pac-scroll span {
+    display: inline-block;
+    animation: pacRebote 1.6s ease-in-out infinite;
+}
+@keyframes pacRebote {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(4px); }
+}
+
+@media (max-width: 600px) {
+    /* En móvil la cabecera es más alta (el menú se reparte en dos líneas).
+       Compactamos el contenido para que TODO (incluido el menú) quepa sin bajar. */
+    .pac-portada { min-height: calc(100svh - 132px); padding: 0.9rem 0.9rem 1.2rem; }
+    .pac-portada-cabecera h1 { font-size: clamp(1.45rem, 6.5vw, 1.8rem); margin: 0.15rem 0 0.4rem; }
+    .pac-portada-sub { font-size: 0.9rem; margin-top: 0.2rem; margin-bottom: 0; }
+    .pac-portada .cifras-grid--portada { gap: 0.5rem; margin-top: 0.8rem; }
+    .pac-portada .cifras-card { padding: 0.6rem 0.7rem; }
+    .pac-portada .cifras-num { font-size: 1.2rem; }
+    .pac-portada .cifras-txt { font-size: 0.76rem; margin-top: 0.3rem; line-height: 1.35; }
+    .portada-menu { margin-top: 0.9rem; gap: 0.5rem; }
+    .portada-opcion { padding: 0.6rem 0.9rem; }
+    .portada-opcion-ico { width: 36px; height: 36px; }
+    .portada-opcion-txt strong { font-size: 0.95rem; }
+    .portada-opcion-txt small { font-size: 0.78rem; }
+}
+
+/* --- Bloque "¿Sabías que…?" (datos clave, visual) --- */
+.sabias-que { margin-top: 1.3rem; max-width: 56ch; }
+.sabias-eyebrow {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: #8e87b8;
+    margin: 0 0 0.9rem;
+}
+.sabias-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 0.9rem;
+}
+.sabias-card {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    border: 1px solid rgba(255,255,255,0.7);
+    border-radius: 16px;
+    padding: 1rem 1.1rem;
+    box-shadow: 0 8px 20px -14px rgba(90,83,136,0.45);
+}
+.sabias-card--lila { background: linear-gradient(160deg, #efe9fc, #e3d9f7); }
+.sabias-card--azul { background: linear-gradient(160deg, #e4eefb, #d3e4f6); }
+.sabias-num {
+    flex: none;
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1;
+    white-space: nowrap;
+}
+.sabias-card--lila .sabias-num { color: #6f5fb3; }
+.sabias-card--azul .sabias-num { color: #3f7cc0; }
+.sabias-num i { font-style: normal; font-size: 0.78rem; font-weight: 600; opacity: 0.75; }
+.sabias-card p { margin: 0; font-size: 0.95rem; color: #55607a; }
+
+.sabias-puntos {
+    list-style: none;
+    margin: 0.9rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.55rem;
+}
+.sabias-puntos li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 1rem;
+    color: #55607a;
+}
+.sabias-icono { flex: none; color: #8079ad; margin-top: 1px; }
+.sabias-icono--ok { color: #46a173; }
+
+/* Aviso discreto al pie de la página (p.nota-pie gana a .contenido-paciente p) */
+p.nota-pie {
+    margin-top: 2.5rem;
+    font-size: 0.83rem;
+    font-style: italic;
+    color: #9aa3b2;
+}
+
+/* ============================================================
+   MENÚ DE LA PORTADA + VENTANA MODAL
+   ============================================================ */
+
+/* Subtítulo bajo el título de la portada */
+.pac-portada-sub {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-size: clamp(1.02rem, 2.1vw, 1.3rem);
+    color: #6c7a86;
+    max-width: 660px;
+    margin: 0.4rem auto 0;
+}
+
+/* Titular discreto y elegante + frase introductoria */
+.pac-portada-titular {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-size: clamp(1.12rem, 2.2vw, 1.45rem);
+    line-height: 1.35;
+    color: #5a5388;
+    max-width: 640px;
+    margin: 0.5rem auto 0;
+}
+.pac-portada-intro {
+    font-size: clamp(0.92rem, 1.8vw, 1.02rem);
+    line-height: 1.55;
+    color: #7a8194;
+    max-width: 600px;
+    margin: 0.65rem auto 0;
+}
+
+/* --- Pines de cifras: pequeños y discretos, ordenados en los laterales --- */
+.cifra-pin {
+    position: absolute;
+    z-index: 1;                 /* por debajo del bloque central (z-index 2) */
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    background: rgba(255,255,255,0.74);
+    -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.85);
+    border-radius: 13px;
+    padding: 0.65rem 0.85rem;
+    box-shadow: 0 8px 18px -10px rgba(90,83,136,0.45);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.cifra-pin:hover {
+    transform: scale(1.06);
+    box-shadow: 0 16px 30px -10px rgba(90,83,136,0.55);
+    z-index: 3;
+}
+.cifra-pin--4:hover, .cifra-pin--5:hover, .cifra-pin--6:hover { transform-origin: right center; }
+.cifra-pin--1:hover, .cifra-pin--2:hover, .cifra-pin--3:hover { transform-origin: left center; }
+.cifra-pin-num {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: #6f5fb3;
+}
+.cifra-pin-txt {
+    font-size: 0.83rem;
+    line-height: 1.3;
+    color: #5a6470;
+    margin-top: 0.3rem;
+}
+.cifra-pin--cta { background: linear-gradient(150deg, #c8b8f0 0%, #b3cdf2 100%); }
+.cifra-pin--cta .cifra-pin-num,
+.cifra-pin--cta .cifra-pin-txt { color: #2f2b50; }
+
+/* Colocación ordenada: tres a cada lado, sin tocar el centro */
+.cifra-pin--1 { top: 17%; left: 3%; }
+.cifra-pin--2 { top: 44%; left: 1%; }
+.cifra-pin--3 { top: 71%; left: 3.5%; }
+.cifra-pin--4 { top: 17%; right: 3%; text-align: right; }
+.cifra-pin--5 { top: 44%; right: 1%; text-align: right; }
+.cifra-pin--6 { top: 71%; right: 3.5%; text-align: right; }
+
+/* ---- Animaciones de entrada de la portada (solo si no se reduce el movimiento) ---- */
+@keyframes portadaEntra {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: none; }
+}
+@keyframes portadaSube {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: none; }
+}
+@keyframes motivoEntra {
+    from { opacity: 0; transform: scale(1.07); }
+    to   { opacity: 0.55; transform: scale(1); }
+}
+/* Aparición lenta (materializar: desenfoque -> nítido con un pop) */
+@keyframes pinEntra {
+    0%   { opacity: 0; transform: scale(0.5) translateY(16px); filter: blur(8px); }
+    100% { opacity: 1; transform: scale(1)   translateY(0);    filter: blur(0); }
+}
+/* Desaparición (se desvanecen hacia arriba) */
+@keyframes pinSale {
+    0%   { opacity: 1; transform: scale(1)    translateY(0);    filter: blur(0); }
+    100% { opacity: 0; transform: scale(0.85) translateY(-12px); filter: blur(5px); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .pac-portada-motivo  { animation: motivoEntra 1.1s ease both; }
+    .pac-portada-cabecera{ animation: portadaEntra 0.7s ease both; }
+    .pac-portada .portada-menu { animation: portadaSube 0.7s ease 0.15s both; }
+
+    /* Los pines aparecen LENTAMENTE uno a uno (en secuencia alterna izq/der) y,
+       una vez todos visibles, DESAPARECEN A LA VEZ (a los 7 s) para dejar el
+       foco en las 4 ventanas. La segunda animación tiene el mismo retardo (7 s)
+       en todos, por eso se van juntos. */
+    .cifra-pin {
+        animation-name: pinEntra, pinSale;
+        animation-duration: 1.6s, 1.4s;
+        animation-timing-function: cubic-bezier(0.34, 1.45, 0.5, 1), ease-in;
+        animation-fill-mode: backwards, forwards;
+    }
+    /* Primero todos los de la IZQUIERDA (de arriba a abajo)... */
+    .cifra-pin--1 { animation-delay: 0.8s,  20.5s; }
+    .cifra-pin--2 { animation-delay: 2.8s,  20.5s; }
+    .cifra-pin--3 { animation-delay: 4.8s,  20.5s; }
+    /* ...y luego todos los de la DERECHA (de arriba a abajo) */
+    .cifra-pin--4 { animation-delay: 6.8s,  20.5s; }
+    .cifra-pin--5 { animation-delay: 8.8s,  20.5s; }
+    .cifra-pin--6 { animation-delay: 10.8s, 20.5s; }
+}
+
+/* En pantallas estrechas, los pines pasan a una fila compacta debajo */
+@media (max-width: 900px) {
+    .cifras-pins {
+        position: static;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        margin: 1.1rem auto 0;
+        max-width: 560px;
+    }
+    .cifra-pin {
+        position: static;
+        max-width: none;
+        flex: 1 1 150px;
+        text-align: left !important;
+    }
+}
+
+/* ============================================================
+   ISLA DE EJERCICIOS — aparece donde estaban las cifras (zona
+   lateral libre) cuando estas desaparecen (~22 s). Color cálido
+   propio (coral/rosa), decoración y animación que invita a clicar.
+   ============================================================ */
+.ejer-isla {
+    position: absolute;
+    z-index: 4;
+    top: 56vh;                 /* zona baja del primer viewport */
+    left: 2.2%;
+    width: 250px;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+    padding: 0.9rem 1rem;
+    border-radius: 18px;
+    color: #5a2540;
+    background: linear-gradient(140deg, #ffd7b0 0%, #ffb0a3 45%, #ff8fb0 100%);
+    border: 1px solid rgba(255,255,255,0.7);
+    box-shadow: 0 16px 34px -14px rgba(255,108,140,0.75);
+    /* Entrada sincronizada con la salida de las cifras + latido continuo */
+    animation: ejerEntra 0.9s cubic-bezier(0.34, 1.56, 0.5, 1) 22s both,
+               ejerLatido 3s ease-in-out 23.2s infinite;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.ejer-isla:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 22px 44px -12px rgba(255,108,140,0.9);
+}
+/* Brillo que cruza la isla al pasar el ratón */
+.ejer-isla::after {
+    content: "";
+    position: absolute; top: 0; left: -60%; width: 45%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.55), transparent);
+    transform: skewX(-18deg);
+    transition: left 0.55s ease;
+}
+.ejer-isla:hover::after { left: 130%; }
+
+/* Anillo de "respiración" alrededor del icono */
+.ejer-isla-ring {
+    position: relative;
+    flex: 0 0 auto;
+    width: 52px; height: 52px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.55);
+}
+.ejer-isla-ring::before {
+    content: "";
+    position: absolute; inset: -6px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.85);
+    animation: ejerRespira 3s ease-in-out 23.2s infinite;
+}
+.ejer-isla-ico { font-size: 1.6rem; line-height: 1; }
+
+.ejer-isla-txt { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.ejer-isla-eyebrow {
+    font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #b03b63;
+}
+.ejer-isla-txt strong { font-size: 0.98rem; line-height: 1.15; color: #5a2540; }
+.ejer-isla-txt small:not(.ejer-isla-eyebrow) { font-size: 0.78rem; color: #844; }
+.ejer-isla-cta {
+    margin-top: 0.4rem; align-self: flex-start;
+    font-size: 0.78rem; font-weight: 700; color: #fff;
+    background: rgba(214,72,110,0.92); border-radius: 99px; padding: 3px 11px;
+}
+
+/* Destellos decorativos flotantes */
+.ejer-spark {
+    position: absolute; font-size: 0.85rem; opacity: 0.9; pointer-events: none;
+    animation: ejerFlota 3.4s ease-in-out 23s infinite;
+}
+.ejer-spark--1 { top: 8px; right: 14px; }
+.ejer-spark--2 { bottom: 12px; right: 22px; animation-delay: 24s; font-size: 0.7rem; }
+.ejer-spark--3 { top: 50%; right: 8px; animation-delay: 23.6s; font-size: 0.6rem; }
+
+@keyframes ejerEntra {
+    0%   { opacity: 0; transform: translateY(28px) scale(0.55); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes ejerLatido {
+    0%, 100% { box-shadow: 0 16px 34px -14px rgba(255,108,140,0.75); }
+    50%      { box-shadow: 0 18px 40px -10px rgba(255,108,140,1); }
+}
+@keyframes ejerRespira {
+    0%, 100% { transform: scale(1);    opacity: 0.85; }
+    50%      { transform: scale(1.18); opacity: 0.25; }
+}
+@keyframes ejerFlota {
+    0%, 100% { transform: translateY(0) rotate(0); opacity: 0.9; }
+    50%      { transform: translateY(-7px) rotate(12deg); opacity: 0.4; }
+}
+
+/* Si se reduce el movimiento: visible desde el inicio, sin animaciones */
+@media (prefers-reduced-motion: reduce) {
+    .ejer-isla { animation: none; }
+    .ejer-isla-ring::before, .ejer-spark { animation: none; }
+}
+
+/* Pantallas medias/estrechas: pasa a banner normal en el flujo (el margen
+   lateral ya no da para flotar sin tapar el contenido), sin esperar 22 s */
+@media (max-width: 1150px) {
+    .ejer-isla {
+        position: static;
+        width: auto; max-width: 460px;
+        margin: 1.2rem auto 0;
+        top: auto; left: auto;
+        animation: ejerEntra 0.8s cubic-bezier(0.34, 1.56, 0.5, 1) 0.4s both,
+                   ejerLatido 3s ease-in-out 1.4s infinite;
+    }
+    .ejer-isla-ring::before { animation-delay: 1.4s; }
+    .ejer-spark--1 { animation-delay: 1.2s; }
+    .ejer-spark--2 { animation-delay: 2s; }
+    .ejer-spark--3 { animation-delay: 1.7s; }
+}
+
+/* ============================================================
+   BLOQUE DE CIFRAS CLAVE (adaptado a la paleta pastel)
+   ============================================================ */
+.cifras { margin: 0.5rem 0 2.8rem; }
+.cifras-titulo {
+    font-size: clamp(1.4rem, 3vw, 1.75rem);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: #403a63;
+    margin-bottom: 0.6rem;
+}
+.cifras-intro {
+    font-size: 1.05rem;
+    color: #5a6470;
+    line-height: 1.6;
+    max-width: 640px;
+    margin-bottom: 1.8rem;
+}
+.cifras-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+.cifras-card {
+    background: #f5f3fb;                  /* lila muy claro */
+    border: 1px solid #ece8f6;
+    border-radius: 16px;
+    padding: 1.5rem 1.3rem;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.cifras-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px -14px rgba(90,83,136,0.45);
+}
+.cifras-num {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.9rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: #6f5fb3;                       /* lila */
+}
+.cifras-txt {
+    font-size: 0.95rem;
+    color: #5a6470;
+    line-height: 1.5;
+    margin-top: 0.75rem;
+}
+
+/* Tarjeta destacada (la del infradiagnóstico) */
+.cifras-card--cta {
+    background: linear-gradient(150deg, #c4b3ef 0%, #aec9f0 100%);
+    border-color: transparent;
+}
+.cifras-card--cta .cifras-num,
+.cifras-card--cta .cifras-txt { color: #2f2b50; }
+
+/* Mensaje de cierre, con barra lila a la izquierda */
+.cifras-cierre {
+    border-left: 4px solid #7c6cc8;
+    padding: 0.4rem 0 0.4rem 1.1rem;
+    margin-top: 1.8rem;
+}
+.cifras-cierre p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #403a63;
+}
+
+/* Fuentes: nota al pie discreta (gana a .contenido-paciente p) */
+p.cifras-fuentes {
+    margin-top: 2.5rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid #e7e3f3;
+    font-size: 0.76rem;
+    color: #9aa3b2;
+    line-height: 1.6;
+}
+.cifras-fuentes strong { color: #6b6494; font-weight: 600; }
+.cifras-fuentes em { font-style: italic; }
+
+/* Menú dentro de la portada: opciones que abren cada ventana */
+.portada-menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.9rem;
+    margin-top: 2.2rem;
+    max-width: 760px;          /* fuerza 2 por fila (2x2) */
+}
+.portada-opcion { flex: 1 1 320px; }
+/* Si un botón queda solo en su fila (nº impar de botones), que no se estire a
+   todo el ancho: conserva el tamaño normal y queda centrado. */
+.portada-menu .portada-opcion:last-child:nth-child(odd) { flex: 0 1 373px; }
+
+/* Cada opción (anula el estilo azul global de button) */
+.portada-opcion {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 0;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    color: #403a63;
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 14px;
+    padding: 0.85rem 1.2rem;
+    cursor: pointer;
+    text-align: left;
+    box-shadow: 0 10px 24px -14px rgba(90,83,136,0.55);
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.portada-opcion:hover {
+    transform: translateY(-2px);
+    background: #ffffff;
+    box-shadow: 0 14px 28px -12px rgba(90,83,136,0.6);
+}
+.portada-opcion-ico {
+    display: inline-flex;
+    flex: none;
+    width: 42px;
+    height: 42px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #c4b3ef, #aec9f0);
+    color: #2f2b50;
+}
+.portada-opcion-txt { display: flex; flex-direction: column; line-height: 1.2; }
+.portada-opcion-txt strong { font-size: 1.02rem; }
+.portada-opcion-txt small { color: #7a8194; font-size: 0.85rem; }
+
+/* --- Ventana modal --- */
+body.modal-abierto { overflow: hidden; }
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    padding: 0;
+    background: rgba(60,53,96,0.45);
+}
+.modal-overlay[hidden] { display: none; }
+
+/* Ventana a PANTALLA COMPLETA */
+.modal-dialog {
+    position: relative;
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100svh;
+    max-height: none;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 0;
+    padding: 1.4rem 1.5rem 1.5rem;
+    animation: portadaEntra 0.3s ease;
+}
+/* El contenido se centra con un ancho cómodo de lectura */
+.modal-cuerpo {
+    max-width: 860px;
+    margin: 0 auto;
+}
+.modal-cuerpo > .modal-seccion > :first-child { margin-top: 0; }
+.modal-seccion[hidden] { display: none; }
+
+/* Logo PSSP arriba a la izquierda: vuelve a la página anterior (cierra la ventana) */
+.modal-volver {
+    position: absolute; top: 0.7rem; left: 1rem; z-index: 6;
+    margin: 0; padding: 0.25rem; background: none; border: none; cursor: pointer;
+    line-height: 0; border-radius: 12px; transition: background 0.15s, transform 0.15s;
+}
+.modal-volver img { height: 50px; width: auto; display: block; }
+.modal-volver:hover { background: #f3f0fc; transform: translateY(-1px); }
+
+/* Logo del hospital: ARRIBA A LA DERECHA del todo (ya no hay × de cerrar),
+   clicable para volver atrás un paso, alineado como en las páginas normales. */
+.modal-firma {
+    position: absolute; top: 0.6rem; right: 1rem; left: auto; bottom: auto;
+    z-index: 6; margin: 0; padding: 0.25rem; background: none; border: none; cursor: pointer;
+    line-height: 0; border-radius: 12px; transition: background 0.15s, transform 0.15s;
+}
+.modal-firma:hover { background: #eef6f8; transform: translateY(-1px); }
+.modal-firma img { height: 64px; width: auto; opacity: 1; display: block; }
+@media (max-width: 600px) { .modal-firma img { height: 46px; } }
+.modal-seccion h2 { color: #403a63; margin-top: 0; }
+
+.modal-cerrar {
+    position: absolute;
+    top: 0.9rem;
+    right: 1rem;
+    margin: 0;
+    width: 2.2rem;
+    height: 2.2rem;
+    padding: 0;
+    line-height: 1;
+    font-size: 1.4rem;
+    background: #f1eefb;
+    color: #6b6494;
+    border-radius: 50%;
+    z-index: 1;
+}
+.modal-cerrar:hover { background: #e5e0f6; }
+
+/* --- Imágenes anatómicas de fondo en "Conoce tu suelo pélvico" --- */
+.conoce-deco-img {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 0;                 /* detrás del contenido */
+    pointer-events: none;
+    opacity: 0.55;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+.conoce-deco-img--1 {
+    left: -10px;
+    width: clamp(220px, 27vw, 400px);
+    height: 88vh;
+    background-image: url('/static/images/anatomia-pelvis.png');
+    -webkit-mask-image: linear-gradient(to right, #000 45%, transparent 95%);
+            mask-image: linear-gradient(to right, #000 45%, transparent 95%);
+}
+.conoce-deco-img--2 {
+    right: -10px;
+    width: clamp(240px, 30vw, 460px);
+    height: 88vh;
+    background-image: url('/static/images/anatomia-suelo.png');
+    -webkit-mask-image: linear-gradient(to left, #000 45%, transparent 95%);
+            mask-image: linear-gradient(to left, #000 45%, transparent 95%);
+}
+/* El contenido (título, notas, panel) por encima de las imágenes */
+#contenido-conoce > h2,
+#contenido-conoce > .postit-fila,
+#contenido-conoce > .conoce-intro,
+#contenido-conoce > .postit-panel { position: relative; z-index: 1; }
+
+/* Logo + lema motivacional, centrados en la ventana */
+.conoce-intro {
+    max-width: 560px;
+    margin: clamp(2.5rem, 9vh, 6rem) auto 0;
+    text-align: center;
+}
+.conoce-emblema {
+    height: clamp(190px, 34vh, 320px);
+    width: auto;
+    opacity: 0.85;
+    margin-bottom: 1.4rem;
+}
+.conoce-lema {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-size: clamp(1.15rem, 2.3vw, 1.5rem);
+    line-height: 1.45;
+    color: #5a5388;
+    margin: 0;
+}
+
+/* Al ABRIR una nota: ocultamos el título, los disparadores y el lema para dejar
+   sitio, y mostramos el contenido en columnas para que quepa sin desplazarse. */
+#contenido-conoce:has(.postit-panel:not([hidden])) > h2,
+#contenido-conoce:has(.postit-panel:not([hidden])) > .conoce-intro,
+#contenido-conoce:has(.postit-panel:not([hidden])) > .postit-fila,
+#contenido-conoce:has(.postit-panel:not([hidden])) > .explorador-banner { display: none; }
+
+#contenido-conoce:has(.postit-panel:not([hidden])) .postit-panel {
+    margin-top: 0.3rem;
+    padding-top: 0.8rem;
+    position: relative;
+    z-index: 6;
+}
+#contenido-conoce .postit-detalle.activo {
+    column-count: 2;
+    column-gap: 2.6rem;
+    font-size: 0.88rem;
+}
+#contenido-conoce .postit-detalle.activo h3 { column-span: all; margin-bottom: 0.4rem; }
+#contenido-conoce .postit-detalle.activo h4,
+#contenido-conoce .postit-detalle.activo p,
+#contenido-conoce .postit-detalle.activo ul,
+#contenido-conoce .postit-detalle.activo li,
+.postit-detalle .dis-bloque { break-inside: avoid; }
+/* Cada punto agrupado: no se separa entre columnas */
+.postit-detalle .dis-bloque { margin-bottom: 0.2rem; }
+
+/* Frase destacada (mensaje positivo), bien visible y elegante */
+.postit-detalle .destacado,
+.articulo .destacado {
+    break-inside: avoid;
+    background: #f1eefb;
+    border-left: 4px solid #7c6cc8;
+    border-radius: 8px;
+    padding: 0.7rem 0.9rem;
+    margin-top: 0.6rem;
+    color: #403a63;
+    font-weight: 500;
+}
+.postit-detalle .destacado strong,
+.articulo .destacado strong { color: #5a4f9c; }
+
+/* ====== EXPLORADOR ANATÓMICO (importado de Claude Design) ====== */
+.anat-explorer {
+    background: #faf6ee;
+    border: 1px solid #e8e1d2;
+    border-radius: 12px;
+    padding: 22px 26px 20px;
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 1;
+}
+.anat-explo-hdr {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+    border-bottom: 1px solid #e8e1d2;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+}
+.anat-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #bb6a52;
+    flex: none;
+}
+.anat-hint {
+    font-size: 12px;
+    color: #8a7f6e;
+    text-align: right;
+    max-width: 220px;
+    line-height: 1.4;
+}
+.anat-explo-body {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 26px;
+    align-items: flex-start;
+}
+.anat-img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #f0ebe0;
+    box-shadow: inset 0 0 0 1px rgba(56,49,42,0.06);
+}
+.anat-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.anat-dot {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    color: #9c5640;
+    background: rgba(250,246,238,0.94);
+    border: 2px solid #bb6a52;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.22);
+    cursor: pointer;
+    transition: width .2s, height .2s, background .2s, color .2s, box-shadow .2s;
+    z-index: 3;
+    padding: 0;
+}
+.anat-dot--act {
+    width: 34px;
+    height: 34px;
+    color: #fff;
+    background: #bb6a52;
+    border-color: rgba(250,246,238,0.9);
+    box-shadow: 0 0 0 5px rgba(187,106,82,0.22), 0 3px 10px rgba(0,0,0,0.20);
+    animation: anatPulse 2.2s ease-out infinite;
+}
+@keyframes anatPulse {
+    0%   { box-shadow: 0 0 0 0   rgba(187,106,82,0.42), 0 3px 10px rgba(0,0,0,0.20); }
+    70%  { box-shadow: 0 0 0 11px rgba(187,106,82,0),   0 3px 10px rgba(0,0,0,0.20); }
+    100% { box-shadow: 0 0 0 0   rgba(187,106,82,0),   0 3px 10px rgba(0,0,0,0.20); }
+}
+.anat-funcs-wrap { margin-top: 12px; }
+.anat-funcs-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #a98e6f;
+    margin-bottom: 7px;
+    display: block;
+}
+.anat-funcs { display: flex; flex-wrap: wrap; gap: 6px; }
+.anat-func {
+    padding: 5px 11px;
+    background: rgba(138,167,178,0.16);
+    color: #4f6b74;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.anat-panel-col { min-width: 0; }
+.anat-intro-p {
+    font-size: 14px;
+    line-height: 1.62;
+    color: #564d42;
+    margin: 0 0 16px;
+}
+.anat-intro-p strong { color: #9c4f39; font-weight: 600; }
+.anat-tabs {
+    display: flex;
+    border-bottom: 2px solid #e8e1d2;
+    margin-bottom: 12px;
+    gap: 0;
+}
+.anat-tab {
+    padding: 0 0 9px;
+    margin-right: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: #a59883;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    background: none;
+    cursor: pointer;
+    transition: color .18s, border-color .18s;
+}
+.anat-tab--act { color: #bb6a52; border-bottom-color: #bb6a52; }
+.anat-structs { display: flex; flex-direction: column; gap: 7px; }
+.anat-struct {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 13px;
+    border-radius: 8px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #ebe3d4;
+    transition: background .18s, border-color .18s;
+}
+.anat-struct--act { background: rgba(187,106,82,0.09); border-color: rgba(187,106,82,0.32); }
+.anat-struct:hover:not(.anat-struct--act) {
+    background: rgba(187,106,82,0.04);
+    border-color: rgba(187,106,82,0.18);
+}
+.anat-badge {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #9c5640;
+    background: rgba(187,106,82,0.14);
+    transition: background .18s, color .18s;
+    margin-top: 1px;
+}
+.anat-struct--act .anat-badge { color: #fff; background: #bb6a52; }
+.anat-struct-info { flex: 1; min-width: 0; }
+.anat-struct-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.anat-struct-name { font-weight: 600; color: #38312a; font-size: 14px; }
+.anat-struct-tag {
+    flex: none;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #a98e6f;
+}
+.anat-struct-desc {
+    margin-top: 6px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #6d6357;
+}
+.anat-disorders { display: flex; flex-direction: column; }
+.anat-disorder { border-top: 1px solid #e8e1d2; }
+.anat-disorder:last-child { border-bottom: 1px solid #e8e1d2; }
+.anat-disorder-head {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 4px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: left;
+}
+.anat-dis-dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #bb6a52; }
+.anat-dis-name { flex: 1; font-size: 13.5px; font-weight: 600; color: #38312a; }
+.anat-dis-sign {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: 400;
+    color: #bb6a52;
+    line-height: 1;
+}
+.anat-disorder-body {
+    padding: 0 4px 11px 17px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #6d6357;
+}
+#contenido-conoce #det-explorador.activo { column-count: 1; column-gap: 0; font-size: inherit; }
+#det-explorador.activo .anat-explorer { margin-bottom: 0; }
+@media (max-width: 680px) {
+    .anat-explo-body { grid-template-columns: 1fr; }
+    .anat-explo-hdr { flex-direction: column; gap: 4px; }
+    .anat-hint { text-align: left; max-width: none; }
+}
+
+/* ====== Lectura más visual dentro de las ventanas ====== */
+.modal-dialog {
+    background: linear-gradient(165deg, #ffffff 0%, #faf8fe 55%, #f5f9f4 100%);
+}
+
+/* Texto base de los artículos (urodinamia, posparto) */
+.articulo p { font-size: 1rem; line-height: 1.6; color: #44546a; margin: 0.6rem 0; }
+.articulo a { color: #6f5fb3; font-weight: 600; }
+
+/* Listas numeradas: mantienen el número (sin la viñeta lila) */
+.articulo ol { padding-left: 1.3rem; margin: 0.5rem 0; }
+.articulo ol li { padding-left: 0.2rem; }
+.articulo ol li::before { content: none; }
+
+/* "(30-45 min)" junto al subtítulo, más discreto */
+.articulo h4 small { font-weight: 400; color: #7a8194; font-size: 0.85em; }
+
+/* Imagen de fondo de la ventana de urodinamia (mismo estilo difuminado) */
+.uro-deco {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: min(62vw, 920px);
+    height: 80vh;
+    z-index: 0;
+    pointer-events: none;
+    background: url('/static/images/urodinamia-fondo.png') no-repeat right bottom / contain;
+    opacity: 0.3;
+    -webkit-mask-image: linear-gradient(to top left, #000 22%, transparent 88%);
+            mask-image: linear-gradient(to top left, #000 22%, transparent 88%);
+}
+/* El contenido de la ventana de urodinamia, por encima del fondo */
+#contenido-urodinamia > :not(.uro-deco) { position: relative; z-index: 1; }
+
+/* ---- Componentes visuales de la guía de urodinamia ---- */
+/* Chips ("cuándo se realiza") */
+.uro-chips { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 0.5rem 0 0.2rem; }
+.uro-chip {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: #f1eefb; color: #46406b;
+    font-weight: 600; font-size: 0.92rem;
+    border: 1px solid #e0d8f5; border-radius: 999px;
+    padding: 0.4rem 0.9rem;
+}
+
+/* Pasos numerados (cómo se realiza) */
+ol.uro-pasos { list-style: none; padding: 0; margin: 0.7rem 0; display: grid; gap: 0.7rem; }
+ol.uro-pasos li {
+    display: flex; align-items: flex-start; gap: 0.85rem; margin: 0;
+    background: #ffffff; border: 1px solid #ece8f6; border-radius: 14px;
+    padding: 0.85rem 1rem; box-shadow: 0 6px 16px -12px rgba(90,83,136,0.4);
+}
+ol.uro-pasos li::before { content: none; }
+.uro-paso-num {
+    flex: none; width: 34px; height: 34px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; color: #2f2b50;
+    background: linear-gradient(135deg, #c4b3ef, #aec9f0);
+}
+ol.uro-pasos li > span:last-child { color: #44546a; line-height: 1.45; }
+
+/* Tarjeta de info (análisis de orina) */
+.uro-tarjeta {
+    display: flex; align-items: center; gap: 0.9rem;
+    background: #f6f4fb; border: 1px solid #ece8f6; border-radius: 14px;
+    padding: 0.85rem 1.1rem; margin: 0.6rem 0;
+}
+.uro-tarjeta-ico { font-size: 1.7rem; flex: none; }
+.uro-tarjeta p { margin: 0; }
+
+/* "El día de la prueba" (resaltado) */
+.uro-dia {
+    background: linear-gradient(135deg, #ede7fb 0%, #e3edfb 100%);
+    border: 1px solid #d8cff3; border-radius: 16px;
+    padding: 1rem 1.2rem; margin: 1rem 0;
+}
+.uro-dia-titulo { font-weight: 700; color: #403a63; font-size: 1.12rem; margin: 0 0 0.6rem; }
+.uro-dia ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.55rem; }
+.uro-dia li { display: flex; gap: 0.55rem; color: #403a63; margin: 0; }
+.uro-dia li::before { content: none; }
+
+/* Puntualidad (bloque gráfico, ámbar) */
+.uro-puntualidad {
+    display: flex; align-items: center; gap: 1rem;
+    background: #fff7e6; border: 1px solid #f3e2b8; border-left: 5px solid #e8b53d;
+    border-radius: 14px; padding: 1rem 1.2rem; margin: 1rem 0;
+}
+.uro-reloj { font-size: 2.6rem; flex: none; line-height: 1; }
+.uro-puntualidad strong { color: #8a6d1f; font-size: 1.08rem; }
+.uro-puntualidad p { margin: 0.25rem 0 0; color: #6f5d2c; font-size: 0.95rem; }
+
+/* Avisos (alerta, rojo suave) */
+.uro-aviso {
+    display: flex; gap: 0.7rem;
+    background: #fff4f4; border: 1px solid #f6d6d6; border-left: 5px solid #e98b8b;
+    border-radius: 12px; padding: 0.8rem 1rem; margin: 0.5rem 0;
+}
+.uro-aviso > span { font-size: 1.3rem; flex: none; line-height: 1.3; }
+.uro-aviso p { margin: 0; color: #7a4a4a; }
+.uro-aviso strong { color: #a23b3b; }
+
+/* "Después de la prueba" (tarjetas, verde suave) */
+.uro-tras {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 0.7rem; margin: 0.6rem 0;
+}
+.uro-tras-item {
+    display: flex; gap: 0.6rem; align-items: flex-start;
+    background: #f1f8f4; border: 1px solid #d8ecdf; border-radius: 12px;
+    padding: 0.8rem 0.9rem;
+}
+.uro-tras-item > span { font-size: 1.4rem; flex: none; line-height: 1.2; }
+.uro-tras-item p { margin: 0; font-size: 0.92rem; color: #3a5a48; }
+
+/* ---- Urodinamia: TODO en una pantalla, en 3 columnas fijas ---- */
+.modal-cuerpo:has(#contenido-urodinamia:not([hidden])) { max-width: 1220px; }
+#contenido-urodinamia { font-size: 0.9rem; }
+
+/* Título elegante */
+.uro-cabecera { text-align: center; margin-bottom: 1rem; }
+.uro-eyebrow {
+    display: block;
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #9b93c4;
+    margin-bottom: 0.35rem;
+}
+#contenido-urodinamia .uro-cabecera h3 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 600;
+    font-size: clamp(1.7rem, 3.2vw, 2.3rem);
+    color: #403a63;
+    margin: 0;
+}
+#contenido-urodinamia .uro-cabecera h3::after {
+    content: "";
+    display: block;
+    width: 60px; height: 3px;
+    margin: 0.55rem auto 0;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #c4b3ef, #aec9f0);
+}
+
+/* Tres columnas fijas (las advertencias van en la 3.ª) */
+.uro-cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    align-items: stretch;        /* columnas a la misma altura */
+}
+.uro-col { min-width: 0; display: flex; flex-direction: column; }
+.uro-col > :first-child { margin-top: 0; }
+
+/* Logo del hospital, centrado al FONDO de la columna central */
+.uro-footer { text-align: center; margin-top: auto; padding-top: 0.9rem; }
+.uro-footer img { height: 92px; width: auto; opacity: 1; }
+
+/* Un poco menos de relleno en la ventana de urodinamia para que entre el logo */
+.modal-dialog:has(#contenido-urodinamia:not([hidden])) { padding-top: 0.8rem; padding-bottom: 0.8rem; }
+
+/* Compactamos para que quepa todo */
+#contenido-urodinamia h4 { margin: 0.45rem 0 0.2rem; font-size: 0.98rem; }
+#contenido-urodinamia .uro-col > p { font-size: 0.88rem; margin: 0.25rem 0; line-height: 1.38; }
+#contenido-urodinamia .uro-chips { gap: 0.4rem; }
+#contenido-urodinamia .uro-chip { font-size: 0.82rem; padding: 0.3rem 0.7rem; }
+#contenido-urodinamia .uro-pasos { gap: 0.4rem; margin: 0.4rem 0; }
+#contenido-urodinamia .uro-pasos li { padding: 0.5rem 0.7rem; gap: 0.6rem; font-size: 0.85rem; }
+#contenido-urodinamia .uro-paso-num { width: 28px; height: 28px; font-size: 0.9rem; }
+#contenido-urodinamia .uro-tarjeta { padding: 0.6rem 0.8rem; margin: 0.45rem 0; gap: 0.6rem; }
+#contenido-urodinamia .uro-tarjeta-ico { font-size: 1.4rem; }
+#contenido-urodinamia .uro-tarjeta p { font-size: 0.85rem; }
+#contenido-urodinamia .uro-dia { padding: 0.7rem 0.9rem; margin: 0.5rem 0; }
+#contenido-urodinamia .uro-dia-titulo { font-size: 1rem; margin-bottom: 0.4rem; }
+#contenido-urodinamia .uro-dia li { font-size: 0.85rem; }
+#contenido-urodinamia .uro-puntualidad { padding: 0.7rem 0.9rem; margin: 0.5rem 0; gap: 0.7rem; }
+#contenido-urodinamia .uro-reloj { font-size: 2rem; }
+#contenido-urodinamia .uro-puntualidad strong { font-size: 0.98rem; }
+#contenido-urodinamia .uro-puntualidad p { font-size: 0.84rem; }
+#contenido-urodinamia .uro-aviso { padding: 0.6rem 0.8rem; margin: 0.4rem 0; }
+#contenido-urodinamia .uro-aviso p { font-size: 0.84rem; }
+/* "¿Y después?" concentrado en un solo recuadro */
+#contenido-urodinamia .uro-tras {
+    display: block;
+    background: #f1f8f4;
+    border: 1px solid #d8ecdf;
+    border-radius: 12px;
+    padding: 0.55rem 0.9rem;
+    margin: 0.4rem 0;
+}
+#contenido-urodinamia .uro-tras p { margin: 0.3rem 0; font-size: 0.84rem; color: #3a5a48; line-height: 1.35; }
+#contenido-urodinamia .uro-tras p span { margin-right: 0.25rem; }
+#contenido-urodinamia .destacado { font-size: 0.85rem; padding: 0.6rem 0.85rem; margin-top: 0.5rem; }
+
+/* En móvil/tablet la urodinamia NO cabe en 3 columnas: se apila (hay scroll). */
+@media (max-width: 900px) {
+    .uro-cols { grid-template-columns: 1fr 1fr; gap: 1rem; }
+}
+@media (max-width: 600px) {
+    .uro-cols { grid-template-columns: 1fr; gap: 0.9rem; }
+    #contenido-urodinamia .uro-col > p,
+    #contenido-urodinamia .uro-dia li,
+    #contenido-urodinamia .uro-tarjeta p,
+    #contenido-urodinamia .uro-aviso p { font-size: 0.95rem; line-height: 1.5; }
+    #contenido-urodinamia h4 { font-size: 1.08rem; }
+}
+
+/* Título de cada nota/artículo, con un acento de color debajo */
+.postit-detalle h3,
+.articulo h3 {
+    font-size: 1.55rem;
+    color: #6f5fb3;
+    margin-top: 0;
+}
+.postit-detalle h3::after,
+.articulo h3::after {
+    content: "";
+    display: block;
+    width: 56px;
+    height: 3px;
+    margin-top: 0.5rem;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #c4b3ef, #aec9f0);
+}
+
+/* Subtítulos con marcador lateral lila */
+.postit-detalle h4,
+.articulo h4 {
+    color: #5a4f9c;
+    padding-left: 0.65rem;
+    border-left: 3px solid #c4b3ef;
+    margin: 1.2rem 0 0.3rem;
+}
+
+/* Listas con viñetas lila en lugar del punto por defecto */
+.postit-detalle ul,
+.articulo ul { list-style: none; padding-left: 1.1rem; }
+.postit-detalle li,
+.articulo li { position: relative; margin: 0.35rem 0; }
+.postit-detalle li::before,
+.articulo li::before {
+    content: "";
+    position: absolute;
+    left: -0.95rem;
+    top: 0.52em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #a99be0;
+}
+
+/* Aviso clicable que abre "Elige según tu diagnóstico" */
+.puedes-cta {
+    column-span: all;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    width: 100%;
+    margin: 1.1rem 0 0;
+    text-align: left;
+    background: linear-gradient(135deg, #ede7fb 0%, #e3edfb 100%);
+    border: 1px solid #d8cff3;
+    border-radius: 14px;
+    padding: 0.9rem 1.1rem;
+    color: #403a63;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.puedes-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px -10px rgba(124,108,200,0.5);
+}
+.puedes-cta-ico {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #c4b3ef, #aec9f0);
+    color: #2f2b50;
+}
+.puedes-cta-txt { flex: 1; font-size: 0.92rem; line-height: 1.4; }
+.puedes-cta-flecha { flex: none; font-weight: 700; font-size: 1.25rem; color: #6f5fb3; }
+#contenido-conoce .postit-detalle.activo p  { font-size: 0.88rem; margin: 0.35rem 0; line-height: 1.4; }
+#contenido-conoce .postit-detalle.activo h4 { margin: 0.6rem 0 0.2rem; }
+#contenido-conoce .postit-detalle.activo ul { margin: 0.35rem 0; }
+#contenido-conoce .postit-detalle.activo li { margin: 0.2rem 0; }
+
+@media (max-width: 600px) {
+    .portada-opcion { flex: 1 1 100%; }
+    /* En móvil el modal ocupa TODA la pantalla (no 90vh) para que la página de
+       detrás no asome por debajo. La base ya usa height:100svh con scroll interno. */
+    .modal-dialog { padding: 1.2rem 1.1rem 1.6rem; }
+    /* Los paneles "Conoce" pasan a 1 columna (no caben 2 en un móvil). */
+    #contenido-conoce .postit-detalle.activo { column-count: 1; column-gap: 0; }
+    /* En móvil hay scroll: deshacemos la compactación de "Disfunciones" para que
+       el texto se lea con comodidad. */
+    #contenido-conoce #det-disf.activo p,
+    #contenido-conoce #det-disf.activo li { font-size: 0.95rem; line-height: 1.5; margin: 0.35rem 0; }
+    #contenido-conoce #det-disf.activo h4 { font-size: 1.05rem; margin: 0.7rem 0 0.25rem; }
+    #contenido-conoce #det-disf.activo .destacado { font-size: 0.92rem; padding: 0.7rem 0.9rem; margin-top: 0.6rem; }
+}
+
+/* --- Bloque de post-its --- */
+.bloque-postits { margin-top: 1.5rem; }
+.bloque-postits h2 { color: #403a63; }
+.postits-ayuda { color: #7a8aa0; font-size: 0.95rem; margin-top: 0.2rem; }
+
+.postit-fila {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1.1rem;
+    margin-top: 1rem;
+}
+
+/* La nota en sí (aspecto de papelito) */
+.postit {
+    position: relative;
+    border-radius: 14px;
+    padding: 1.1rem 1.2rem 1rem;
+    min-height: 130px;
+    cursor: pointer;
+    color: #3f3a5c;
+    box-shadow: 0 6px 16px -6px rgba(90,83,136,0.35);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    outline: none;
+    scroll-margin-top: 1.5rem;   /* aire al desplazarse hasta la nota */
+}
+.postit:hover,
+.postit:focus-visible { transform: translateY(-3px) rotate(-1deg); box-shadow: 0 12px 24px -8px rgba(90,83,136,0.45); }
+
+/* Colores pastel de cada nota */
+/* Banner Explorador anatómico */
+.explorador-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    min-height: 52px;
+    background: linear-gradient(135deg, #f5e4d4 0%, #edddd0 100%);
+    border: 1px solid #d9bda8;
+    border-left: 4px solid #bb6a52;
+    border-radius: 10px;
+    padding: 11px 18px;
+    margin-top: 0.85rem;
+    margin-bottom: 0.1rem;
+    cursor: pointer;
+    text-align: left;
+    color: #38312a;
+    box-shadow: 0 2px 8px rgba(187,106,82,0.10);
+    transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+    position: relative;
+    z-index: 1;
+}
+.explorador-banner:hover,
+.explorador-banner:focus-visible {
+    background: linear-gradient(135deg, #efd5c1 0%, #e6caba 100%);
+    box-shadow: 0 4px 14px rgba(187,106,82,0.20);
+    transform: translateY(-1px);
+}
+/* Variante pequeña y centrada (debajo de las notas) */
+.explorador-banner--mini {
+    width: auto; max-width: 430px; margin: 0.7rem auto 0.2rem;
+    min-height: 0; padding: 8px 15px; gap: 10px;
+}
+.explorador-banner--mini .explorador-banner-ico { font-size: 16px; }
+.explorador-banner--mini .explorador-banner-txt strong { font-size: 0.9rem; }
+.explorador-banner--mini .explorador-banner-txt small { font-size: 0.76rem; }
+.explorador-banner--mini .explorador-banner-flecha { font-size: 1.1rem; }
+
+.explorador-banner-ico { font-size: 19px; flex: none; line-height: 1; }
+.explorador-banner-txt { flex: 1; min-width: 0; line-height: 1.3; }
+.explorador-banner-txt strong {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #38312a;
+}
+.explorador-banner-txt small {
+    display: block;
+    font-size: 12px;
+    color: #8a7f6e;
+    margin-top: 2px;
+}
+.explorador-banner-flecha {
+    flex: none;
+    font-size: 17px;
+    color: #bb6a52;
+    font-weight: 600;
+}
+
+.postit--lila  { background: linear-gradient(160deg, #e7defc, #d9ccf6); }
+.postit--azul  { background: linear-gradient(160deg, #dcebfb, #c7ddf5); }
+.postit--menta { background: linear-gradient(160deg, #d8f0e3, #c3e7d2); }
+.postit--ambar { background: linear-gradient(160deg, #fce8d8, #f5d1b3); }
+
+.postit-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #6b6494;
+    background: rgba(255,255,255,0.55);
+    padding: 0.18rem 0.55rem;
+    border-radius: 999px;
+}
+.postit-titulo { margin: 0.7rem 0 0; font-size: 1.15rem; color: #3a3560; }
+.postit-pista {
+    position: absolute;
+    bottom: 0.9rem;
+    right: 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6b6494;
+    opacity: 0.85;
+}
+
+/* Nota activa (su panel está abierto): un aro suave para indicarlo */
+.postit[aria-expanded="true"] {
+    box-shadow: 0 0 0 3px rgba(124,108,200,0.45), 0 8px 18px -8px rgba(90,83,136,0.4);
+}
+
+/* --- El PANEL que se despliega DEBAJO (en el flujo, empuja el contenido) --- */
+.postit-panel {
+    position: relative;
+    margin-top: 1.1rem;
+    background: #ffffff;
+    border: 1px solid #ece8f6;
+    border-radius: 16px;
+    padding: 1.4rem 1.5rem 1.3rem;
+    box-shadow: 0 14px 32px -18px rgba(60,53,96,0.40);
+    text-align: left;
+}
+.postit-panel[hidden] { display: none; }
+
+/* Cada detalle: oculto salvo el activo, con una aparición suave */
+.postit-detalle { display: none; }
+.postit-detalle.activo { display: block; animation: postitAparecer 0.22s ease; }
+@keyframes postitAparecer {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: none; }
+}
+.postit-detalle h3 { margin: 0 0 0.6rem; color: #6f5fb3; }
+.postit-detalle p { font-size: 1rem; margin: 0.5rem 0; }
+.postit-detalle ul { margin: 0.5rem 0; padding-left: 1.2rem; }
+.postit-detalle li { margin: 0.3rem 0; }
+
+.postit-cerrar {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.6rem;
+    margin: 0;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    line-height: 1;
+    font-size: 1.3rem;
+    background: #f1eefb;
+    color: #6b6494;
+    border-radius: 50%;
+}
+.postit-cerrar:hover { background: #e5e0f6; }
+
+/* --- Iconos de las tarjetas de diagnóstico --- */
+.tarjeta { position: relative; }
+.tarjeta-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    margin-bottom: 0.7rem;
+}
+.tarjeta--lila  .tarjeta-icono { background: #e7defc; color: #6f5fb3; }
+.tarjeta--azul  .tarjeta-icono { background: #d9e8fb; color: #3f7cc0; }
+.tarjeta--menta .tarjeta-icono { background: #d3edde; color: #46a173; }
+.tarjeta--cielo .tarjeta-icono { background: #d3eef3; color: #3f9bb0; }
+.tarjeta--ambar .tarjeta-icono { background: #fbeed0; color: #bf9230; }
+.tarjeta--rosa  .tarjeta-icono { background: #fbdce8; color: #c0608f; }
+
+/* Al pasar el ratón, la tarjeta se tiñe del color SUAVE de su diagnóstico
+   (anula el fondo violeta intenso que hereda de button:hover). */
+.tarjeta--lila:hover  { background: #f4effd; border-color: #d8c9f3; color: inherit; }
+.tarjeta--azul:hover  { background: #eef4fd; border-color: #c6dcf5; color: inherit; }
+.tarjeta--cielo:hover { background: #ecf6f9; border-color: #b6dfe8; color: inherit; }
+.tarjeta--menta:hover { background: #edf7f1; border-color: #bbe3cd; color: inherit; }
+.tarjeta--ambar:hover { background: #fdf6e7; border-color: #efdca6; color: inherit; }
+
+@media (max-width: 520px) {
+    /* En móvil, un poco menos de relleno en el panel desplegable */
+    .postit-panel { padding: 1.2rem 1.2rem 1.1rem; }
+}
+
+/* ============================================================
+   CRONÓMETRO GUIADO DE EJERCICIOS (página de ejercicios)
+   ============================================================ */
+
+/* Selector de nivel: tres botones tipo "tarjeta" */
+.nivel-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin: 1rem 0 1.6rem;
+}
+
+.nivel-btn {
+    flex: 1 1 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    margin: 0;                 /* anula el margin-top de button */
+    background: white;
+    color: #6f5fb3;
+    border: 2px solid #d4deea;
+    border-radius: 10px;
+    padding: 0.7rem 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.nivel-btn small { font-weight: 500; color: #7a8aa0; font-size: 0.8rem; }
+.nivel-btn:hover { background: white; border-color: #6f5fb3; }
+.nivel-btn.activo {
+    border-color: #6f5fb3;
+    background: #efeafb;
+    box-shadow: 0 2px 10px rgba(124,108,200,0.18);
+}
+
+/* Zona central donde vive el círculo */
+.crono-zona {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 320px;
+    margin: 1rem 0;
+}
+
+/* El círculo que crece (contrae) y se encoge (relaja).
+   La transición dura lo mismo que cada fase para que el movimiento
+   acompañe a la cuenta atrás de forma suave. */
+.crono-circulo {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #a99be0, #6f5fb3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 10px 30px rgba(124,108,200,0.35);
+    transform: scale(0.7);     /* tamaño en reposo / relajado */
+    transition: transform 3s ease-in-out, background 0.4s;
+}
+
+/* Fase PREPÁRATE: tamaño medio y color calmado antes de empezar */
+.crono-circulo.prepara {
+    transform: scale(0.9);
+    background: radial-gradient(circle at 35% 30%, #aebfce, #7c8ea0);
+    transition: transform 0.4s ease-in-out, background 0.4s;
+}
+
+/* Fase CONTRAE: el círculo se hace grande */
+.crono-circulo.contrae {
+    transform: scale(1.12);
+    background: radial-gradient(circle at 35% 30%, #7d6cc4, #4a3d86);
+}
+
+/* Fase RELAJA: el círculo se hace pequeño y cambia a verde pistacho */
+.crono-circulo.relaja {
+    transform: scale(0.7);
+    background: radial-gradient(circle at 35% 30%, #bfe0b6, #7bbf8a);
+}
+
+.crono-centro {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+.crono-fase    { font-size: 1.3rem; font-weight: 700; }
+.crono-segundos{ font-size: 2.6rem; font-weight: 800; }
+
+.crono-reps {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #44546a;
+}
+
+.crono-controles {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin: 0.5rem 0 0.5rem;
+}
+
+/* Botón secundario (Reiniciar): más discreto que el principal */
+.boton-secundario {
+    background: white;
+    color: #6f5fb3;
+    border: 2px solid #d4deea;
+}
+.boton-secundario:hover { background: #efeafb; }
+
+button:disabled { opacity: 0.6; cursor: default; }
+
+/* Interruptor de sonido, centrado bajo los botones */
+.crono-sonido {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 0.4rem 0 0.2rem;
+    color: #44546a;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+.crono-sonido input { width: 1.1rem; height: 1.1rem; cursor: pointer; }
+
+/* En móvil, el círculo un poco más pequeño */
+@media (max-width: 520px) {
+    .crono-circulo { width: 180px; height: 180px; }
+    .crono-zona { min-height: 260px; }
+}
+
+/* ============================================================
+   PORTADA DE INICIO (hero a pantalla completa)
+   ============================================================ */
+
+/* En la portada, el contenido ocupa todo el ancho (sin el margen central). */
+body.inicio main {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Reservamos sitio abajo para la barra fija del logo del hospital y
+   respetamos el "notch" de los móviles (env(safe-area-inset-bottom)). */
+.hero {
+    --footer-h: 96px;                       /* alto reservado para el logo fijo */
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;                     /* alto real en móviles (sin barras) */
+    box-sizing: border-box;
+    /* Fondo PASTEL suave: lavanda -> azul cielo -> menta -> crema. */
+    background: linear-gradient(
+        160deg,
+        #e9ecfb 0%,
+        #e7f1f8 34%,
+        #e6f4ed 64%,
+        #f7f2ec 100%
+    );
+    color: #46406b;
+    padding: 1.4rem 4vw calc(var(--footer-h) + 1rem);
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;                     /* nunca scroll horizontal */
+}
+
+/* Imagen anatómica de fondo, a la derecha y difuminada hacia el centro.
+   El "mask-image" hace que se desvanezca por el lado izquierdo para que no
+   compita con la tarjeta; la propia acuarela ya se funde por los demás bordes. */
+.hero-bg-imagen {
+    --img-size: clamp(360px, 48vw, 660px);
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url('/static/images/portada-anatomia.png');
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: var(--img-size);
+    opacity: 0.9;
+    /* multiply funde el "papel" claro de la acuarela con el fondo. */
+    mix-blend-mode: multiply;
+    /* Máscara circular ANCLADA a la imagen (mismo tamaño y posición que el
+       fondo). Al ser la composición redonda, el cuadro entero se disuelve y
+       solo queda el dibujo, sin bordes, a cualquier tamaño de pantalla. */
+    -webkit-mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
+            mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
+    -webkit-mask-repeat: no-repeat;          mask-repeat: no-repeat;
+    -webkit-mask-position: right center;     mask-position: right center;
+    -webkit-mask-size: var(--img-size);      mask-size: var(--img-size);
+}
+
+/* Formas pastel difuminadas que flotan en el fondo (decorativas). */
+.hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(46px);
+    opacity: 0.55;
+    z-index: 0;
+    pointer-events: none;
+}
+.blob-1 { width: 360px; height: 360px; background: #f4cfe2; top: -70px; left: -50px; }
+.blob-2 { width: 320px; height: 320px; background: #c8eadb; bottom: 6%; right: -50px; }
+.blob-3 { width: 280px; height: 280px; background: #d8d3f7; top: 38%; left: 52%; }
+
+/* La barra superior y el centro van por ENCIMA de las formas. */
+.hero-topbar,
+.hero-main { position: relative; z-index: 1; }
+
+/* Barra superior: logo (izquierda) | botón profesionales (derecha) */
+.hero-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: clamp(1.5rem, 5vh, 3rem);
+}
+
+/* Logo PSSP sin marco: va directo sobre el fondo y, al ser un enlace,
+   devuelve al inicio. Crece suavemente al pasar el ratón o al pulsarlo. */
+.hero-logo-link {
+    display: inline-flex;
+    transform-origin: left center;   /* crece desde la izquierda, sin moverse */
+    transition: transform 0.2s ease;
+}
+.hero-logo-link:hover { transform: scale(1.08); }
+.hero-logo-link:active { transform: scale(1.04); }   /* al hacer clic */
+.logo-pssp-top {
+    display: block;
+    height: clamp(48px, 8vw, 64px);
+    width: auto;
+}
+
+/* Botón profesionales: pastilla translúcida con texto oscuro (fondo claro) */
+.btn-prof {
+    color: #5a5388;
+    text-decoration: none;
+    background: rgba(255,255,255,0.55);
+    border: 1.5px solid rgba(90,83,136,0.30);
+    border-radius: 999px;
+    padding: 0.5rem 1.1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    transition: background 0.15s, box-shadow 0.15s;
+}
+.btn-prof:hover {
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(90,83,136,0.18);
+}
+
+/* La tarjeta de bienvenida se coloca a la IZQUIERDA para no tapar la imagen
+   (en móvil/tablet vuelve al centro, más abajo). */
+.hero-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Tarjeta de "cristal esmerilado" (glassmorphism) */
+.hero-card {
+    max-width: 560px;
+    width: 100%;
+    text-align: center;
+    background: rgba(255,255,255,0.62);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.75);
+    border-radius: 28px;
+    padding: clamp(2rem, 5vw, 3.6rem);
+    box-shadow: 0 24px 60px -22px rgba(90,83,136,0.40);
+}
+
+.hero-eyebrow {
+    font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    margin: 0 0 0.6rem;
+    color: #8e87b8;
+}
+
+.hero-titulo {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 600;
+    font-size: clamp(2rem, 5vw, 3.1rem);
+    line-height: 1.12;
+    color: #403a63;
+    margin: 0;
+}
+
+.hero-subtitulo {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-size: clamp(1.05rem, 2.3vw, 1.45rem);
+    line-height: 1.35;
+    color: #6c7a86;
+    margin: 1rem 0 2rem;
+}
+
+/* Botones de acción */
+.hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-pacientes {
+    display: inline-block;
+    background: linear-gradient(135deg, #c4b3ef 0%, #aec9f0 100%);
+    color: #322e57;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: clamp(1.05rem, 2vw, 1.15rem);
+    padding: 0.95rem 1.8rem;
+    border-radius: 999px;
+    box-shadow: 0 10px 22px -8px rgba(124,108,200,0.55);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-pacientes:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px -8px rgba(124,108,200,0.65);
+}
+
+/* Botón secundario "fantasma" (solo borde) */
+.btn-ghost {
+    display: inline-block;
+    color: #5a5388;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: clamp(1rem, 2vw, 1.1rem);
+    padding: 0.9rem 1.5rem;
+    border-radius: 999px;
+    border: 1.5px solid rgba(90,83,136,0.40);
+    transition: background 0.15s;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.55); }
+
+/* --- Barra FIJA inferior con el logo del hospital --- */
+.hero-footer-fija {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 0.5rem 1rem calc(0.6rem + env(safe-area-inset-bottom));
+    /* Velo suave para que el logo se lea sobre cualquier contenido al bajar */
+    background: linear-gradient(to top, rgba(247,243,239,0.97) 45%, rgba(247,243,239,0));
+    pointer-events: none;          /* no bloquea clics del contenido */
+    z-index: 20;
+}
+.logo-hospital {
+    display: block;
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+    pointer-events: auto;
+}
+
+/* ====== Estilos para la IMAGEN del arco (se reutilizarán más adelante) ======
+   Se conservan aquí para cuando volvamos a añadir la imagen de portada.
+.arco {
+    width: 100%; max-width: 440px; aspect-ratio: 4 / 5;
+    background: linear-gradient(145deg, #f7f1e3 0%, #e6dcc6 100%);
+    border-radius: 220px 220px 22px 22px; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 28px 56px -12px rgba(90,83,136,0.40);
+}
+.arco img { width: 100%; height: 100%; object-fit: cover; }
+*/
+
+/* ====== Adaptación a tablet / móvil ====== */
+@media (max-width: 820px) {
+    /* En móvil/tablet la tarjeta vuelve al centro y a ancho completo */
+    .hero-main { justify-content: center; }
+    .hero-card { max-width: 720px; }
+    /* En móvil/tablet la imagen pasa a ser un velo suave centrado detrás de todo */
+    .hero-bg-imagen {
+        --img-size: min(115%, 520px);
+        background-position: center 34%;
+        opacity: 0.35;
+        -webkit-mask-position: center 34%;   mask-position: center 34%;
+    }
+}
+
+@media (max-width: 520px) {
+    .hero { --footer-h: 78px; }
+    .logo-hospital { max-width: 200px; }
+    .blob-1 { width: 240px; height: 240px; }
+    .blob-2 { width: 220px; height: 220px; }
+    .blob-3 { width: 200px; height: 200px; }
+}
+
+/* ====================================================================
+   POSPARTO · "Recupérate tras el parto"
+   Recorrido temporal por fases con ventanas que se abren al pasar el
+   ratón, y calculadora de fase según la fecha del parto.
+   ==================================================================== */
+.modal-cuerpo:has(#contenido-parto:not([hidden])),
+.modal-cuerpo:has(#contenido-embarazo:not([hidden])) { max-width: 1180px; }
+.modal-dialog:has(#contenido-parto:not([hidden])),
+.modal-dialog:has(#contenido-embarazo:not([hidden])) { padding-top: 1rem; padding-bottom: 1rem; }
+
+.posparto { display: flex; flex-direction: column; gap: 0.7rem; }
+
+/* --- Cabecera --- */
+.pp-cabecera { text-align: center; }
+.pp-eyebrow {
+    display: inline-block;
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #b48aa6; font-weight: 700; margin-bottom: 0.2rem;
+}
+.posparto h3 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.7rem, 3.2vw, 2.35rem);
+    font-weight: 700; color: #403a63; margin: 0; line-height: 1.1;
+}
+.posparto h3::after { content: none; }
+.pp-lema { font-size: 0.95rem; color: #6c6790; margin: 0.35rem 0 0; }
+.pp-lema strong { color: #b06a93; }
+
+/* Cabecera compacta para las ventanas de diagnóstico (incontinencia, etc.):
+   la descripción inicial ocupa menos para que todo quepa sin scroll. */
+.diag-win .pp-cabecera { line-height: 1.05; }
+.diag-win .pp-eyebrow { font-size: 0.68rem; margin-bottom: 0.1rem; }
+.diag-win .posparto h3,
+.diag-win h3 { font-size: clamp(1.45rem, 2.6vw, 1.95rem); }
+.diag-win .pp-lema {
+    font-size: 0.88rem; line-height: 1.35;
+    margin: 0.25rem auto 0; max-width: 60ch;
+}
+
+/* --- Calculadora de fase --- */
+.pp-fecha {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 0.5rem 0.8rem;
+    background: linear-gradient(120deg, #fbf2f7, #f3f0fc);
+    border: 1px solid #efe2ee; border-radius: 14px;
+    padding: 0.6rem 1rem;
+}
+.pp-fecha label { font-weight: 700; color: #7a4f6b; font-size: 0.92rem; }
+.pp-fecha input[type="date"] {
+    font: inherit; font-size: 0.9rem; padding: 0.35rem 0.6rem;
+    border: 1px solid #e0c9da; border-radius: 9px; background: #fff; color: #403a63;
+    accent-color: #b06a93;
+}
+.pp-resultado {
+    flex: 1 1 100%; text-align: center; font-size: 0.9rem; color: #6c6790;
+    margin-top: 0.15rem; line-height: 1.4;
+}
+.pp-resultado--ok { color: #3a5a48; }
+.pp-resultado--aviso { color: #b06a93; }
+.pp-resultado strong { color: #b06a93; }
+.pp-resultado--ok strong { color: #2f7d57; }
+
+/* --- Recorrido: 3 fases en columnas, unidas por una línea --- */
+.pp-recorrido {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+    position: relative;
+}
+.pp-fase {
+    position: relative;
+    background: #fbfafe; border: 1px solid #ece8f7; border-radius: 16px;
+    padding: 0.8rem 0.9rem 0.9rem;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+.pp-fase--izq { /* fase 3: sus ventanas se abren hacia la izquierda */ }
+/* Al interactuar, la fase se eleva para que su ventana flote sobre las demás */
+.pp-fase:has(.pp-tema--abierto) { z-index: 20; }
+
+.pp-fase-cab { display: flex; flex-wrap: nowrap; align-items: center; gap: 0.6rem; margin-bottom: 0.6rem; min-height: 48px; }
+.pp-fase-cab > div { min-width: 0; }
+.pp-fase-num {
+    flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 800; font-size: 1.15rem;
+    color: #fff; background: linear-gradient(135deg, #c98bb3, #8f7cc8);
+    box-shadow: 0 4px 12px rgba(143,124,200,0.35);
+}
+/* Fase "libre": no es un paso cronológico, va con corazón en vez de número */
+.pp-fase-num--libre { font-size: 1.2rem; background: linear-gradient(135deg, #f3a9c4, #d59ad8); }
+
+/* ====================================================================
+   Paleta ALEGRE para la ventana de EMBARAZO
+   (rosados + melocotón, cálida y luminosa)
+   ==================================================================== */
+#contenido-embarazo h3 { color: #d6567f; }
+#contenido-embarazo .pp-lema strong { color: #f0865c; }
+
+#contenido-embarazo .pp-fecha {
+    background: linear-gradient(120deg, #ffeef2, #ffe7d8);
+    border-color: #ffd9d4;
+}
+#contenido-embarazo .pp-fecha label { color: #c75c84; }
+#contenido-embarazo .pp-fecha input[type="date"] { border-color: #f3cdd2; accent-color: #f0865c; }
+#contenido-embarazo .pp-resultado--ok { color: #b15a7c; }
+#contenido-embarazo .pp-resultado--ok strong { color: #d6567f; }
+#contenido-embarazo .pp-resultado--aviso,
+#contenido-embarazo .pp-resultado--aviso strong { color: #f0865c; }
+
+/* Insignias de trimestre: degradado melocotón → rosa */
+#contenido-embarazo .pp-fase-num {
+    background: linear-gradient(135deg, #ffb38a, #ff7ea8);
+    box-shadow: 0 4px 12px rgba(255,130,160,0.4);
+}
+#contenido-embarazo .pp-fase { background: #fff9f8; border-color: #f7e3df; }
+
+/* Tarjetas/temas */
+#contenido-embarazo .pp-tema-cab { border-color: #f4ddd8; color: #6a4a55; }
+#contenido-embarazo .pp-tema--abierto .pp-tema-cab {
+    border-color: #ffc2b4; box-shadow: 0 6px 16px rgba(255,130,140,0.22); background: #fffaf8;
+}
+#contenido-embarazo .pp-tema--destaca .pp-tema-cab {
+    background: linear-gradient(120deg, #ffe7d6, #ffe1ec);
+    border-color: #ffccba; color: #c2632e;
+}
+
+/* Ventanas emergentes */
+#contenido-embarazo .pp-pop { border-color: #f3e0dc; }
+#contenido-embarazo .pp-pop h5 { color: #d6567f; border-bottom-color: #fbeae8; }
+#contenido-embarazo .pp-pop strong { color: #e06490; }
+#contenido-embarazo .pp-pop li::marker { color: #ff9c8a; }
+#contenido-embarazo .pp-pop a { color: #d6567f; }
+
+/* Trimestre activo (resaltado por la calculadora) */
+#contenido-embarazo .pp-fase.pp-activa {
+    border-color: #ff7ea8;
+    box-shadow: 0 10px 28px rgba(255,126,168,0.34);
+}
+#contenido-embarazo .pp-fase.pp-activa .pp-fase-num {
+    animation: ppLatidoEmb 1.6s ease-in-out infinite;
+}
+@keyframes ppLatidoEmb {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 12px rgba(255,130,160,0.4); }
+    50% { transform: scale(1.08); box-shadow: 0 6px 18px rgba(240,134,92,0.55); }
+}
+
+/* Pie: curiosidad en rosa suave */
+#contenido-embarazo .pp-sabias {
+    background: #fff0f4; border-left-color: #f59ab8;
+}
+#contenido-embarazo .pp-sabias strong { color: #d6567f; }
+
+/* ====================================================================
+   "Elige según tu diagnóstico" · cabecera elegante + fondo difuminado
+   ==================================================================== */
+.diag-cab { text-align: center; margin-bottom: 0.8rem; }
+.diag-eyebrow {
+    display: inline-block; font-size: 0.72rem; letter-spacing: 0.14em;
+    text-transform: uppercase; font-weight: 700; color: #b48aa6; margin-bottom: 0.25rem;
+}
+#contenido-diag .diag-cab h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.7rem, 3.4vw, 2.35rem);
+    font-weight: 700; color: #403a63; margin: 0; line-height: 1.12;
+}
+#contenido-diag .diag-cab h2::after {
+    content: ""; display: block; width: 66px; height: 3px; margin: 0.6rem auto 0;
+    border-radius: 2px; background: linear-gradient(90deg, #c4b3ef, #aec9f0);
+}
+.diag-sub { max-width: 640px; margin: 0.55rem auto 0; color: #6c6790; font-size: 0.96rem; line-height: 1.5; }
+
+/* Imagen de fondo (musculatura del suelo pélvico), difuminada, abajo a la derecha */
+.diag-deco {
+    position: fixed; right: 0; bottom: 0;
+    width: min(40vw, 520px); height: 80vh; z-index: 0; pointer-events: none;
+    background: url('/static/images/diag-fondo.png') no-repeat right bottom / contain;
+    opacity: 0.3;
+    -webkit-mask-image: linear-gradient(to top left, #000 16%, transparent 82%);
+            mask-image: linear-gradient(to top left, #000 16%, transparent 82%);
+}
+/* El contenido del apartado, por encima del fondo */
+#contenido-diag > :not(.diag-deco) { position: relative; z-index: 1; }
+
+/* --- Ventanas de cada diagnóstico (reutilizan el layout de posparto) --- */
+.modal-cuerpo:has(.diag-win:not([hidden])) { max-width: 1180px; }
+.modal-dialog:has(.diag-win:not([hidden])) { padding-top: 1rem; padding-bottom: 1rem; }
+
+/* Tema de aviso "Cuándo consultar" (rojo) dentro de una columna */
+.pp-tema--alerta .pp-tema-cab {
+    background: linear-gradient(120deg, #fdecec, #fbe3ea);
+    border-color: #f1c4c4; color: #b23b4e; font-weight: 700;
+}
+.pp-pop--rojo h5 { color: #b23b4e; border-bottom-color: #f7dadd; }
+.pp-pop--rojo li::marker { color: #e09aa3; }
+
+/* Casilla "leído" al inicio de cada punto */
+.pp-leido {
+    flex: none; width: 1.05rem; height: 1.05rem; margin: 0 0.15rem 0 0;
+    accent-color: #46a173; cursor: pointer;
+}
+.pp-tema--leido .pp-tema-cab { border-color: #bfe3c9; }
+.pp-tema--leido .pp-tema-cab::after {
+    content: "✓"; margin-left: auto; color: #46a173; font-weight: 800; font-size: 0.95rem;
+}
+
+/* Pie de la ventana: descargar PDF · borrador · volver */
+.diag-pie { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; flex-wrap: wrap; margin-top: 1rem; }
+.diag-pdf {
+    position: relative; overflow: hidden;
+    display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;
+    font-weight: 700; font-size: 0.95rem; color: #fff;
+    background: linear-gradient(135deg, #8f7cc8, #6f5fb3);
+    padding: 0.68rem 1.2rem; border-radius: 12px;
+    box-shadow: 0 8px 20px -8px rgba(111,95,179,0.7);
+    transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+    animation: pdfLatido 1.8s ease-in-out infinite;
+}
+.diag-pdf:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 14px 30px -8px rgba(111,95,179,0.9); filter: brightness(1.05); animation-play-state: paused; }
+/* Latido suave para llamar la atención */
+@keyframes pdfLatido {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+}
+/* Destello que cruza el botón */
+.diag-pdf::after {
+    content: ""; position: absolute; top: 0; left: -60%; width: 42%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.55), transparent);
+    transform: skewX(-18deg); animation: pdfDestello 2.8s ease-in-out infinite;
+}
+@keyframes pdfDestello { 0%, 55% { left: -60%; } 100% { left: 130%; } }
+@media (prefers-reduced-motion: reduce) {
+    .diag-pdf { animation: none; }
+    .diag-pdf::after { animation: none; display: none; }
+}
+/* Enlace para descargar el diario miccional (en las incontinencias) */
+.diag-diario {
+    display: inline-flex; align-items: center; gap: 0.45rem; text-decoration: none;
+    font-weight: 600; font-size: 0.9rem; color: #6f5fb3;
+    background: #fff; border: 1px solid #d8d2ee; padding: 0.55rem 0.95rem; border-radius: 12px;
+    transition: background 0.15s;
+}
+.diag-diario:hover { background: #f3f0fc; }
+
+/* --- Paletas por diagnóstico (concordancia con el color de la tarjeta) --- */
+/* AZUL · esfuerzo */
+.diag-win--azul .pp-fase-num { background: linear-gradient(135deg, #79aee6, #3f7cc0); box-shadow: 0 4px 12px rgba(63,124,192,0.4); }
+.diag-win--azul .pp-tema--destaca .pp-tema-cab { background: linear-gradient(120deg, #e7f1fc, #dde9fb); border-color: #bcd8f5; color: #2f6aad; }
+.diag-win--azul .pp-pop h5 { color: #3f7cc0; }
+.diag-win--azul .pp-pop strong { color: #3f7cc0; }
+.diag-win--azul .pp-pop li::marker { color: #8fbbe8; }
+.diag-win--azul .pp-lema strong { color: #3f7cc0; }
+.diag-win--azul .diag-pdf { background: linear-gradient(135deg, #79aee6, #3f7cc0); box-shadow: 0 8px 20px -8px rgba(63,124,192,0.7); }
+.diag-win--azul .diag-diario, .diag-win--azul .estim-volver { color: #3f7cc0; border-color: #bcd8f5; }
+
+/* CIELO/TEAL · urgencia */
+.diag-win--cielo .pp-fase-num { background: linear-gradient(135deg, #6fc1d2, #3f9bb0); box-shadow: 0 4px 12px rgba(63,155,176,0.4); }
+.diag-win--cielo .pp-tema--destaca .pp-tema-cab { background: linear-gradient(120deg, #e3f5f8, #d3eef3); border-color: #b3e0e8; color: #2f7e90; }
+.diag-win--cielo .pp-pop h5 { color: #3f9bb0; }
+.diag-win--cielo .pp-pop strong { color: #2f8497; }
+.diag-win--cielo .pp-pop li::marker { color: #7fc4d2; }
+.diag-win--cielo .pp-lema strong { color: #2f8497; }
+.diag-win--cielo .diag-pdf { background: linear-gradient(135deg, #6fc1d2, #3f9bb0); box-shadow: 0 8px 20px -8px rgba(63,155,176,0.7); }
+.diag-win--cielo .diag-diario, .diag-win--cielo .estim-volver { color: #3f9bb0; border-color: #b3e0e8; }
+
+/* MENTA/VERDE · mixta */
+.diag-win--menta .pp-fase-num { background: linear-gradient(135deg, #74c79a, #46a173); box-shadow: 0 4px 12px rgba(70,161,115,0.4); }
+.diag-win--menta .pp-tema--destaca .pp-tema-cab { background: linear-gradient(120deg, #e6f6ed, #d3edde); border-color: #b6e0c8; color: #2f7d54; }
+.diag-win--menta .pp-pop h5 { color: #46a173; }
+.diag-win--menta .pp-pop strong { color: #36895f; }
+.diag-win--menta .pp-pop li::marker { color: #86cda3; }
+.diag-win--menta .pp-lema strong { color: #36895f; }
+.diag-win--menta .diag-pdf { background: linear-gradient(135deg, #74c79a, #46a173); box-shadow: 0 8px 20px -8px rgba(70,161,115,0.7); }
+.diag-win--menta .diag-diario, .diag-win--menta .estim-volver { color: #46a173; border-color: #b6e0c8; }
+
+/* ÁMBAR · fecal */
+.diag-win--ambar .pp-fase-num { background: linear-gradient(135deg, #e7bd63, #bf9230); box-shadow: 0 4px 12px rgba(191,146,48,0.4); }
+.diag-win--ambar .pp-tema--destaca .pp-tema-cab { background: linear-gradient(120deg, #fdf3da, #fbeed0); border-color: #f0dca6; color: #97701f; }
+.diag-win--ambar .pp-pop h5 { color: #a87e20; }
+.diag-win--ambar .pp-pop strong { color: #a87e20; }
+.diag-win--ambar .pp-pop li::marker { color: #e0c277; }
+.diag-win--ambar .pp-lema strong { color: #a87e20; }
+.diag-win--ambar .diag-pdf { background: linear-gradient(135deg, #e7bd63, #bf9230); box-shadow: 0 8px 20px -8px rgba(191,146,48,0.7); }
+.diag-win--ambar .diag-diario, .diag-win--ambar .estim-volver { color: #a87e20; border-color: #f0dca6; }
+
+/* LILA · prolapso (refuerza la paleta base) */
+.diag-win--lila .pp-tema--destaca .pp-tema-cab { background: linear-gradient(120deg, #efe9fc, #f3e8fb); border-color: #d8c9f3; color: #6a4fae; }
+.diag-win--lila .pp-pop strong { color: #7a5bb5; }
+.diag-win--lila .pp-pop h5 { color: #6f5fb3; }
+.diag-win--lila .pp-lema strong { color: #7a5bb5; }
+
+/* --- Ventanas emergentes en TONO TENUE de la paleta (cristal esmerilado),
+       para que no se vean oscuras y se entrevea el contenido de detrás --- */
+.diag-win .pp-pop {
+    -webkit-backdrop-filter: blur(8px) saturate(1.15);
+            backdrop-filter: blur(8px) saturate(1.15);
+    box-shadow: 0 8px 22px rgba(60,53,96,0.12);
+}
+.diag-win .pp-pop li { color: #463f63; }
+.diag-win--lila  .pp-pop { background: rgba(244,240,253,0.85); border-color: #ddcff3; }
+.diag-win--azul  .pp-pop { background: rgba(236,243,253,0.87); border-color: #c6dcf5; }
+.diag-win--cielo .pp-pop { background: rgba(232,245,248,0.87); border-color: #b6dfe8; }
+.diag-win--menta .pp-pop { background: rgba(234,247,240,0.87); border-color: #bbe3cd; }
+.diag-win--ambar .pp-pop { background: rgba(253,246,227,0.9);  border-color: #efdca6; }
+/* La ventana de aviso, en rojo muy tenue */
+.diag-win .pp-pop--rojo { background: rgba(253,236,236,0.9); border-color: #f3cccc; }
+
+/* ====================================================================
+   "¿Cómo se estimula el suelo pélvico?" · botón llamativo + ventana
+   ==================================================================== */
+/* Botón invitador dentro de "¿Qué puedes hacer?" */
+.estim-cta {
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; gap: 0.9rem; width: 100%;
+    margin: 1rem 0 0; padding: 0.95rem 1.15rem; cursor: pointer; text-align: left;
+    border: none; border-radius: 16px; color: #fff;
+    background: linear-gradient(120deg, #c264a0, #8f7cc8 55%, #6f9fd8);
+    box-shadow: 0 12px 26px -10px rgba(143,124,200,0.75);
+    transition: transform 0.16s, box-shadow 0.16s, filter 0.16s;
+}
+.estim-cta:hover { transform: translateY(-2px); box-shadow: 0 18px 34px -10px rgba(143,124,200,0.9); filter: brightness(1.05); }
+.estim-cta:focus-visible { outline: 3px solid #d8c4ee; outline-offset: 2px; }
+.estim-cta-ico { font-size: 1.65rem; line-height: 1; animation: estimPulso 1.8s ease-in-out infinite; }
+@keyframes estimPulso { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2) rotate(6deg); } }
+.estim-cta-txt { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.estim-cta-txt strong { font-size: 1rem; line-height: 1.2; }
+.estim-cta-txt small { font-size: 0.82rem; opacity: 0.92; }
+.estim-cta-flecha { font-size: 1.35rem; flex: none; transition: transform 0.16s; }
+.estim-cta:hover .estim-cta-flecha { transform: translateX(4px); }
+/* Brillo que cruza el botón para que "apetezca apretarlo" */
+.estim-cta-brillo {
+    position: absolute; top: 0; left: -60%; width: 45%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.45), transparent);
+    transform: skewX(-18deg); animation: estimBrillo 3.2s ease-in-out infinite;
+}
+@keyframes estimBrillo {
+    0%, 65% { left: -60%; } 100% { left: 130%; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .estim-cta-ico, .estim-cta-brillo { animation: none; }
+}
+
+/* Ventana de estimulación */
+.modal-cuerpo:has(#contenido-estimulacion:not([hidden])) { max-width: 1040px; }
+.estim-cab { text-align: center; margin-bottom: 0.4rem; }
+.estim-eyebrow { display: block; font-style: italic; color: #9a93b8; font-size: 0.98rem; margin-bottom: 0.15rem; }
+#contenido-estimulacion .estim-cab h3 { margin: 0; }
+.estim-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; margin-top: 1.1rem; align-items: start; }
+.estim-card {
+    background: #fff; border: 1px solid #ece8f7; border-top: 4px solid #c4b3ef;
+    border-radius: 16px; padding: 1.1rem 1.2rem;
+    box-shadow: 0 12px 26px -18px rgba(90,83,136,0.55);
+}
+.estim-card--benef { border-top-color: #c98bcf; }
+.estim-card--como  { border-top-color: #e29ab8; }
+.estim-card--pauta { border-top-color: #e9b873; }
+.estim-card-ico { font-size: 1.9rem; display: block; margin-bottom: 0.25rem; }
+.estim-card h4 { margin: 0 0 0.5rem; color: #6f5fb3; font-size: 1.08rem; }
+.estim-card p { font-size: 0.92rem; color: #514c70; line-height: 1.45; margin: 0.3rem 0; }
+.estim-card ul { margin: 0.3rem 0; padding-left: 1.15rem; }
+.estim-card li { font-size: 0.9rem; color: #514c70; line-height: 1.45; margin: 0.2rem 0; }
+.estim-card strong { color: #b06a93; }
+.estim-big { font-size: 1.25rem; color: #403a63 !important; }
+.estim-big strong { color: #8f7cc8; }
+/* Pasos numerados de "¿Cómo se hace?" */
+.estim-pasos { list-style: none; counter-reset: estim; margin: 0.5rem 0 0; padding: 0; }
+.estim-pasos li {
+    position: relative; padding: 0.4rem 0.2rem 0.4rem 2.1rem;
+    font-size: 0.9rem; color: #514c70; border-bottom: 1px dashed #efeaf9;
+}
+.estim-pasos li::before {
+    counter-increment: estim; content: counter(estim);
+    position: absolute; left: 0; top: 0.35rem;
+    width: 1.45rem; height: 1.45rem; border-radius: 50%;
+    background: linear-gradient(135deg, #e29ab8, #b48ad6); color: #fff;
+    font-size: 0.8rem; font-weight: 700; display: grid; place-items: center;
+}
+.estim-pasos li:last-child { border-bottom: none; }
+.estim-pie { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: 1.2rem; }
+.estim-volver {
+    background: #fff; border: 1px solid #d8d2ee; color: #6f5fb3;
+    border-radius: 10px; padding: 0.5rem 0.95rem; cursor: pointer; font-weight: 600; font-size: 0.9rem;
+    transition: background 0.15s;
+}
+.estim-volver:hover { background: #f3f0fc; }
+
+.pp-fase-cab strong { display: block; color: #403a63; font-size: 1rem; line-height: 1.15; }
+.pp-fase-cab small { color: #9a93b8; font-size: 0.76rem; }
+.pp-condicion {
+    background: #eef7f1; border: 1px solid #d6ecdf; border-radius: 9px;
+    color: #2f7d57; font-size: 0.78rem; font-weight: 600;
+    padding: 0.35rem 0.6rem; margin: 0 0 0.5rem;
+}
+
+/* --- Lista de temas (chips que abren ventana) --- */
+.pp-temas { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.45rem; }
+.pp-tema { position: relative; }
+.pp-tema-cab {
+    display: flex; align-items: center; gap: 0.5rem; cursor: pointer;
+    background: #fff; border: 1px solid #e8e3f5; border-radius: 11px;
+    padding: 0.5rem 0.7rem; font-size: 0.88rem; font-weight: 600; color: #4a4470;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+.pp-tema-cab em { font-style: normal; color: #c98bb3; font-weight: 700; font-size: 0.8rem; }
+.pp-ico { font-size: 1.1rem; line-height: 1; }
+.pp-tema--abierto .pp-tema-cab {
+    border-color: #c9aee8; box-shadow: 0 6px 16px rgba(143,124,200,0.18);
+    transform: translateX(2px); background: #fdfbff;
+}
+.pp-tema--destaca .pp-tema-cab {
+    background: linear-gradient(120deg, #fff4e6, #fdeaf2);
+    border-color: #f4d6bd; color: #a85a3a;
+}
+
+/* --- Ventana emergente (popover) --- */
+.pp-pop {
+    position: absolute; left: calc(100% + 12px); top: 0; width: 290px; z-index: 40;
+    background: #fff; border: 1px solid #ece8f5; border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(60,53,96,0.12);
+    padding: 0.7rem 0.85rem;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transform: translateX(-6px); transform-origin: left top;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+.pp-fase--izq .pp-pop { left: auto; right: calc(100% + 12px); transform: translateX(6px); transform-origin: right top; }
+/* Ventana que se abre hacia ARRIBA (para temas situados al fondo de una columna) */
+.pp-pop--arriba { top: auto; bottom: 0; transform-origin: left bottom; }
+.pp-fase--izq .pp-pop--arriba { transform-origin: right bottom; }
+.pp-tema--abierto .pp-pop {
+    opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(0);
+}
+.pp-pop h5 {
+    margin: 0 0 0.4rem; font-size: 0.92rem; color: #6f5fb3;
+    padding-bottom: 0.35rem; border-bottom: 1px solid #f0ecf9;
+}
+.pp-pop ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.3rem; }
+.pp-pop li { font-size: 0.82rem; color: #514c70; line-height: 1.4; }
+.pp-pop li::marker { color: #c9aee8; }
+.pp-pop strong { color: #b06a93; }
+.pp-pop a { color: #6f5fb3; font-weight: 600; }
+
+/* Sub-bloques dentro de una ventana (p. ej. suelo pélvico / faja abdominal) */
+.pp-pop .pp-sub {
+    background: #faf8fe; border: 1px solid #efeaf9; border-radius: 10px;
+    padding: 0.5rem 0.65rem; margin-top: 0.45rem;
+}
+.pp-pop .pp-sub > strong {
+    display: block; color: #6f5fb3; font-size: 0.86rem; margin-bottom: 0.15rem;
+}
+.pp-pop .pp-sub p { margin: 0; font-size: 0.82rem; color: #514c70; line-height: 1.4; }
+
+/* --- Fase activa (resaltada por la calculadora) --- */
+.pp-fase.pp-activa {
+    border-color: #c98bb3;
+    box-shadow: 0 10px 28px rgba(201,139,179,0.3);
+    transform: translateY(-3px);
+    background: #fff;
+}
+.pp-fase.pp-activa .pp-fase-num { animation: ppLatido 1.6s ease-in-out infinite; }
+@keyframes ppLatido {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 12px rgba(143,124,200,0.35); }
+    50% { transform: scale(1.08); box-shadow: 0 6px 18px rgba(201,139,179,0.55); }
+}
+
+/* --- Pie: curiosidad + alerta --- */
+.pp-pie { display: grid; grid-template-columns: 1fr auto; gap: 0.8rem; align-items: center; }
+.pp-sabias {
+    margin: 0; font-size: 0.8rem; color: #6c6790; line-height: 1.45;
+    background: #f6f3fc; border-left: 3px solid #c9aee8; border-radius: 8px;
+    padding: 0.55rem 0.8rem;
+}
+.pp-sabias strong { color: #8f7cc8; }
+.pp-alerta { flex: 0 0 auto; }
+.pp-alerta .pp-tema-cab {
+    background: linear-gradient(120deg, #fdecec, #fbe3ea);
+    border-color: #f1c4c4; color: #b23b4e; font-weight: 700; white-space: nowrap;
+}
+.pp-pop--alerta {
+    left: 50%; right: auto; top: auto; bottom: calc(100% + 12px); width: 440px;
+    transform: translateX(-50%) translateY(6px); transform-origin: bottom center;
+    border-color: #f4cfd3;
+}
+.pp-alerta.pp-tema--abierto .pp-pop--alerta { transform: translateX(-50%) translateY(0); }
+.pp-pop--alerta h5 { color: #b23b4e; border-bottom-color: #f7dadd; }
+.pp-pop--alerta li::marker { color: #e09aa3; }
+
+@media (max-width: 760px) {
+    .pp-recorrido { grid-template-columns: 1fr; }
+    .pp-pop, .pp-fase--izq .pp-pop { position: static; width: auto; opacity: 1; visibility: visible;
+        pointer-events: auto; transform: none; box-shadow: none; margin-top: 0.4rem; }
+    .pp-pie { grid-template-columns: 1fr; }
+}
+
+/* ====================================================================
+   Cuestionario POP (panel del profesional)
+   ==================================================================== */
+/* Variante de botón secundario, usada en las acciones del cuestionario */
+.boton--sec {
+    background: #eef4f5; color: #2f7d8a; border: 1px solid #c6e2e6;
+}
+.boton--sec:hover { background: #e0eef0; }
+
+/* --- Banner desplegable --- */
+.pop-banner {
+    display: flex; align-items: center; gap: 14px; width: 100%;
+    margin: 1.4rem 0 0; padding: 13px 18px;
+    background: linear-gradient(135deg, #e3f3f4 0%, #d8eef0 100%);
+    border: 1px solid #b9dfe2; border-left: 4px solid #2f9bab; border-radius: 10px;
+    cursor: pointer; text-align: left; color: #234d52;
+    box-shadow: 0 2px 8px rgba(47,155,171,0.12);
+    transition: background 0.18s, box-shadow 0.18s;
+}
+.pop-banner:hover { background: linear-gradient(135deg, #dceff1 0%, #cfe9eb 100%); }
+.pop-banner-ico { font-size: 1.5rem; line-height: 1; flex: 0 0 auto; }
+.pop-banner-txt { display: flex; flex-direction: column; gap: 2px; flex: 1 1 auto; }
+.pop-banner-txt strong { font-size: 1rem; }
+.pop-banner-txt small { font-size: 0.82rem; color: #4a767c; }
+.pop-banner-flecha { font-size: 1.1rem; flex: 0 0 auto; transition: transform 0.2s; }
+.pop-banner--abierto .pop-banner-flecha { transform: rotate(180deg); }
+
+/* --- Panel del cuestionario --- */
+.pop-panel {
+    background: #fbfdfd; border: 1px solid #d6ebed;
+    border-radius: 0 0 12px 12px; border-top: none;
+    padding: 1.1rem 1.3rem 1.4rem; margin-bottom: 1.4rem;
+    box-shadow: 0 4px 14px rgba(47,155,171,0.08);
+}
+.pop-aviso {
+    font-size: 0.84rem; color: #6a5a2f; line-height: 1.5;
+    background: #fdf6e3; border: 1px solid #f0e2b8; border-radius: 8px;
+    padding: 0.6rem 0.85rem; margin: 0 0 1rem;
+}
+.pop-id { margin-bottom: 1rem; }
+.pop-id label { display: block; font-weight: 600; color: #34555a; font-size: 0.9rem; }
+.pop-id input {
+    display: block; width: 100%; max-width: 360px; margin-top: 0.3rem;
+    padding: 0.5rem 0.7rem; font-size: 0.95rem;
+    border: 1px solid #c6dde0; border-radius: 7px; background: #fff;
+}
+.pop-id input:focus { outline: none; border-color: #2f9bab; box-shadow: 0 0 0 3px rgba(47,155,171,0.15); }
+
+/* --- Bloques (dominios) --- */
+.pop-dom {
+    border: 1px solid #dcebec; border-radius: 10px;
+    padding: 0.8rem 1rem 0.4rem; margin: 0 0 1rem; background: #fff;
+}
+.pop-dom legend {
+    font-weight: 700; color: #2f7d8a; font-size: 0.95rem; padding: 0 0.4rem;
+    display: flex; align-items: center; gap: 0.5rem;
+}
+.pop-max {
+    font-size: 0.72rem; font-weight: 600; color: #6a8b90;
+    background: #eaf5f6; border: 1px solid #cfe6e8; border-radius: 20px;
+    padding: 1px 8px;
+}
+.pop-preg { margin: 0 0 0.9rem; }
+.pop-q { margin: 0 0 0.5rem; font-size: 0.92rem; color: #2f3d40; line-height: 1.4; }
+.pop-ops { display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem; }
+.pop-ops label {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    font-size: 0.88rem; color: #46585b; cursor: pointer;
+}
+.pop-ops input[type="radio"] { accent-color: #2f9bab; cursor: pointer; }
+
+.pop-acciones { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+.pop-acciones .boton { margin-top: 0; }
+
+/* --- Resultado --- */
+.pop-resultado { margin-top: 1.2rem; }
+.pop-summary {
+    background: #0f2d31; color: #d6f0f2;
+    font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.78rem; line-height: 1.45;
+    padding: 1rem 1.1rem; border-radius: 10px;
+    overflow-x: auto; white-space: pre; margin: 0 0 0.9rem;
+}
+.pop-copiado { color: #2f7d8a; font-weight: 600; font-size: 0.88rem; margin: 0.4rem 0 0; }
+
+@media (max-width: 560px) {
+    .pop-banner-txt small { display: none; }
+    .pop-summary { font-size: 0.68rem; }
+}
+
+/* ====================================================================
+   Cuestionario POP para la PACIENTE (público) — estilo pastel
+   Prefijo .cpop-  (no confundir con el cribado .pop- del panel)
+   ==================================================================== */
+.cpop-wrap { max-width: 720px; margin: 0 auto; }
+
+.cpop-card {
+    background: #fff; border: 1px solid #ece8f5; border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(96,83,150,0.08);
+    padding: 1.6rem 1.8rem; margin: 1.2rem 0;
+}
+.cpop-card h1 { color: #4a4470; margin: 0 0 0.4rem; font-size: 1.5rem; }
+.cpop-card h2 { color: #4a4470; margin: 0 0 0.6rem; }
+.cpop-card h3 { color: #6f5fb3; margin: 0 0 0.4rem; font-size: 1.05rem; }
+.cpop-hidden { display: none; }
+.cpop-muted { color: #7a8aa0; font-size: 0.92rem; }
+
+.cpop-aviso {
+    font-size: 0.86rem; color: #6a5a2f; line-height: 1.5;
+    background: #fdf6e3; border: 1px solid #f0e2b8; border-radius: 9px;
+    padding: 0.65rem 0.9rem; margin: 1rem 0;
+}
+
+/* --- Datos de la paciente --- */
+.cpop-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; margin-top: 0.4rem;
+}
+.cpop-field {
+    display: flex; flex-direction: column; gap: 0.3rem;
+    font-weight: 600; color: #4a4470; font-size: 0.9rem;
+}
+.cpop-field input {
+    padding: 0.55rem 0.7rem; font-size: 0.98rem;
+    border: 1px solid #d8d2ec; border-radius: 8px; background: #fcfbff;
+    font-weight: 400; color: #333;
+}
+.cpop-field input:focus {
+    outline: none; border-color: #9f8fd6; box-shadow: 0 0 0 3px rgba(143,124,200,0.16);
+}
+.cpop-info { margin-top: 1.3rem; }
+.cpop-info p { line-height: 1.55; color: #444; }
+
+.cpop-error { color: #b00020; background: #fde8e8; padding: 0.55rem 0.8rem;
+    border-radius: 7px; font-size: 0.9rem; margin: 0.6rem 0 0; }
+/* Resalte temporal del campo NHC cuando falta al pulsar "Comenzar". */
+.cpop-resaltado {
+    border-color: #b00020 !important;
+    box-shadow: 0 0 0 4px rgba(176,0,32,0.18) !important;
+    animation: cpopParpadeo 0.5s ease 2;
+}
+@keyframes cpopParpadeo { 0%,100% { background: #fff; } 50% { background: #fde8e8; } }
+
+.cpop-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.3rem; align-items: center; }
+.cpop-actions .boton { margin-top: 0; }
+.cpop-actions--nav { justify-content: space-between; }
+
+/* --- Barra de progreso --- */
+.cpop-progress-wrap { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem; }
+.cpop-progress { flex: 1 1 auto; height: 8px; background: #ece8f5; border-radius: 99px; overflow: hidden; }
+.cpop-progress-bar {
+    height: 100%; width: 0;
+    background: linear-gradient(90deg, #c9aee8, #8f7cc8);
+    border-radius: 99px; transition: width 0.3s ease;
+}
+.cpop-progress-text { flex: 0 0 auto; font-size: 0.82rem; color: #8678b0; font-weight: 600; min-width: 56px; text-align: right; }
+
+/* --- Pregunta --- */
+.cpop-pill {
+    display: inline-block; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.02em;
+    color: #6f5fb3; background: #f1ecfb; border: 1px solid #ddd2f3;
+    border-radius: 99px; padding: 3px 12px; margin-bottom: 0.9rem;
+}
+.cpop-question { margin-bottom: 0.5rem; }
+.cpop-qtitle { font-size: 1.12rem; font-weight: 700; color: #36314f; line-height: 1.45; margin-bottom: 0.4rem; }
+.cpop-qsub { margin-bottom: 0.5rem; }
+.cpop-scale {
+    font-size: 0.84rem; color: #6c6790; background: #f7f5fc;
+    border-left: 3px solid #c9aee8; border-radius: 7px;
+    padding: 0.45rem 0.7rem; margin-bottom: 1rem;
+}
+.cpop-scale:empty { display: none; }
+
+.cpop-options { display: flex; flex-direction: column; gap: 0.55rem; }
+.cpop-opt {
+    display: block; width: 100%; text-align: left; margin: 0;
+    background: #fcfbff; color: #3d3860;
+    border: 1.5px solid #e2dbf3; border-radius: 11px;
+    padding: 0.75rem 1rem; font-size: 0.98rem; font-weight: 600; cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.12s, box-shadow 0.15s;
+}
+.cpop-opt:hover {
+    border-color: #b49fe0; background: #f6f1ff;
+    transform: translateX(3px); box-shadow: 0 4px 12px rgba(143,124,200,0.15);
+}
+.cpop-opt--sel { border-color: #8f7cc8; background: #efe9fb; }
+/* Selección múltiple: marca con un check a la izquierda */
+.cpop-opt--multi.cpop-opt--sel::before { content: "✓ "; color: #6f5fb3; font-weight: 800; }
+.cpop-multi-cont { margin-top: 1rem; }
+
+/* --- Informe --- */
+.cpop-saved { color: #2f7d57; font-weight: 600; background: #e9f6ee;
+    border: 1px solid #bfe3cd; border-radius: 8px; padding: 0.55rem 0.8rem; margin: 0 0 0.9rem; }
+.cpop-report {
+    background: #2b2740; color: #ece8f8;
+    font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.8rem; line-height: 1.5;
+    padding: 1.1rem 1.2rem; border-radius: 12px;
+    overflow-x: auto; white-space: pre-wrap; word-break: break-word; margin: 0 0 1rem;
+}
+.cpop-copiado { color: #6f5fb3; font-weight: 600; font-size: 0.88rem; margin: 0.5rem 0 0; }
+
+@media (max-width: 560px) {
+    .cpop-card { padding: 1.2rem 1.1rem; }
+    .cpop-grid { grid-template-columns: 1fr; }
+    .cpop-report { font-size: 0.72rem; }
+}
+
+/* --- Banner: algoritmo de incontinencia urinaria (panel profesional) --- */
+.algoritmo-banner {
+    display: flex; align-items: center; gap: 14px; width: 100%;
+    margin: 1.2rem 0 0; padding: 14px 20px;
+    background: linear-gradient(135deg, #2f6fb2 0%, #3f9bb0 100%);
+    border-radius: 14px; text-decoration: none; color: #fff;
+    box-shadow: 0 12px 28px -10px rgba(47,111,178,0.7);
+    transition: transform 0.18s, box-shadow 0.18s;
+}
+.algoritmo-banner:hover { transform: translateY(-3px); box-shadow: 0 18px 36px -10px rgba(47,111,178,0.85); }
+.algoritmo-banner-ico { font-size: 1.8rem; line-height: 1; flex: 0 0 auto; }
+.algoritmo-banner-txt { display: flex; flex-direction: column; gap: 2px; flex: 1 1 auto; }
+.algoritmo-banner-txt strong { font-size: 1.08rem; }
+.algoritmo-banner-txt small { font-size: 0.85rem; opacity: 0.92; }
+.algoritmo-banner-flecha { font-size: 1.5rem; flex: 0 0 auto; transition: transform 0.18s; }
+.algoritmo-banner:hover .algoritmo-banner-flecha { transform: translateX(4px); }
+
+/* Dos banners lado a lado (algoritmo IU + calculadora POP-Q) */
+.panel-banners { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; margin: 1.2rem 0 0; }
+.panel-banners .algoritmo-banner { margin: 0; }
+@media (max-width: 760px) { .panel-banners { grid-template-columns: 1fr; } }
+/* Banner POP-Q: tono violeta para diferenciarlo */
+.algoritmo-banner--popq {
+    background: linear-gradient(135deg, #6f5fb3 0%, #9a6fc0 100%);
+    box-shadow: 0 12px 28px -10px rgba(111,95,179,0.7);
+}
+.algoritmo-banner--popq:hover { box-shadow: 0 18px 36px -10px rgba(111,95,179,0.85); }
+/* Chip que destaca el estadio POP-Q */
+.cpop-chip--popq { color: #fff; background: #6f5fb3; border-color: #6f5fb3; }
+
+/* --- Lookup de cuestionarios POP en el panel del profesional --- */
+.cpop-buscador {
+    background: #f7f5fc; border: 1px solid #e6e0f5; border-radius: 12px;
+    padding: 1rem 1.2rem; margin: 1.4rem 0;
+}
+.cpop-buscador h2 { margin: 0 0 0.3rem; font-size: 1.15rem; color: #4a4470; }
+.cpop-buscador form { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: flex-end; margin-top: 0.6rem; }
+.cpop-buscador label { display: flex; flex-direction: column; gap: 0.3rem; font-weight: 600; color: #4a4470; font-size: 0.9rem; }
+.cpop-buscador input {
+    padding: 0.5rem 0.7rem; font-size: 0.98rem; min-width: 220px;
+    border: 1px solid #d8d2ec; border-radius: 8px; background: #fff;
+}
+.cpop-buscador input:focus { outline: none; border-color: #9f8fd6; box-shadow: 0 0 0 3px rgba(143,124,200,0.16); }
+.cpop-buscador .boton { margin-top: 0; }
+
+.cpop-resultado {
+    background: #fff; border: 1px solid #ece8f5; border-radius: 12px;
+    padding: 1rem 1.2rem; margin: 0.9rem 0;
+    box-shadow: 0 3px 12px rgba(96,83,150,0.07);
+}
+.cpop-resultado-cab { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: baseline; margin-bottom: 0.6rem; }
+.cpop-resultado-cab strong { color: #4a4470; }
+.cpop-resultado-cab .cpop-fecha { color: #8a8aa0; font-size: 0.85rem; }
+.cpop-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.6rem; }
+.cpop-chip {
+    font-size: 0.78rem; font-weight: 600; color: #6f5fb3;
+    background: #f1ecfb; border: 1px solid #ddd2f3; border-radius: 99px; padding: 2px 10px;
+}
+.cpop-resultado pre {
+    background: #2b2740; color: #ece8f8;
+    font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 0.76rem; line-height: 1.5; padding: 0.9rem 1rem; border-radius: 10px;
+    overflow-x: auto; white-space: pre-wrap; word-break: break-word; margin: 0;
+}
+.cpop-vacio { color: #8a8aa0; font-style: italic; }
+.cpop-grupo { margin: 1.4rem 0 0.4rem; font-size: 1.02rem; color: #6f5fb3;
+    border-bottom: 2px solid #ece8f5; padding-bottom: 0.3rem; }
+.cpop-resultado--destacado { border: 2px solid #c9aee8; box-shadow: 0 4px 16px rgba(143,124,200,0.18); }
+.cpop-resultado--destacado .cpop-resultado-cab strong { color: #6f5fb3; font-size: 1.05rem; }
+
+/* Botón de copiar (esquina superior derecha de cada informe) */
+.cpop-resultado { position: relative; }
+.cpop-copy-btn {
+    position: absolute; top: 0.7rem; right: 0.7rem; margin: 0;
+    font-size: 0.8rem; font-weight: 600; cursor: pointer;
+    color: #6f5fb3; background: #f1ecfb; border: 1px solid #ddd2f3;
+    border-radius: 8px; padding: 0.3rem 0.6rem; line-height: 1;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.cpop-copy-btn:hover { background: #e7ddf8; }
+.cpop-copy-btn--ok { background: #e9f6ee; color: #2f7d57; border-color: #bfe3cd; }
+
+/* Tabla de evolución en el tiempo */
+.cpop-evolucion .cpop-resultado-cab strong { color: #6f5fb3; }
+.cpop-evo-titulo { margin: 0.9rem 0 0.4rem; font-size: 0.92rem; color: #4a4470; }
+.cpop-evo-scroll { overflow-x: auto; }
+.cpop-evo-tabla { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+.cpop-evo-tabla th, .cpop-evo-tabla td {
+    border: 1px solid #ece8f5; padding: 0.4rem 0.7rem; text-align: center; white-space: nowrap;
+}
+.cpop-evo-tabla th { background: #f6f3fc; color: #534d77; font-weight: 700; }
+.cpop-evo-tabla td.cpop-evo-ind { text-align: left; font-weight: 600; color: #4a4470; }
+.cpop-evo-badge { display: inline-block; font-weight: 700; font-size: 0.8rem; border-radius: 99px; padding: 2px 10px; }
+.cpop-evo--buena { background: #e9f6ee; color: #2f7d57; border: 1px solid #bfe3cd; }
+.cpop-evo--mala  { background: #fdecec; color: #b23b4e; border: 1px solid #f3cccc; }
+.cpop-evo--neutra { background: #eef0f5; color: #6c6790; border: 1px solid #dcd9ea; }
+.cpop-evo-nota { font-size: 0.78rem; color: #8a85a5; margin: 0.6rem 0 0; }
+
+/* ====================================================================
+   COMPACTAR la portada de pacientes para que todo quepa sin scroll
+   (en pantallas de escritorio amplias). Se aplica solo en ≥901px.
+   ==================================================================== */
+@media (min-width: 901px) {
+    .pac-portada { padding: 0.9rem 1.5rem 1rem; min-height: calc(100svh - 112px); }
+    .pac-portada-cabecera h1 { font-size: clamp(1.6rem, 3.4vw, 2.2rem); margin: 0; }
+    .pac-portada-titular { margin: 0.2rem auto 0; font-size: 1.02rem; }
+    .pac-portada-intro { margin: 0.2rem auto 0; font-size: 0.92rem; }   /* visible y compacto */
+
+    .pac-portada .portada-menu { margin-top: 0.7rem; gap: 0.6rem; }
+    .portada-recursos { margin-top: 0.7rem; }
+    .recursos-titulo { margin-bottom: 0.3rem; }
+    .recursos-menu .recurso-opcion { padding: 0.5rem 0.9rem; }
+
+    /* Apartado de cuestionarios, compacto */
+    .portada-cuestionarios { margin-top: 0.7rem; padding: 0.75rem 1.1rem 0.85rem; }
+    .cuestionarios-titulo { font-size: 1.18rem; }
+    .cuestionarios-sub { font-size: 0.85rem; margin-top: 0.1rem; }
+    .portada-cuestionarios .cuest-orientador { margin-top: 0.6rem; padding: 0.6rem 0.85rem; }
+    .cuest-orientador-q { margin-bottom: 0.45rem; font-size: 0.92rem; }
+    .cuest-orientador-ops { gap: 0.4rem; }
+    .cuest-op { padding: 0.45rem 0.7rem; font-size: 0.84rem; }
+    .cuestionarios-cards { margin-top: 0.6rem; }
+}
+
+/* ====================================================================
+   ÁREA DE PACIENTES SIN SCROLL (≥901px): el aviso secundario y el pie
+   no deben empujar; la portada llena el alto disponible.
+   ==================================================================== */
+@media (min-width: 901px) {
+    body.pac-portada-page .nota-pie,
+    body.pac-portada-page .pac-cuerpo .volver { display: none; }
+    body.pac-portada-page footer { padding: 0.4rem 1rem; }
+    body.pac-portada-page footer p { margin: 0; font-size: 0.78rem; }
+
+    .pac-portada { min-height: calc(100svh - 112px - 40px); padding-bottom: 0.6rem; }
+    .cuestionarios-sub { display: none; }       /* subtítulo no imprescindible: gana espacio */
+    .portada-cuestionarios { padding: 0.65rem 1.1rem 0.75rem; }
+    .portada-cuestionarios .cuest-orientador { margin-top: 0.5rem; }
+    .cuestionarios-cards { margin-top: 0.5rem; }
+}
+
+/* El artículo que envuelve los modales no debe ocupar alto en la portada */
+@media (min-width: 901px) {
+    body.pac-portada-page .pac-cuerpo { margin: 0; padding: 0; }
+}
+
+/* Recorridos (migas) eliminados en todas las páginas para ganar espacio */
+.migas, .alg-migas { display: none !important; }
+
+/* Sellos de "borrador" retirados (la web ya es profesional) */
+.borrador { display: none !important; }
+
+/* Banner "Entrena tu suelo pélvico" dentro de cada patología */
+.diag-ejer-banner {
+    display: flex; align-items: center; gap: 13px; width: 100%;
+    margin: 1.1rem 0 0.2rem; padding: 12px 18px;
+    text-decoration: none; color: #fff;
+    background: linear-gradient(135deg, #2f9b8e 0%, #57b894 55%, #8fc879 100%);
+    border-radius: 14px; box-shadow: 0 12px 26px -12px rgba(47,155,142,0.75);
+    transition: transform 0.16s, box-shadow 0.16s;
+}
+.diag-ejer-banner:hover { transform: translateY(-2px); box-shadow: 0 18px 34px -12px rgba(47,155,142,0.9); }
+.diag-ejer-ico { font-size: 1.6rem; line-height: 1; flex: 0 0 auto; }
+.diag-ejer-txt { display: flex; flex-direction: column; gap: 1px; flex: 1 1 auto; min-width: 0; }
+.diag-ejer-txt strong { font-size: 1.02rem; }
+.diag-ejer-txt small { font-size: 0.82rem; opacity: 0.95; }
+.diag-ejer-flecha { font-size: 1.4rem; flex: 0 0 auto; transition: transform 0.16s; }
+.diag-ejer-banner:hover .diag-ejer-flecha { transform: translateX(4px); }
+
+/* --- Enlace inline "Ver animación" + overlay a pantalla completa --- */
+.anim-link {
+    display: inline-flex; align-items: center; gap: 5px; margin: 0 0 0 8px;
+    font: inherit; font-size: 0.86rem; font-weight: 700; cursor: pointer;
+    color: #fff; background: linear-gradient(135deg, #3f9bb0, #2f7e90);
+    border: 0; border-radius: 99px; padding: 4px 13px; vertical-align: middle;
+    box-shadow: 0 4px 12px -4px rgba(47,126,144,0.6);
+    transition: transform 0.12s, box-shadow 0.15s;
+}
+.anim-link:hover { transform: translateY(-1px); box-shadow: 0 7px 16px -5px rgba(47,126,144,0.75); }
+
+/* Compactar el panel "Disfunciones del suelo pélvico" para que quepa sin scroll
+   (los botones de animación se mantienen grandes y visibles). */
+#contenido-conoce #det-disf.activo p,
+#contenido-conoce #det-disf.activo li { font-size: 0.8rem; line-height: 1.28; margin: 0.1rem 0; }
+#contenido-conoce #det-disf.activo h4 { margin: 0.28rem 0 0.08rem; font-size: 0.9rem; }
+#contenido-conoce #det-disf.activo ul { margin: 0.12rem 0; }
+#contenido-conoce #det-disf.activo .dis-bloque { margin-bottom: 0.1rem; }
+#contenido-conoce #det-disf.activo .destacado { margin-top: 0.3rem; padding: 0.4rem 0.7rem; font-size: 0.8rem; }
+
+.anim-overlay { position: fixed; inset: 0; z-index: 220; background: rgba(20,16,40,0.6); }
+.anim-overlay[hidden] { display: none; }
+.anim-overlay-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+.anim-overlay-cerrar {
+    position: absolute; top: 14px; right: 16px; z-index: 2; width: 2.4rem; height: 2.4rem; margin: 0;
+    font-size: 1.4rem; line-height: 1; cursor: pointer; color: #6b6494;
+    background: rgba(255,255,255,0.96); border: 1px solid #ddd2f3; border-radius: 50%;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+}
+.anim-overlay-cerrar:hover { background: #fff; }

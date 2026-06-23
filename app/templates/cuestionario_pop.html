@@ -1,0 +1,490 @@
+<!--
+  cuestionario_pop.html
+  ---------------------
+  Cuestionario de impacto del prolapso de órganos pélvicos (POP).
+  Combina tres instrumentos validados:
+    · PFDI-20  (síntomas):  POPDI-6 · CRADI-8 · UDI-6
+    · PFIQ-7   (impacto en calidad de vida): POPIQ-7 · CRAIQ-7 · UIQ-7
+    · PISQ-IR  (función sexual; con ramificación activa / no activa)
+
+  Lo rellena la PACIENTE en la zona pública. Al terminar genera un informe
+  y lo guarda en la base de datos asociado a su NHC, para que el profesional
+  pueda consultarlo después. Solo datos ficticios de prueba.
+-->
+{% extends "base.html" %}
+
+{% block contenido %}
+<div class="cpop-wrap">
+
+    <!-- ============ Pantalla 1: datos de la paciente ============ -->
+    <div class="cpop-card" id="cpop-intro">
+        <h1>Cuestionario de impacto del prolapso (POP)</h1>
+        <p class="cpop-muted">
+            Versión para la paciente. Al finalizar se genera un informe que tu
+            profesional podrá consultar con tu NHC.
+        </p>
+
+        <div class="cpop-grid">
+            <label class="cpop-field">NHC (Nº de Historia Clínica)
+                <input type="text" id="nhc" placeholder="Ej.: NHC-0001" autocomplete="off">
+            </label>
+            <label class="cpop-field">Nombre y apellidos
+                <input type="text" id="nombre" autocomplete="off">
+            </label>
+            <label class="cpop-field">Fecha
+                <input type="date" id="fecha">
+            </label>
+        </div>
+        <p class="cpop-error" id="cpop-error-datos" hidden>Introduce al menos el NHC para continuar.</p>
+
+        <div class="cpop-info">
+            <h3>Información para la paciente</h3>
+            <p>Este cuestionario evalúa cómo los síntomas pélvicos, urinarios y
+               fecales afectan a tu bienestar, tu calidad de vida y tu función
+               sexual en los <strong>últimos 3 meses</strong>.</p>
+            <p class="cpop-muted">No hay respuestas correctas o incorrectas.
+               Responde según tu experiencia. Puedes saltar cualquier pregunta.</p>
+        </div>
+
+        <div class="cpop-actions">
+            <button type="button" class="boton" id="cpop-start">Comenzar</button>
+        </div>
+    </div>
+
+    <!-- ============ Pantalla 2: preguntas (una a una) ============ -->
+    <div class="cpop-card cpop-hidden" id="cpop-question">
+        <div class="cpop-progress-wrap">
+            <div class="cpop-progress"><div class="cpop-progress-bar" id="cpop-bar"></div></div>
+            <div class="cpop-progress-text" id="cpop-progress-text"></div>
+        </div>
+
+        <div class="cpop-pill" id="cpop-pill"></div>
+
+        <div class="cpop-question">
+            <div class="cpop-qtitle" id="cpop-qtitle"></div>
+            <div class="cpop-qsub cpop-muted" id="cpop-qsub"></div>
+            <div class="cpop-scale" id="cpop-scale"></div>
+            <div class="cpop-options" id="cpop-options"></div>
+        </div>
+
+        <div class="cpop-actions cpop-actions--nav">
+            <button type="button" class="boton boton--sec" id="cpop-back">← Volver atrás</button>
+            <button type="button" class="boton boton--sec" id="cpop-skip">Saltar →</button>
+        </div>
+    </div>
+
+    <!-- ============ Pantalla 3: informe ============ -->
+    <div class="cpop-card cpop-hidden" id="cpop-reportcard">
+        <h2>Resumen para historia clínica</h2>
+        <p class="cpop-saved" id="cpop-saved" hidden>✓ Cuestionario guardado. Tu profesional podrá verlo buscando tu NHC.</p>
+        <p class="cpop-error" id="cpop-save-error" hidden>No se pudo guardar en el servidor. Puedes copiar el informe manualmente.</p>
+        <pre class="cpop-report" id="cpop-report"></pre>
+        <div class="cpop-actions">
+            <button type="button" class="boton boton--sec" id="cpop-restart">Volver a empezar</button>
+            <button type="button" class="boton boton--sec" id="cpop-copy">📑 Copiar informe</button>
+            <button type="button" class="boton boton--sec" id="cpop-pdf">📄 Generar PDF</button>
+            <button type="button" class="boton" id="cpop-email">✉️ Enviar por email</button>
+        </div>
+        <p class="cpop-copiado" id="cpop-copiado" hidden>✓ Copiado al portapapeles</p>
+    </div>
+
+</div>
+
+<!-- Datos del cuestionario (96 ítems) -->
+<script src="/static/pop_flow.js?v={{ css_v() }}"></script>
+<!-- html2pdf para exportar el informe -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+(function () {
+    "use strict";
+    const FLOW = window.POP_FLOW || [];
+
+    // Estado del recorrido
+    let answers = {};
+    let current = -1;
+    const historyStack = [];
+    // Totales calculados (para guardar en la BD)
+    let pfdiTotalVal = null, pfiqTotalVal = null;
+
+    // ---------- Atajos al DOM ----------
+    const $ = (id) => document.getElementById(id);
+
+    // ====================================================================
+    //  Lógica de visibilidad y navegación (idéntica al modelo)
+    // ====================================================================
+    function isVisible(item) {
+        if (!item.showIf) return true;
+        try { return Function("answers", "return " + item.showIf)(answers); }
+        catch (e) { return true; }
+    }
+    function visibleIndexes() {
+        const out = [];
+        FLOW.forEach((item, idx) => { if (isVisible(item)) out.push(idx); });
+        return out;
+    }
+    function nextVisibleIndex(from) {
+        for (let i = from + 1; i < FLOW.length; i++) {
+            if (isVisible(FLOW[i])) return i;
+        }
+        return -1;
+    }
+    function currentVisiblePosition() {
+        return visibleIndexes().indexOf(current) + 1;
+    }
+
+    // ====================================================================
+    //  Utilidades de puntuación
+    // ====================================================================
+    function val(name) { return answers[name] || ""; }
+    function mean(a, b) {
+        let nums = [];
+        if (Array.isArray(a) && b === undefined) {
+            nums = a.filter(v => v !== null && v !== "" && !Number.isNaN(Number(v))).map(Number);
+        } else {
+            nums = [a, b].filter(v => v !== null && v !== "" && !Number.isNaN(Number(v))).map(Number);
+        }
+        if (!nums.length) return null;
+        return nums.reduce((x, y) => x + y, 0) / nums.length;
+    }
+    function recode5(x) { if (!x) return ""; return 6 - Number(x); }
+
+    function severity100(score) {
+        if (score == null || Number.isNaN(Number(score))) return "NA";
+        const s = Number(score);
+        if (s <= 20) return "mínimo";
+        if (s <= 50) return "leve-moderado";
+        return "moderado-alto";
+    }
+    function interpretPFDITotal(total) {
+        if (total == null || Number.isNaN(Number(total))) return "no interpretable";
+        const t = Number(total);
+        if (t <= 50) return "no o escasamente sintomático";
+        if (t <= 100) return "levemente sintomático";
+        if (t <= 200) return "moderadamente sintomático";
+        return "altamente sintomático";
+    }
+    function interpretPFIQTotal(total) {
+        if (total == null || Number.isNaN(Number(total))) return "no interpretable";
+        const t = Number(total);
+        if (t <= 50) return "escasa";
+        if (t <= 100) return "leve";
+        if (t <= 200) return "moderada";
+        return "alta";
+    }
+    // Escalas descriptivas del PISQ-IR
+    function escala5(v) {
+        if (!v) return "NA";
+        const map = {"1":"muy bajo/nunca","2":"bajo","3":"moderado","4":"alto","5":"muy alto"};
+        return v + "/5 (" + map[v] + ")";
+    }
+    function escala5Positiva(v, tipo) {
+        if (!v) return "NA";
+        const maps = {
+            excitacion:   {"1":"nunca","2":"rara vez","3":"algunas veces","4":"a menudo","5":"casi siempre"},
+            satisfaccion: {"1":"muy baja","2":"baja","3":"intermedia","4":"alta","5":"muy alta"},
+            deseo:        {"1":"muy bajo","2":"bajo","3":"intermedio","4":"alto","5":"muy alto"}
+        };
+        const map = maps[tipo] || maps.satisfaccion;
+        return v + "/5 (" + (map[v] || v) + ")";
+    }
+    function escala4(v, tipo) {
+        if (!v) return "NA";
+        const maps = {
+            acuerdo:        {"1":"muy de acuerdo","2":"algo de acuerdo","3":"algo en desacuerdo","4":"muy en desacuerdo"},
+            limitacion:     {"1":"nada","2":"un poco","3":"algo","4":"mucho"},
+            pareja:         {"1":"muy positiva","2":"algo positiva","3":"algo negativa","4":"muy negativa"},
+            parejaProblema: {"1":"todo el tiempo","2":"la mayor parte del tiempo","3":"algunas veces","4":"casi nunca / rara vez"}
+        };
+        const map = maps[tipo] || maps.limitacion;
+        return v + "/4 (" + (map[v] || v) + ")";
+    }
+
+    // ====================================================================
+    //  Render de cada pregunta
+    // ====================================================================
+    function renderQuestion() {
+        if (current === -1) current = nextVisibleIndex(-1);
+        if (current === -1) { finish(); return; }
+
+        const item = FLOW[current];
+        $("cpop-pill").textContent = item.section;
+        $("cpop-qtitle").textContent = item.title;
+        $("cpop-qsub").textContent = item.subtitle || "";
+        $("cpop-scale").textContent = item.scaleText || "";
+
+        const box = $("cpop-options");
+        box.innerHTML = "";
+        item.options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "cpop-opt";
+            if (answers[item.id] === opt[0]) btn.classList.add("cpop-opt--sel");
+            btn.textContent = opt[1];
+            btn.onclick = () => {
+                answers[item.id] = opt[0];
+                historyStack.push(current);
+                current = nextVisibleIndex(current);
+                if (current === -1) finish();
+                else renderQuestion();
+            };
+            box.appendChild(btn);
+        });
+
+        const total = visibleIndexes().length;
+        const pos = currentVisiblePosition();
+        $("cpop-progress-text").textContent = pos + " / " + total;
+        $("cpop-bar").style.width = ((pos - 1) / total * 100) + "%";
+        $("cpop-back").disabled = historyStack.length === 0;
+    }
+
+    function skipQuestion() {
+        if (current === -1) return;
+        answers[FLOW[current].id] = "";
+        historyStack.push(current);
+        current = nextVisibleIndex(current);
+        if (current === -1) finish();
+        else renderQuestion();
+    }
+    function goBack() {
+        if (!historyStack.length) return;
+        const prev = historyStack.pop();
+        if (current !== -1) delete answers[FLOW[current].id];
+        current = prev;
+        renderQuestion();
+    }
+
+    // ====================================================================
+    //  Generación del informe (puntuación de los 3 instrumentos)
+    // ====================================================================
+    function finish() {
+        $("cpop-question").classList.add("cpop-hidden");
+        $("cpop-reportcard").classList.remove("cpop-hidden");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        // ----- PFDI-20 -----
+        const pfdiVals = Array.from({length:20}, (_, i) => {
+            const present = val("PFDI_" + (i+1) + "_present");
+            const severity = val("PFDI_" + (i+1) + "_severity");
+            if (present === "no") return 0;
+            if (present === "yes" && severity !== "") return Number(severity);
+            return null;
+        });
+        const popdiScore = mean(pfdiVals.slice(0,6));
+        const cradiScore = mean(pfdiVals.slice(6,14));
+        const udiScore   = mean(pfdiVals.slice(14,20));
+        const popdi100 = popdiScore == null ? null : (popdiScore * 25).toFixed(1);
+        const cradi100 = cradiScore == null ? null : (cradiScore * 25).toFixed(1);
+        const udi100   = udiScore   == null ? null : (udiScore   * 25).toFixed(1);
+        const pfdiTotal = (popdi100 && cradi100 && udi100)
+            ? (Number(popdi100)+Number(cradi100)+Number(udi100)).toFixed(1) : null;
+
+        // ----- PFIQ-7 -----
+        const popiq = Array.from({length:7}, (_, i) => { const v = val("POPIQ_"+(i+1)); return v === "" ? null : Number(v); });
+        const craiq = Array.from({length:7}, (_, i) => { const v = val("CRAIQ_"+(i+1)); return v === "" ? null : Number(v); });
+        const uiq   = Array.from({length:7}, (_, i) => { const v = val("UIQ_"+(i+1));   return v === "" ? null : Number(v); });
+        const popiqBase = mean(popiq), craiqBase = mean(craiq), uiqBase = mean(uiq);
+        const popiq100 = popiqBase == null ? null : (popiqBase * (100/3)).toFixed(1);
+        const craiq100 = craiqBase == null ? null : (craiqBase * (100/3)).toFixed(1);
+        const uiq100   = uiqBase   == null ? null : (uiqBase   * (100/3)).toFixed(1);
+        const pfiqTotal = (uiq100 && craiq100 && popiq100)
+            ? (Number(uiq100)+Number(craiq100)+Number(popiq100)).toFixed(1) : null;
+
+        pfdiTotalVal = pfdiTotal; pfiqTotalVal = pfiqTotal;
+
+        // ----- PISQ-IR (función sexual, ramificado) -----
+        const q1 = val("Q1");
+        let pisqText = "PISQ-IR\nEstado sexual: no consta";
+        if (q1 === "1") {
+            const limitacion = val("Q3"), molestia = val("Q6"), motivoSintomas = val("Q2c");
+            const motivos = [];
+            if (val("Q2a")) motivos.push("Sin pareja: " + escala4(val("Q2a"),"acuerdo"));
+            if (val("Q2b")) motivos.push("Falta de interés: " + escala4(val("Q2b"),"acuerdo"));
+            if (val("Q2c")) motivos.push("Síntomas de suelo pélvico: " + escala4(val("Q2c"),"acuerdo"));
+            if (val("Q2d")) motivos.push("Otros problemas de salud: " + escala4(val("Q2d"),"acuerdo"));
+            if (val("Q2e")) motivos.push("Dolor: " + escala4(val("Q2e"),"acuerdo"));
+            let patrones = [];
+            if (motivoSintomas && Number(motivoSintomas) <= 2) patrones.push("relacionada con síntomas de suelo pélvico");
+            if (val("Q2e") && Number(val("Q2e")) <= 2) patrones.push("dolor como barrera");
+            if (val("Q2b") && Number(val("Q2b")) <= 2) patrones.push("bajo interés sexual");
+            if (val("Q2a") && Number(val("Q2a")) <= 2) patrones.push("ausencia de pareja");
+            pisqText = "PISQ-IR\nEstado sexual: mujer no sexualmente activa\n\nMotivos referidos para la ausencia de actividad sexual:\n"
+                + (motivos.length ? "- " + motivos.join("\n- ") : "- No consta")
+                + "\n\nImpacto clínico:\n- Limitación por síntomas: " + escala4(limitacion,"limitacion")
+                + "\n- Molestia por inactividad sexual: " + escala4(molestia,"limitacion")
+                + "\n\nInterpretación:\n- Patrón predominante: " + (patrones.length ? patrones.join(", ") : "sin patrón definido")
+                + "\n- Impacto clínicamente relevante: " + ((limitacion >= "3" || molestia >= "3") ? "sí" : "no");
+        } else if (q1 === "2") {
+            const deseo = (val("Q16") && val("Q17")) ? mean(recode5(val("Q16")), recode5(val("Q17"))) : recode5(val("Q17"));
+            const excitacion = val("Q7");
+            const satisfaccion = (val("Q19a") && val("Q8a")) ? mean(recode5(val("Q19a")), val("Q8a")) : recode5(val("Q19a"));
+            const dolor = val("Q11"), escapes = val("Q9"), limitacion = val("Q18");
+            const frustracion = val("Q20a"), inferioridad = val("Q20b"), verguenza = val("Q20c"), enfado = val("Q20d");
+            let dominios = [];
+            if (satisfaccion && Number(satisfaccion) <= 2) dominios.push("satisfacción baja");
+            else if (satisfaccion && Number(satisfaccion) === 3) dominios.push("satisfacción intermedia");
+            if (deseo && Number(deseo) <= 2) dominios.push("deseo bajo");
+            else if (deseo && Number(deseo) === 3) dominios.push("deseo intermedio");
+            if (excitacion && Number(excitacion) <= 2) dominios.push("excitación baja");
+            else if (excitacion && Number(excitacion) === 3) dominios.push("excitación intermedia");
+            if (dolor && Number(dolor) >= 4) dominios.push("dispareunia significativa");
+            else if (dolor && Number(dolor) === 3) dominios.push("dispareunia leve");
+            if (limitacion && Number(limitacion) >= 3) dominios.push("limitación por prolapso/incontinencia");
+            if (escapes && Number(escapes) >= 3) dominios.push("escapes durante actividad sexual");
+            if ((frustracion && Number(frustracion) <= 2) || (inferioridad && Number(inferioridad) <= 2) || (verguenza && Number(verguenza) <= 2))
+                dominios.push("impacto emocional relevante");
+            let extra = "";
+            if (val("Q12") === "1") extra = "\n\nInfluencia de la pareja:\n- Problemas sexuales de la pareja: " + escala4(val("Q13"),"parejaProblema")
+                + "\n- Influencia sobre el deseo: " + escala4(val("Q14a"),"pareja")
+                + "\n- Influencia sobre la frecuencia: " + escala4(val("Q14b"),"pareja");
+            pisqText = "PISQ-IR\nEstado sexual: mujer sexualmente activa\n\nFunción sexual:\n- Excitación: " + escala5(excitacion)
+                + "\n- Satisfacción: " + escala5Positiva(satisfaccion, "satisfaccion")
+                + "\n- Deseo: " + escala5Positiva(deseo, "deseo")
+                + "\n- Dolor con coito: " + escala5(dolor)
+                + "\n- Escapes durante actividad sexual: " + escala5(escapes)
+                + "\n- Limitación por síntomas: " + escala4(limitacion,"limitacion") + extra
+                + "\n\nImpacto emocional:\n- Frustración: " + escala4(frustracion,"acuerdo")
+                + "\n- Inferioridad: " + escala4(inferioridad,"acuerdo")
+                + "\n- Vergüenza: " + escala4(verguenza,"acuerdo")
+                + "\n- Enfado: " + escala4(enfado,"acuerdo")
+                + "\n\nInterpretación:\n- Patrón predominante: " + (dominios.length ? dominios.join(", ") : "sin alteraciones relevantes");
+        }
+
+        // Dominio predominante
+        const pfdiDomains = [["prolapso", popdi100?Number(popdi100):-1], ["colorrectal", cradi100?Number(cradi100):-1], ["urinario", udi100?Number(udi100):-1]].sort((a,b)=>b[1]-a[1]);
+        const pfiqDomains = [["urinario", uiq100?Number(uiq100):-1], ["colorrectal", craiq100?Number(craiq100):-1], ["prolapso", popiq100?Number(popiq100):-1]].sort((a,b)=>b[1]-a[1]);
+        const pfdiDominio = pfdiDomains[0][1] >= 0 ? pfdiDomains[0][0] : "sin predominio claro";
+        const pfiqDominio = pfiqDomains[0][1] >= 0 ? pfiqDomains[0][0] : "sin predominio claro";
+
+        // Datos de cabecera
+        const nombre = $("nombre").value.trim() || "No consta";
+        const nhc = $("nhc").value.trim() || "No consta";
+        const fecha = $("fecha").value || "No consta";
+
+        const lines = [
+            "NHC: " + nhc,
+            "Paciente: " + nombre,
+            "Fecha: " + fecha,
+            "",
+            "PFDI-20",
+            "- POPDI-6 (síntomas de prolapso): " + (popdi100 || "NA") + "/100 " + (popdi100 ? "(" + severity100(popdi100) + ")" : ""),
+            "- CRADI-8 (síntomas colorrectales): " + (cradi100 || "NA") + "/100 " + (cradi100 ? "(" + severity100(cradi100) + ")" : ""),
+            "- UDI-6 (síntomas urinarios): " + (udi100 || "NA") + "/100 " + (udi100 ? "(" + severity100(udi100) + ")" : ""),
+            "- Puntuación total: " + (pfdiTotal || "NA") + "/300",
+            "- Interpretación: POP global " + interpretPFDITotal(pfdiTotal) + " con predominio del componente " + pfdiDominio + ".",
+            "",
+            "PFIQ-7",
+            "- UIQ-7 (impacto urinario): " + (uiq100 || "NA") + "/100 " + (uiq100 ? "(" + severity100(uiq100) + ")" : ""),
+            "- CRAIQ-7 (impacto colorrectal): " + (craiq100 || "NA") + "/100 " + (craiq100 ? "(" + severity100(craiq100) + ")" : ""),
+            "- POPIQ-7 (impacto del prolapso): " + (popiq100 || "NA") + "/100 " + (popiq100 ? "(" + severity100(popiq100) + ")" : ""),
+            "- Puntuación total: " + (pfiqTotal || "NA") + "/300",
+            "- Interpretación: POP con " + interpretPFIQTotal(pfiqTotal) + " afectación en la calidad de vida, con mayor repercusión funcional del componente " + pfiqDominio + ".",
+            "",
+            pisqText
+        ];
+        $("cpop-report").textContent = lines.join("\n");
+
+        // Guardar en el servidor
+        guardarEnServidor();
+    }
+
+    // ====================================================================
+    //  Guardado en la base de datos
+    // ====================================================================
+    function guardarEnServidor() {
+        const datos = new FormData();
+        datos.append("nhc", $("nhc").value.trim());
+        datos.append("nombre", $("nombre").value.trim());
+        datos.append("fecha", $("fecha").value);
+        datos.append("informe", $("cpop-report").textContent);
+        datos.append("respuestas_json", JSON.stringify(answers));
+        if (pfdiTotalVal) datos.append("pfdi_total", pfdiTotalVal);
+        if (pfiqTotalVal) datos.append("pfiq_total", pfiqTotalVal);
+
+        fetch("/cuestionario-pop", { method: "POST", body: datos })
+            .then(r => r.json())
+            .then(res => {
+                if (res && res.ok) { $("cpop-saved").hidden = false; $("cpop-save-error").hidden = true; }
+                else { $("cpop-save-error").hidden = false; }
+            })
+            .catch(() => { $("cpop-save-error").hidden = false; });
+    }
+
+    // ====================================================================
+    //  Acciones del informe: copiar, PDF, email
+    // ====================================================================
+    function copiar() {
+        const txt = $("cpop-report").textContent;
+        const ok = () => { $("cpop-copiado").hidden = false; setTimeout(() => { $("cpop-copiado").hidden = true; }, 2500); };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(txt).then(ok, () => fallback(txt, ok));
+        } else { fallback(txt, ok); }
+    }
+    function fallback(txt, ok) {
+        const ta = document.createElement("textarea");
+        ta.value = txt; document.body.appendChild(ta); ta.select();
+        try { document.execCommand("copy"); ok(); } catch (e) {}
+        document.body.removeChild(ta);
+    }
+    function generarPDF() {
+        const texto = $("cpop-report").textContent;
+        if (!texto.trim()) return;
+        const wrapper = document.createElement("div");
+        wrapper.style.fontFamily = "Arial, sans-serif";
+        wrapper.style.padding = "24px";
+        wrapper.style.whiteSpace = "pre-wrap";
+        wrapper.style.lineHeight = "1.4";
+        wrapper.textContent = texto;
+        if (typeof html2pdf === "undefined") { window.print(); return; }
+        html2pdf().set({
+            margin: 10, filename: "Informe_POP.pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+        }).from(wrapper).save();
+    }
+    function enviarEmail() {
+        const texto = $("cpop-report").textContent;
+        if (!texto.trim()) return;
+        const email = prompt("Introduce el email de destino:");
+        if (!email) return;
+        window.location.href = "mailto:" + email
+            + "?subject=" + encodeURIComponent("Informe cuestionario POP")
+            + "&body=" + encodeURIComponent(texto);
+    }
+    function resetAll() {
+        answers = {}; historyStack.length = 0; current = -1;
+        $("cpop-reportcard").classList.add("cpop-hidden");
+        $("cpop-question").classList.add("cpop-hidden");
+        $("cpop-intro").classList.remove("cpop-hidden");
+        $("cpop-saved").hidden = true; $("cpop-save-error").hidden = true;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // ====================================================================
+    //  Conexión de botones
+    // ====================================================================
+    $("cpop-start").onclick = () => {
+        if (!$("nhc").value.trim()) {
+            // En móvil el campo NHC queda arriba; lo traemos a la vista y lo resaltamos
+            $("cpop-error-datos").hidden = false;
+            $("nhc").scrollIntoView({ behavior: "smooth", block: "center" });
+            $("nhc").focus({ preventScroll: true });
+            $("nhc").classList.add("cpop-resaltado");
+            setTimeout(() => $("nhc").classList.remove("cpop-resaltado"), 1600);
+            return;
+        }
+        $("cpop-error-datos").hidden = true;
+        historyStack.length = 0; current = -1;
+        $("cpop-intro").classList.add("cpop-hidden");
+        $("cpop-question").classList.remove("cpop-hidden");
+        renderQuestion();
+    };
+    $("cpop-back").onclick = goBack;
+    $("cpop-skip").onclick = skipQuestion;
+    $("cpop-restart").onclick = resetAll;
+    $("cpop-copy").onclick = copiar;
+    $("cpop-pdf").onclick = generarPDF;
+    $("cpop-email").onclick = enviarEmail;
+})();
+</script>
+{% endblock %}

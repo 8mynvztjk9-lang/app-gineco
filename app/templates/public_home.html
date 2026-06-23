@@ -1,0 +1,68 @@
+<!--
+  public_home.html
+  ----------------
+  Portada de inicio (hero a pantalla completa), rediseño PASTEL y moderno:
+    - Fondo pastel suave con formas difuminadas de colores (decorativas).
+    - Barra superior: logo PSSP (fondo blanco, contraste, CLICABLE -> inicio)
+      a la izquierda; botón "Área profesionales" a la derecha.
+    - Centro: tarjeta de "cristal esmerilado" (glassmorphism) con la bienvenida,
+      el título, el eslogan y los botones de acción.
+    - SIN hueco de imagen (se añadirá más adelante).
+    - Barra FIJA abajo con el logo del Hospital Son Llàtzer, centrado y siempre
+      visible aunque se haga scroll.
+    - Todo se adapta al tamaño del dispositivo (móvil, tablet, escritorio).
+
+  Esta página trae su propia cabecera y pie, por eso vacía esos bloques.
+-->
+{% extends "base.html" %}
+
+{% block body_class %}inicio{% endblock %}
+
+{% block cabecera %}{% endblock %}
+{% block pie %}{% endblock %}
+
+{% block contenido %}
+<div class="hero">
+
+    <!-- Imagen anatómica en SEGUNDO PLANO: difuminada hacia el centro para
+         fundirse con el fondo pastel (decoración, no es contenido). -->
+    <div class="hero-bg-imagen" aria-hidden="true"></div>
+
+    <!-- Formas pastel difuminadas (solo decoración) -->
+    <span class="hero-blob blob-1" aria-hidden="true"></span>
+    <span class="hero-blob blob-2" aria-hidden="true"></span>
+    <span class="hero-blob blob-3" aria-hidden="true"></span>
+
+    <!-- Barra superior: logo clicable (vuelve al inicio) | botón profesionales -->
+    <div class="hero-topbar">
+        <a href="/" class="hero-logo-link" aria-label="Volver al inicio">
+            <img class="logo-pssp-top"
+                 src="/static/images/logo-pssp.png"
+                 alt="Promoción Salud Suelo Pélvico (PSSP)">
+        </a>
+
+        <a class="btn-prof" href="/login">Área profesionales →</a>
+    </div>
+
+    <!-- Centro: tarjeta de cristal con la bienvenida y los botones -->
+    <div class="hero-main">
+        <div class="hero-card">
+            <p class="hero-eyebrow">Bienvenida a</p>
+            <h1 class="hero-titulo">Promoción de la Salud del Suelo Pélvico</h1>
+            <p class="hero-subtitulo">Salud del suelo pélvico, calidad de vida</p>
+
+            <div class="hero-cta">
+                <a class="btn-pacientes" href="/suelo-pelvico">Área de pacientes →</a>
+                <a class="btn-ghost" href="/suelo-pelvico/ejercicios">Ver ejercicios</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Barra FIJA inferior: logo del hospital, centrado y siempre visible -->
+<div class="hero-footer-fija">
+    <img class="logo-hospital"
+         src="/static/images/logo-son-llatzer.png"
+         alt="Hospital Universitari Son Llàtzer">
+</div>
+{% endblock %}

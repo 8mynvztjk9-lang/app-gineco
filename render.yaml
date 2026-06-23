@@ -1,0 +1,17 @@
+# render.yaml — despliegue de la app en Render (https://render.com)
+#
+# Cómo usarlo (una sola vez):
+#   1) Sube este proyecto a un repositorio en GitHub.
+#   2) En Render:  New  →  Blueprint  →  conecta el repositorio.
+#      Render lee este archivo y lo configura todo solo.
+#   3) Pulsa Deploy. Te dará una URL FIJA, p. ej. https://app-gineco.onrender.com
+#
+# Esa URL no caduca: es la que pones en el QR definitivo de la tarjeta.
+services:
+  - type: web
+    name: app-gineco
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    autoDeploy: true

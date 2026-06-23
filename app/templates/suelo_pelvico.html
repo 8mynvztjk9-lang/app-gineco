@@ -1,0 +1,2267 @@
+<!--
+  suelo_pelvico.html
+  ------------------
+  Página pública (para pacientes): apartado GENERAL del suelo pélvico.
+
+  Diseño tipo "post-it": cada tema se muestra como una nota pequeña que, al
+  pasar el ratón (escritorio) o tocarla (móvil), se abre como POP-UP con todo
+  el contenido. Abajo, las tarjetas para elegir según el diagnóstico.
+
+  ⚠️ El texto informativo es un BORRADOR pendiente de revisión clínica.
+-->
+{% extends "base.html" %}
+
+{% block body_class %}pac-portada-page{% endblock %}
+
+{% block contenido %}
+    <!-- ====== PORTADA a pantalla completa, con el motivo PSSP de fondo ====== -->
+    <section class="pac-portada">
+        <div class="pac-portada-motivo" aria-hidden="true"></div>
+
+        <!-- Titular de página, arriba (deja el centro y la imagen más despejados) -->
+        <div class="pac-portada-cabecera">
+            <span class="borrador">Borrador — pendiente de revisión clínica</span>
+            <h1>Salud del suelo pélvico</h1>
+            <p class="pac-portada-titular">Las disfunciones del suelo pélvico son mucho más frecuentes de lo que se habla.</p>
+            <p class="pac-portada-intro">Afectan a la calidad de vida de millones de mujeres, pero siguen siendo un problema silencioso e infradiagnosticado.</p>
+        </div>
+
+        <!-- Menú: cada opción abre una ventana con su contenido -->
+        <div class="portada-menu">
+                <button type="button" class="portada-opcion" data-modal="contenido-conoce">
+                    <span class="portada-opcion-ico" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7M8 11h7"/>
+                        </svg>
+                    </span>
+                    <span class="portada-opcion-txt">
+                        <strong>Conoce tu suelo pélvico</strong>
+                        <small>Qué es y sus disfunciones</small>
+                    </span>
+                </button>
+
+                <button type="button" class="portada-opcion" data-modal="contenido-diag">
+                    <span class="portada-opcion-ico" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 6h10M4 12h16M4 18h10"/><circle cx="18" cy="6" r="2"/><circle cx="18" cy="18" r="2"/>
+                        </svg>
+                    </span>
+                    <span class="portada-opcion-txt">
+                        <strong>Elige según tu diagnóstico</strong>
+                        <small>Información por diagnóstico</small>
+                    </span>
+                </button>
+
+                <button type="button" class="portada-opcion" data-modal="contenido-embarazo">
+                    <span class="portada-opcion-ico" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="4" r="2.3"/>
+                            <path d="M11 6.6c-1.5 1.2-1.8 2.9-1.4 4.6"/>
+                            <path d="M9.6 11.2c3 .1 5 1.7 5 4.1 0 2-1.7 3.1-3.9 3.1"/>
+                            <path d="M9.6 11.2 8.6 21"/>
+                            <path d="M11 18.4 12.2 21"/>
+                        </svg>
+                    </span>
+                    <span class="portada-opcion-txt">
+                        <strong>Consejos durante el embarazo</strong>
+                        <small>Cuídate desde antes del parto</small>
+                    </span>
+                </button>
+
+                <button type="button" class="portada-opcion" data-modal="contenido-parto">
+                    <span class="portada-opcion-ico" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="9"/>
+                            <path d="M12 3c1.6 0 2.4-1.1 2.4-2.2"/>
+                            <circle cx="9.2" cy="11" r="0.6" fill="currentColor" stroke="none"/>
+                            <circle cx="14.8" cy="11" r="0.6" fill="currentColor" stroke="none"/>
+                            <path d="M9.5 15c1.5 1.3 3.5 1.3 5 0"/>
+                        </svg>
+                    </span>
+                    <span class="portada-opcion-txt">
+                        <strong>Recupérate tras el parto</strong>
+                        <small>Cuidados del posparto</small>
+                    </span>
+                </button>
+
+            </div>
+
+            <!-- ====== Bloque distinto: Recursos para pacientes ====== -->
+            <div class="portada-recursos">
+                <span class="recursos-titulo">Recursos para pacientes</span>
+                <div class="recursos-menu">
+                    <button type="button" class="portada-opcion recurso-opcion" data-modal="contenido-urodinamia">
+                        <span class="portada-opcion-ico" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                                 stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v3h6V3"/><path d="M8 12l2.5 2.5L16 9"/>
+                            </svg>
+                        </span>
+                        <span class="portada-opcion-txt">
+                            <strong>Urodinamia: instrucciones</strong>
+                            <small>Cómo prepararte para la prueba</small>
+                        </span>
+                    </button>
+
+                    <a class="portada-opcion recurso-opcion" href="/suelo-pelvico/diario">
+                        <span class="portada-opcion-ico" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                                 stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v2h6V3"/><path d="M8 11h8M8 15h5"/>
+                            </svg>
+                        </span>
+                        <span class="portada-opcion-txt">
+                            <strong>Diario miccional</strong>
+                            <small>Anótalo y llévalo a la consulta</small>
+                        </span>
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- ====== Apartado DESTACADO: Cuestionarios ====== -->
+            <div class="portada-cuestionarios">
+                <span class="cuestionarios-titulo"><span aria-hidden="true">📋</span> Cuestionarios</span>
+                <p class="cuestionarios-sub">
+                    Cuéntale a tu profesional cómo estás: rellena el cuestionario y verá tus resultados al buscar tu NHC.
+                </p>
+
+                <!-- Pregunta orientadora: ayuda a elegir el cuestionario -->
+                <div class="cuest-orientador">
+                    <p class="cuest-orientador-q">
+                        <span class="cuest-orientador-ico" aria-hidden="true">🧭</span>
+                        ¿No sabes cuál rellenar? <strong>¿Qué te molesta más?</strong>
+                    </p>
+                    <div class="cuest-orientador-ops">
+                        <a class="cuest-op" href="/cuestionario-pop">
+                            <span class="cuest-op-ico" aria-hidden="true">🔻</span>
+                            <span>Noto un <strong>bulto o pesadez</strong> en la vagina</span>
+                        </a>
+                        <a class="cuest-op" href="/cuestionario-incontinencia">
+                            <span class="cuest-op-ico" aria-hidden="true">💧</span>
+                            <span>Se me <strong>escapa la orina</strong>, tengo urgencia o voy mucho al baño</span>
+                        </a>
+                        <button type="button" class="cuest-op"
+                                onclick="var h=document.getElementById('cuest-hint'); h.hidden=!h.hidden; this.classList.toggle('cuest-op--sel');">
+                            <span class="cuest-op-ico" aria-hidden="true">🤔</span>
+                            <span>Las <strong>dos cosas</strong> o no estoy segura</span>
+                        </button>
+                    </div>
+                    <p class="cuest-orientador-hint" id="cuest-hint" hidden>
+                        Sin problema: te conviene rellenar <strong>los dos</strong>. Empieza por el de
+                        <a href="/cuestionario-pop">prolapso (POP)</a> y luego el de
+                        <a href="/cuestionario-incontinencia">vejiga e incontinencia</a>.
+                    </p>
+                </div>
+
+                <!-- Las dos tarjetas de cuestionario -->
+                <div class="recursos-menu cuestionarios-cards">
+                    <a class="portada-opcion recurso-opcion" href="/cuestionario-pop">
+                        <span class="portada-opcion-ico" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                                 stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                                <rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12l2 2 4-4"/>
+                            </svg>
+                        </span>
+                        <span class="portada-opcion-txt">
+                            <strong>Cuestionario de impacto (POP)</strong>
+                            <small>Prolapso y suelo pélvico</small>
+                        </span>
+                    </a>
+
+                    <a class="portada-opcion recurso-opcion" href="/cuestionario-incontinencia">
+                        <span class="portada-opcion-ico" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                                 stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2.7S6 9 6 14a6 6 0 0 0 12 0c0-5-6-11.3-6-11.3z"/>
+                            </svg>
+                        </span>
+                        <span class="portada-opcion-txt">
+                            <strong>Cuestionario de vejiga e incontinencia</strong>
+                            <small>CACV + ICIQ</small>
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+        <!-- Pines de cifras: ordenados a los lados, con el contenido completo -->
+        <div class="cifras-pins" aria-label="Cifras clave">
+            <div class="cifra-pin cifra-pin--1">
+                <span class="cifra-pin-num">1 de cada 4</span>
+                <span class="cifra-pin-txt">mujeres presenta incontinencia urinaria en algún momento de su vida</span>
+            </div>
+            <div class="cifra-pin cifra-pin--2">
+                <span class="cifra-pin-num">+50&nbsp;%</span>
+                <span class="cifra-pin-txt">de prevalencia a partir de los 65 años</span>
+            </div>
+            <div class="cifra-pin cifra-pin--3">
+                <span class="cifra-pin-num">hasta 40&nbsp;%</span>
+                <span class="cifra-pin-txt">de las mujeres con varios partos desarrolla prolapso</span>
+            </div>
+            <div class="cifra-pin cifra-pin--4">
+                <span class="cifra-pin-num">65&nbsp;%</span>
+                <span class="cifra-pin-txt">de los partos vaginales implica algún grado de trauma perineal</span>
+            </div>
+            <div class="cifra-pin cifra-pin--5">
+                <span class="cifra-pin-num">4–10&nbsp;%</span>
+                <span class="cifra-pin-txt">de las mujeres convive con incontinencia fecal</span>
+            </div>
+            <div class="cifra-pin cifra-pin--6 cifra-pin--cta">
+                <span class="cifra-pin-num">solo 1 de 4</span>
+                <span class="cifra-pin-txt">mujeres con incontinencia anal llega a consultar a un profesional</span>
+            </div>
+        </div>
+
+        <!-- Isla de EJERCICIOS: aparece cuando las cifras desaparecen, en la
+             zona lateral libre, con color cálido propio y decoración animada. -->
+        <a class="ejer-isla" href="/suelo-pelvico/ejercicios"
+           aria-label="Ejercicios del suelo pélvico: practica con el cronómetro guiado">
+            <span class="ejer-spark ejer-spark--1" aria-hidden="true">✨</span>
+            <span class="ejer-spark ejer-spark--2" aria-hidden="true">✦</span>
+            <span class="ejer-spark ejer-spark--3" aria-hidden="true">✨</span>
+            <span class="ejer-isla-ring" aria-hidden="true">
+                <span class="ejer-isla-ico">🧘‍♀️</span>
+            </span>
+            <span class="ejer-isla-txt">
+                <small class="ejer-isla-eyebrow">Tu rutina diaria</small>
+                <strong>Ejercicios del suelo pélvico</strong>
+                <small>Practica con el cronómetro guiado</small>
+                <span class="ejer-isla-cta">Empezar ahora →</span>
+            </span>
+        </a>
+    </section>
+
+    <article class="contenido-paciente pac-cuerpo">
+
+      <!-- ====== Ventana modal: muestra SOLO la sección elegida ====== -->
+      <div class="modal-overlay" id="modal-secciones" hidden>
+        <div class="modal-dialog" role="dialog" aria-modal="true">
+          <button type="button" class="modal-volver" aria-label="Volver atrás">
+            <img src="/static/images/logo-pssp.png" alt="Promoción Salud Suelo Pélvico — volver atrás">
+          </button>
+          <div class="modal-cuerpo">
+
+        <!-- ====== Sección: NOTAS TIPO POST-IT ====== -->
+        <section class="modal-seccion bloque-postits" id="contenido-conoce"
+                 aria-label="Conoce tu suelo pélvico" hidden>
+
+            <!-- Imágenes anatómicas de fondo, difuminadas (decorativas) -->
+            <span class="conoce-deco-img conoce-deco-img--1" aria-hidden="true"></span>
+            <span class="conoce-deco-img conoce-deco-img--2" aria-hidden="true"></span>
+
+            <h2>Conoce tu suelo pélvico</h2>
+
+            <!-- Notas (solo el "disparador") -->
+            <div class="postit-fila">
+                <div class="postit postit--lila" tabindex="0" role="button"
+                     aria-expanded="false" aria-controls="postit-panel" data-target="det-quees">
+                    <span class="postit-tag">Información</span>
+                    <h3 class="postit-titulo">Qué es el suelo pélvico</h3>
+                    <span class="postit-pista">Ábrelo ↗</span>
+                </div>
+
+                <div class="postit postit--azul" tabindex="0" role="button"
+                     aria-expanded="false" aria-controls="postit-panel" data-target="det-disf">
+                    <span class="postit-tag">Información</span>
+                    <h3 class="postit-titulo">Disfunciones del suelo pélvico</h3>
+                    <span class="postit-pista">Ábrelo ↗</span>
+                </div>
+
+                <div class="postit postit--menta" tabindex="0" role="button"
+                     aria-expanded="false" aria-controls="postit-panel" data-target="det-puedes">
+                    <span class="postit-tag">Consejos</span>
+                    <h3 class="postit-titulo">¿Qué puedes hacer?</h3>
+                    <span class="postit-pista">Ábrelo ↗</span>
+                </div>
+            </div>
+
+            <!-- Banner Explorador anatómico: pequeño y centrado, bajo las notas -->
+            <button type="button" class="postit explorador-banner explorador-banner--mini"
+                    aria-expanded="false" aria-controls="postit-panel" data-target="det-explorador">
+                <span class="explorador-banner-ico" aria-hidden="true">🔬</span>
+                <span class="explorador-banner-txt">
+                    <strong>Explorador anatómico interactivo</strong>
+                    <small>Toca la lámina · Explora las estructuras del suelo pélvico</small>
+                </span>
+                <span class="explorador-banner-flecha" aria-hidden="true">→</span>
+            </button>
+
+            <!-- Logo PSSP central decorativo -->
+            <div class="conoce-intro">
+                <img class="conoce-emblema"
+                     src="/static/images/motivo-pssp-lila.png"
+                     alt="" aria-hidden="true">
+                <p class="conoce-lema">
+                    Cuidar tu suelo pélvico es cuidar tu libertad y tu bienestar.
+                    Recupera el control y la confianza: el primer paso lo das tú.
+                </p>
+            </div>
+
+            <!-- Panel desplegable: aparece DEBAJO y empuja el resto (no se solapa) -->
+            <div class="postit-panel" id="postit-panel" hidden>
+                <button type="button" class="postit-cerrar" aria-label="Cerrar">×</button>
+
+                <div class="postit-detalle" id="det-quees">
+                    <h3>Qué es el suelo pélvico</h3>
+                    <p>
+                        El suelo pélvico es un conjunto de músculos y ligamentos que
+                        se encuentran en la parte más baja de la pelvis. Funciona como
+                        una hamaca o red que cierra la pelvis por abajo y sostiene los
+                        órganos que están dentro.
+                    </p>
+
+                    <h4>¿Qué sostiene?</h4>
+                    <p>En la mujer, el suelo pélvico sujeta tres órganos:</p>
+                    <ul>
+                        <li>La <strong>vejiga</strong> (donde se guarda la orina)</li>
+                        <li>El <strong>útero</strong> (la matriz)</li>
+                        <li>El <strong>recto</strong> (la parte final del intestino)</li>
+                    </ul>
+                    <p>
+                        Estos órganos descansan sobre esa hamaca de músculos, que los
+                        mantiene en su sitio.
+                    </p>
+
+                    <h4>¿Para qué sirve?</h4>
+                    <p>Tiene varias funciones importantes en el día a día:</p>
+                    <ul>
+                        <li><strong>Controlar la orina y las heces.</strong> Rodea los conductos de salida y, al apretarse, permite aguantar las ganas hasta llegar al baño. Al relajarse, deja salir.</li>
+                        <li><strong>Sujetar los órganos.</strong> Evita que la vejiga, el útero o el recto se descuelguen hacia abajo.</li>
+                        <li><strong>Soportar la presión del abdomen.</strong> Cuando tosemos, reímos, levantamos peso o hacemos esfuerzo, la tripa empuja hacia abajo; el suelo pélvico responde para que todo se mantenga en su lugar.</li>
+                        <li><strong>Participar en las relaciones sexuales</strong>, gracias a su tono y capacidad de contraerse.</li>
+                        <li><strong>Tener un papel clave en el embarazo y el parto</strong>, ya que acompaña y deja pasar al bebé en el momento de nacer.</li>
+                    </ul>
+                </div>
+
+                <div class="postit-detalle" id="det-disf">
+                    <h3>Disfunciones del suelo pélvico</h3>
+                    <p>
+                        Cuando los músculos del suelo pélvico no funcionan bien (porque
+                        se debilitan, se dañan o, al contrario, están demasiado tensos),
+                        pueden aparecer distintos problemas. Estos son los más frecuentes:
+                    </p>
+
+                    <div class="dis-bloque">
+                        <h4>1. Pérdidas de orina (incontinencia urinaria)</h4>
+                        <p>Son los escapes de orina que ocurren sin querer.</p>
+                        <ul>
+                            <li><strong>De esfuerzo:</strong> se escapa orina al toser, reír, estornudar, saltar o cargar peso. Sucede porque el suelo pélvico no cierra bien la salida de la vejiga cuando aumenta la presión.
+                                <button type="button" class="anim-link" data-anim="/static/anim-incontinencia-esfuerzo.html">🎬 Ver animación</button>
+                            </li>
+                            <li><strong>De urgencia:</strong> se siente una necesidad muy fuerte y repentina de orinar, difícil de aguantar, que a veces no da tiempo a llegar al baño.
+                                <button type="button" class="anim-link" data-anim="/static/anim-incontinencia-urgencia.html">🎬 Ver animación</button>
+                            </li>
+                            <li><strong>Mixta:</strong> combinación de las dos anteriores: escapes con el esfuerzo y también con la urgencia.
+                                <button type="button" class="anim-link" data-anim="/static/anim-incontinencia-mixta.html">🎬 Ver animación</button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="dis-bloque">
+                        <h4>2. Prolapso de los órganos pélvicos</h4>
+                        <p>
+                            Es la sensación de que "algo baja o pesa" en la zona genital,
+                            como un bulto. Ocurre cuando la hamaca de músculos se debilita y
+                            la vejiga, el útero o el recto descienden de su posición normal.
+                            Puede notarse molestia, presión o ver/tocar un abultamiento.
+                            <button type="button" class="anim-link" data-anim="/static/anim-prolapso.html">🎬 Ver animación</button>
+                        </p>
+                    </div>
+
+                    <div class="dis-bloque">
+                        <h4>3. Problemas para controlar las heces o los gases</h4>
+                        <p>
+                            Dificultad para retener las heces o los gases (incontinencia
+                            anal), o al contrario, estreñimiento y dificultad para vaciar el
+                            intestino.
+                        </p>
+                    </div>
+
+                    <div class="dis-bloque">
+                        <h4>4. Dolor y molestias</h4>
+                        <p>
+                            Dolor en la zona genital o pélvica, dolor en las relaciones
+                            sexuales o sensación de tensión. A veces el problema no es
+                            debilidad, sino que los músculos están demasiado contraídos y no
+                            consiguen relajarse.
+                        </p>
+                    </div>
+
+                    <div class="dis-bloque">
+                        <h4>¿Por qué aparecen estas disfunciones?</h4>
+                        <p>
+                            Son varias las causas que pueden debilitar o dañar el suelo
+                            pélvico, y muchas veces se combinan entre sí:
+                        </p>
+                        <ul>
+                            <li><strong>El embarazo y el parto.</strong> El peso del bebé durante el embarazo y el esfuerzo del parto vaginal estiran y pueden lesionar estos músculos. Los partos de bebés grandes o instrumentados (con fórceps o ventosa) aumentan el riesgo.</li>
+                            <li><strong>La menopausia.</strong> La bajada de estrógenos hace que los tejidos pierdan elasticidad y firmeza.</li>
+                            <li><strong>La edad.</strong> Con los años, los músculos pierden fuerza de forma natural.</li>
+                            <li><strong>El sobrepeso y la obesidad.</strong> El exceso de peso aumenta de forma constante la presión sobre el suelo pélvico.</li>
+                            <li><strong>Los esfuerzos repetidos.</strong> El estreñimiento crónico, la tos persistente (por tabaco o enfermedades respiratorias) o levantar mucho peso sobrecargan la zona una y otra vez.</li>
+                            <li>Algunas <strong>cirugías de la pelvis</strong> y ciertos <strong>factores genéticos</strong> que hacen que los tejidos sean más laxos.</li>
+                        </ul>
+                    </div>
+
+                    <p class="destacado">
+                        La mayoría de estas disfunciones se pueden <strong>prevenir,
+                        mejorar o tratar</strong>: desde ejercicios del suelo pélvico y
+                        cambios de hábitos hasta tratamientos médicos o quirúrgicos
+                        cuando hacen falta.
+                    </p>
+                </div>
+
+                <div class="postit-detalle" id="det-puedes">
+                    <h3>¿Qué puedes hacer?</h3>
+                    <p>
+                        En la mayoría de las disfunciones del suelo pélvico, el primer
+                        paso del tratamiento es <strong>conservador</strong>, y buena
+                        parte puedes ponerlo en marcha tú misma. Se basa en tres pilares:
+                        <strong>cambiar algunos hábitos de vida</strong>,
+                        <strong>reeducar la vejiga</strong> y
+                        <strong>rehabilitar la musculatura del suelo pélvico</strong>.
+                    </p>
+
+                    <h4>¿Qué vas a ganar?</h4>
+                    <ul>
+                        <li>Notarás alivio de las molestias.</li>
+                        <li>Controlarás mejor cuándo vaciar la vejiga y el intestino.</li>
+                        <li>Te sentirás más segura para aguantar la orina, los gases y las heces, evitando los escapes.</li>
+                        <li>Disfrutarás de unas relaciones sexuales más placenteras.</li>
+                        <li>Reducirás el riesgo de otros problemas de salud.</li>
+                    </ul>
+
+                    <h4>La prevención es tu mejor aliada</h4>
+                    <p>
+                        Cuanto antes cuides tu suelo pélvico, mejor. No hace falta esperar
+                        a tener síntomas: adoptar buenos hábitos y trabajar esta
+                        musculatura de forma regular ayuda a evitar que los problemas
+                        aparezcan y a frenar que los ya existentes empeoren. Es un cuidado
+                        sencillo, sin riesgos y que está en tus manos cada día.
+                    </p>
+
+                    <button type="button" class="puedes-cta" data-modal="contenido-diag">
+                        <span class="puedes-cta-ico" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                                 stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 6h10M4 12h16M4 18h10"/><circle cx="18" cy="6" r="2"/><circle cx="18" cy="18" r="2"/>
+                            </svg>
+                        </span>
+                        <span class="puedes-cta-txt">Usa la sección <strong>«Elige según tu diagnóstico»</strong> para ver cuáles son las recomendaciones más adecuadas para ti.</span>
+                        <span class="puedes-cta-flecha" aria-hidden="true">→</span>
+                    </button>
+
+                    <button type="button" class="estim-cta" data-modal="contenido-estimulacion">
+                        <span class="estim-cta-brillo" aria-hidden="true"></span>
+                        <span class="estim-cta-ico" aria-hidden="true">✨</span>
+                        <span class="estim-cta-txt">
+                            <strong>¿Sabías que puedes estimular tu suelo pélvico?</strong>
+                            <small>Descubre cómo despertarlo y cuidarlo · pulsa aquí</small>
+                        </span>
+                        <span class="estim-cta-flecha" aria-hidden="true">→</span>
+                    </button>
+                </div>
+
+                <div class="postit-detalle" id="det-explorador">
+                    <div class="anat-explorer">
+                        <div class="anat-explo-hdr">
+                            <span class="anat-eyebrow">Anatomía · Explorador interactivo</span>
+                            <span class="anat-hint">Toca los puntos de la lámina o las estructuras para explorarlas</span>
+                        </div>
+                        <div class="anat-explo-body">
+                            <div class="anat-img-col">
+                                <div class="anat-img-wrap">
+                                    <img src="/static/images/suelo-pelvico-anatomia.png"
+                                         alt="Lámina anatómica del suelo pélvico" class="anat-img">
+                                    <button type="button" class="anat-dot" data-id="elevador"
+                                            style="left:33%;top:60%" aria-label="Músculo elevador del ano">1</button>
+                                    <button type="button" class="anat-dot" data-id="uretra"
+                                            style="left:50%;top:40%" aria-label="Uretra">2</button>
+                                    <button type="button" class="anat-dot" data-id="vagina"
+                                            style="left:50%;top:49%" aria-label="Vagina">3</button>
+                                    <button type="button" class="anat-dot" data-id="recto"
+                                            style="left:50%;top:67%" aria-label="Recto">4</button>
+                                </div>
+                                <div class="anat-funcs-wrap">
+                                    <span class="anat-funcs-label">Funciones en las que interviene</span>
+                                    <div class="anat-funcs">
+                                        <span class="anat-func">Micción</span>
+                                        <span class="anat-func">Defecación</span>
+                                        <span class="anat-func">Relaciones sexuales</span>
+                                        <span class="anat-func">Parto</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="anat-panel-col">
+                                <p class="anat-intro-p">Es un complejo conjunto de músculos, fascias y ligamentos que cierran la base de la pelvis. Su protagonista es el <strong>músculo elevador del ano</strong>, que envuelve la uretra, la vagina y el recto y los mantiene en su posición correcta.</p>
+                                <div class="anat-tabs" role="tablist">
+                                    <button type="button" class="anat-tab anat-tab--act" data-tab="estructuras" role="tab" aria-selected="true">Estructuras</button>
+                                    <button type="button" class="anat-tab" data-tab="trastornos" role="tab" aria-selected="false">Trastornos</button>
+                                </div>
+                                <div class="anat-tab-pane" id="anat-pane-estructuras" role="tabpanel">
+                                    <div class="anat-structs">
+                                        <div class="anat-struct" data-id="elevador">
+                                            <span class="anat-badge">1</span>
+                                            <div class="anat-struct-info">
+                                                <div class="anat-struct-head">
+                                                    <span class="anat-struct-name">Músculo elevador del ano</span>
+                                                    <span class="anat-struct-tag">El protagonista</span>
+                                                </div>
+                                                <div class="anat-struct-desc" hidden>Envuelve la uretra, la vagina y el recto, y les da apoyo manteniéndolos en su posición correcta. Interviene en la micción, la defecación, las relaciones sexuales y el parto.</div>
+                                            </div>
+                                        </div>
+                                        <div class="anat-struct" data-id="uretra">
+                                            <span class="anat-badge">2</span>
+                                            <div class="anat-struct-info">
+                                                <div class="anat-struct-head">
+                                                    <span class="anat-struct-name">Uretra</span>
+                                                    <span class="anat-struct-tag">Micción</span>
+                                                </div>
+                                                <div class="anat-struct-desc" hidden>Conducto de salida de la orina. El suelo pélvico rodea su cierre y controla la micción.</div>
+                                            </div>
+                                        </div>
+                                        <div class="anat-struct" data-id="vagina">
+                                            <span class="anat-badge">3</span>
+                                            <div class="anat-struct-info">
+                                                <div class="anat-struct-head">
+                                                    <span class="anat-struct-name">Vagina</span>
+                                                    <span class="anat-struct-tag">Sexualidad · parto</span>
+                                                </div>
+                                                <div class="anat-struct-desc" hidden>El suelo pélvico la sostiene y participa en las relaciones sexuales y en el parto.</div>
+                                            </div>
+                                        </div>
+                                        <div class="anat-struct" data-id="recto">
+                                            <span class="anat-badge">4</span>
+                                            <div class="anat-struct-info">
+                                                <div class="anat-struct-head">
+                                                    <span class="anat-struct-name">Recto</span>
+                                                    <span class="anat-struct-tag">Defecación</span>
+                                                </div>
+                                                <div class="anat-struct-desc" hidden>Porción final del intestino. El suelo pélvico interviene en la defecación y en la continencia fecal.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="anat-tab-pane" id="anat-pane-trastornos" role="tabpanel" hidden>
+                                    <div class="anat-disorders">
+                                        <div class="anat-disorder">
+                                            <button type="button" class="anat-disorder-head">
+                                                <span class="anat-dis-dot"></span>
+                                                <span class="anat-dis-name">Incontinencia urinaria</span>
+                                                <span class="anat-dis-sign">+</span>
+                                            </button>
+                                            <div class="anat-disorder-body" hidden>Pérdida involuntaria de orina al toser, reír, estornudar o con urgencia repentina de difícil control.</div>
+                                        </div>
+                                        <div class="anat-disorder">
+                                            <button type="button" class="anat-disorder-head">
+                                                <span class="anat-dis-dot"></span>
+                                                <span class="anat-dis-name">Prolapsos</span>
+                                                <span class="anat-dis-sign">+</span>
+                                            </button>
+                                            <div class="anat-disorder-body" hidden>Descenso de los órganos pélvicos —vejiga, útero o recto— por debilidad del soporte muscular.</div>
+                                        </div>
+                                        <div class="anat-disorder">
+                                            <button type="button" class="anat-disorder-head">
+                                                <span class="anat-dis-dot"></span>
+                                                <span class="anat-dis-name">Disfunciones sexuales</span>
+                                                <span class="anat-dis-sign">+</span>
+                                            </button>
+                                            <div class="anat-disorder-body" hidden>Dolor o alteraciones durante las relaciones sexuales, a veces por exceso de tensión muscular.</div>
+                                        </div>
+                                        <div class="anat-disorder">
+                                            <button type="button" class="anat-disorder-head">
+                                                <span class="anat-dis-dot"></span>
+                                                <span class="anat-dis-name">Incontinencia fecal</span>
+                                                <span class="anat-dis-sign">+</span>
+                                            </button>
+                                            <div class="anat-disorder-body" hidden>Pérdida involuntaria de heces o gases, o dificultad para retenerlos hasta llegar al baño.</div>
+                                        </div>
+                                        <div class="anat-disorder">
+                                            <button type="button" class="anat-disorder-head">
+                                                <span class="anat-dis-dot"></span>
+                                                <span class="anat-dis-name">Dolor pélvico</span>
+                                                <span class="anat-dis-sign">+</span>
+                                            </button>
+                                            <div class="anat-disorder-body" hidden>Molestia o dolor persistente en la zona pélvica, relacionado con tensión o lesión de la musculatura.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /det-explorador -->
+            </div>
+        </section>
+
+        <!-- ====== Sección: Cómo se estimula el suelo pélvico ====== -->
+        <section class="modal-seccion articulo estim" id="contenido-estimulacion"
+                 aria-label="Cómo se estimula el suelo pélvico" hidden>
+            <div class="estim-cab">
+                <h3>¿Cómo se estimula el suelo pélvico?</h3>
+            </div>
+            <div class="estim-grid">
+                <div class="estim-card estim-card--benef">
+                    <span class="estim-card-ico">✨</span>
+                    <h4>¿Para qué sirve?</h4>
+                    <ul>
+                        <li>Mejora el <strong>tono</strong> de la musculatura del suelo pélvico.</li>
+                        <li>Aumenta la <strong>circulación sanguínea</strong>.</li>
+                        <li>Mejora la <strong>lubricación vaginal</strong>.</li>
+                    </ul>
+                </div>
+                <div class="estim-card estim-card--como">
+                    <span class="estim-card-ico">🌸</span>
+                    <h4>¿Cómo se hace?</h4>
+                    <p>Con un <strong>vibrador bien lubricado</strong>, recórrelo en este orden:</p>
+                    <ol class="estim-pasos">
+                        <li>El cuerpo perineal</li>
+                        <li>Los labios menores</li>
+                        <li>La entrada de la vagina</li>
+                        <li>El clítoris</li>
+                        <li>Termina <strong>introduciéndolo en la vagina</strong></li>
+                    </ol>
+                </div>
+                <div class="estim-card estim-card--pauta">
+                    <span class="estim-card-ico">⏱️</span>
+                    <h4>Pauta recomendada</h4>
+                    <p class="estim-big"><strong>10-20 min</strong> al día</p>
+                    <ul>
+                        <li>Con vibración <strong>intermitente</strong>.</li>
+                        <li>A una intensidad <strong>agradable</strong>, sin molestias.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="estim-pie">
+                <button type="button" class="estim-volver" data-modal="contenido-conoce">← Volver a «Conoce tu suelo pélvico»</button>
+                <span class="borrador">Borrador — pendiente de revisión clínica</span>
+            </div>
+        </section>
+
+        <!-- ====== Sección: Elegir según diagnóstico ====== -->
+        <section class="modal-seccion" id="contenido-diag"
+                 aria-label="Elige según tu diagnóstico" hidden>
+
+            <!-- Imagen de fondo difuminada, abajo a la derecha -->
+            <div class="diag-deco" aria-hidden="true"></div>
+
+            <div class="diag-cab">
+                <span class="diag-eyebrow">Información a tu medida</span>
+                <h2>Cuidados según tu diagnóstico</h2>
+                <p class="diag-sub">
+                    Si tu ginecólogo te ha dado un diagnóstico, elige tu tarjeta y
+                    descubre las recomendaciones pensadas para ti.
+                </p>
+            </div>
+
+            <div class="tarjetas-diagnostico">
+                <button type="button" class="tarjeta tarjeta--lila" data-modal="diag-prolapso">
+                    <span class="tarjeta-icono" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 4v12"/><path d="M7 11l5 5 5-5"/><path d="M6 20h12"/>
+                        </svg>
+                    </span>
+                    <h3>Prolapsos de órganos pélvicos</h3>
+                    <p>Cuando uno o varios órganos de la pelvis descienden y notas peso o un bulto.</p>
+                    <span class="enlace-tarjeta">Ver información →</span>
+                </button>
+
+                <button type="button" class="tarjeta tarjeta--azul" data-modal="diag-esfuerzo">
+                    <span class="tarjeta-icono" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 3c3.5 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2.5-6 6-10z"/>
+                        </svg>
+                    </span>
+                    <h3>Incontinencia de orina de esfuerzo</h3>
+                    <p>Pequeñas pérdidas de orina al toser, reír, estornudar o hacer ejercicio.</p>
+                    <span class="enlace-tarjeta">Ver información →</span>
+                </button>
+
+                <button type="button" class="tarjeta tarjeta--cielo" data-modal="diag-urgencia">
+                    <span class="tarjeta-icono" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+                        </svg>
+                    </span>
+                    <h3>Incontinencia de orina de urgencia</h3>
+                    <p>Ganas repentinas e intensas de orinar, difíciles de aguantar.</p>
+                    <span class="enlace-tarjeta">Ver información →</span>
+                </button>
+
+                <button type="button" class="tarjeta tarjeta--menta" data-modal="diag-mixta">
+                    <span class="tarjeta-icono" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 3h5v5"/><path d="M21 3l-7 7"/><path d="M8 21H3v-5"/><path d="M3 21l7-7"/>
+                        </svg>
+                    </span>
+                    <h3>Incontinencia de orina mixta</h3>
+                    <p>Combinación de pérdidas por esfuerzo y por urgencia.</p>
+                    <span class="enlace-tarjeta">Ver información →</span>
+                </button>
+
+                <button type="button" class="tarjeta tarjeta--ambar" data-modal="diag-fecal">
+                    <span class="tarjeta-icono" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 14h10a3 3 0 1 0-3-3"/><path d="M4 18h13a3 3 0 1 1-3 3"/>
+                        </svg>
+                    </span>
+                    <h3>Incontinencia fecal o a gases</h3>
+                    <p>Dificultad para controlar la salida de gases o heces.</p>
+                    <span class="enlace-tarjeta">Ver información →</span>
+                </button>
+            </div>
+
+            <p class="aviso">
+                Si no tienes un diagnóstico o tienes dudas, consulta con un
+                profesional sanitario.
+            </p>
+        </section>
+
+        <!-- ====== Ventana de diagnóstico: PROLAPSO ====== -->
+        <section class="modal-seccion posparto diag-win diag-win--lila" id="diag-prolapso"
+                 aria-label="Prolapso de órganos pélvicos" hidden>
+            <div class="pp-cabecera">
+                <span class="pp-eyebrow">Guía de cuidados · Información para la paciente</span>
+                <h3>Prolapso de órganos pélvicos</h3>
+                <p class="pp-lema"><strong>¿Qué es?</strong> El descenso de la vejiga, el útero o el recto por debilidad del suelo pélvico; puedes notar bulto o peso en la vagina. En casos leves-moderados, <strong>los ejercicios y los hábitos mejoran los síntomas</strong>.</p>
+            </div>
+
+            <div class="pp-recorrido">
+                <!-- COL 1 -->
+                <article class="pp-fase" data-fase="1">
+                    <header class="pp-fase-cab">
+                        <span class="pp-fase-num">1</span>
+                        <div><strong>Tu tratamiento</strong><small>Ejercicios y apoyo</small></div>
+                    </header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema pp-tema--destaca" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⛺</span> Ejercicios de Kegel</span>
+                            <div class="pp-pop">
+                                <h5>⛺ Ejercicios del suelo pélvico</h5>
+                                <ul>
+                                    <li><strong>Localiza</strong> la musculatura: tumbada boca arriba, rodillas flexionadas (luego sentada o de pie). Contrae hacia dentro y arriba, como para aguantar la orina y un gas a la vez.</li>
+                                    <li><strong>Lento:</strong> contrae 5 s soltando el aire y descansa 10 s. 10 repeticiones.</li>
+                                    <li><strong>Rápido:</strong> contrae 1 s y descansa 1 s, «activar y soltar». 10 repeticiones.</li>
+                                    <li><strong>Frecuencia:</strong> ambos 2-3 veces/día; con soltura, alarga el lento y sube las repeticiones del rápido.</li>
+                                    <li><strong>Claves:</strong> suelta el aire al contraer (nunca en apnea), respeta el descanso y no aprietes barriga, piernas ni glúteos.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🛟</span> El pesario</span>
+                            <div class="pp-pop">
+                                <h5>🛟 El pesario, una opción de apoyo</h5>
+                                <ul>
+                                    <li>Dispositivo de <strong>silicona</strong> que se coloca en la vagina para sostener los órganos.</li>
+                                    <li>Alternativa eficaz cuando no se desea o no se puede operar, o mientras trabajas la musculatura.</li>
+                                    <li>Tu ginecólogo valora si te conviene y qué <strong>tipo y talla</strong> son adecuados.</li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </article>
+
+                <!-- COL 2 -->
+                <article class="pp-fase" data-fase="2">
+                    <header class="pp-fase-cab">
+                        <span class="pp-fase-num">2</span>
+                        <div><strong>Cuida tus hábitos</strong><small>Medidas que protegen tu suelo pélvico</small></div>
+                    </header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⚖️</span> Peso y alimentación</span>
+                            <div class="pp-pop">
+                                <h5>⚖️ Peso y alimentación</h5>
+                                <ul>
+                                    <li>Controla tu <strong>peso</strong>: dieta rica en fruta, verdura, cereales y legumbres. El sobrepeso añade presión.</li>
+                                    <li>Combate el <strong>estreñimiento</strong> con dieta equilibrada y abundante fibra.</li>
+                                    <li>Bebe con moderación: <strong>1,5-2 L/día</strong> repartidos; reduce 3-4 h antes de dormir.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">💧</span> Vejiga e intestino</span>
+                            <div class="pp-pop">
+                                <h5>💧 Cuida tu vejiga y tu intestino</h5>
+                                <ul>
+                                    <li>Reduce los <strong>irritantes</strong> de la vejiga: café, té, alcohol, chocolate, picantes y grasas.</li>
+                                    <li>Postura al defecar: <strong>rodillas por encima de las caderas</strong>, codos sobre las rodillas, y exhala soplando sin apnea.</li>
+                                    <li>Higiene íntima: solo con agua, separando bien los labios y de delante hacia atrás.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🏊‍♀️</span> Movimiento y vida diaria</span>
+                            <div class="pp-pop">
+                                <h5>🏊‍♀️ Muévete y cuida tu día a día</h5>
+                                <ul>
+                                    <li><strong>Bajo impacto</strong> (natación, elíptica, bici de paseo, hipopresivos o un paseo diario de media hora). Evita el impacto (correr, crossfit, spinning); el Pilates solo dirigido.</li>
+                                    <li><strong>No fumes</strong>: irrita la vejiga y la tos crónica debilita el suelo pélvico.</li>
+                                    <li>Evita la ropa que oprima el abdomen y no abuses del tacón.</li>
+                                    <li><strong>Revisa tu medicación con tu médico de cabecera</strong> (diuréticos, antihipertensivos o fármacos con actividad anticolinérgica), por si conviene ajustarla.</li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </article>
+
+                <!-- COL 3 -->
+                <article class="pp-fase pp-fase--izq" data-fase="3">
+                    <header class="pp-fase-cab">
+                        <span class="pp-fase-num">3</span>
+                        <div><strong>Protege y vigila</strong><small>El truco protector y las señales</small></div>
+                    </header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema pp-tema--destaca" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🛡️</span> Protege en el esfuerzo</span>
+                            <div class="pp-pop">
+                                <h5>🛡️ El truco protector («the knack»)</h5>
+                                <ul>
+                                    <li>Contrae el suelo pélvico <strong>justo antes</strong> de toser, estornudar, reír o levantar peso.</li>
+                                    <li>Da soporte extra y reduce los escapes y la presión sobre el prolapso.</li>
+                                    <li>Practícalo hasta que te salga de forma <strong>automática</strong>.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema pp-tema--alerta" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⚠️</span> Cuándo consultar</span>
+                            <div class="pp-pop pp-pop--rojo">
+                                <h5>⚠️ Consulta sin esperar si…</h5>
+                                <ul>
+                                    <li>El bulto <strong>aumenta, sangra, se ulcera</strong> o causa dolor.</li>
+                                    <li>Dificultad para <strong>orinar o defecar</strong>, o para vaciar por completo.</li>
+                                    <li>Escapes de orina o de heces que <strong>no mejoran</strong>.</li>
+                                    <li>Molestias en las <strong>relaciones sexuales</strong>.</li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </article>
+            </div>
+
+            <a class="diag-ejer-banner" href="/suelo-pelvico/ejercicios">
+                <span class="diag-ejer-ico" aria-hidden="true">🏋️‍♀️</span>
+                <span class="diag-ejer-txt">
+                    <strong>Entrena tu suelo pélvico</strong>
+                    <small>Ejercicios guiados con cronómetro y simulador</small>
+                </span>
+                <span class="diag-ejer-flecha" aria-hidden="true">→</span>
+            </a>
+
+            <div class="diag-pie">
+                <a class="diag-pdf" href="/static/pdf/prolapso.pdf" download>
+                    <span aria-hidden="true">⬇️</span> Descargar instrucciones en PDF
+                </a>
+                <span class="borrador">Borrador — pendiente de revisión clínica</span>
+                <button type="button" class="estim-volver" data-modal="contenido-diag">← Volver a los diagnósticos</button>
+            </div>
+        </section>
+
+        <!-- ====== Ventana de diagnóstico: INCONTINENCIA DE ESFUERZO ====== -->
+        <section class="modal-seccion posparto diag-win diag-win--azul" id="diag-esfuerzo"
+                 aria-label="Incontinencia de orina de esfuerzo" hidden>
+            <div class="pp-cabecera">
+                <span class="pp-eyebrow">Guía de cuidados · Información para la paciente</span>
+                <h3>Incontinencia de orina de esfuerzo</h3>
+                <p class="pp-lema"><strong>¿Qué es?</strong> Escape de orina al aumentar la presión abdominal (toser, reír, estornudar, saltar o cargar peso). Los <strong>ejercicios del suelo pélvico</strong> son el tratamiento de primera línea.</p>
+            </div>
+            <div class="pp-recorrido">
+                <article class="pp-fase" data-fase="1">
+                    <header class="pp-fase-cab"><span class="pp-fase-num">1</span><div><strong>Entrena y protege</strong><small>Tu tratamiento clave</small></div></header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema pp-tema--destaca" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⛺</span> Ejercicios de Kegel</span>
+                            <div class="pp-pop">
+                                <h5>⛺ Ejercicios del suelo pélvico</h5>
+                                <ul>
+                                    <li><strong>Localiza</strong> la musculatura: tumbada boca arriba, rodillas flexionadas (luego sentada o de pie). Contrae hacia dentro y arriba, como para aguantar la orina y un gas.</li>
+                                    <li><strong>Lento:</strong> contrae 5 s soltando el aire y descansa 10 s. 10 repeticiones.</li>
+                                    <li><strong>Rápido:</strong> contrae 1 s y descansa 1 s. 10 repeticiones.</li>
+                                    <li><strong>2-3 veces/día</strong>; con soltura, alarga el lento y sube las repeticiones del rápido.</li>
+                                    <li><strong>Claves:</strong> suelta el aire (nunca en apnea), respeta el descanso y no aprietes barriga, piernas ni glúteos.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🛡️</span> Protege con el «knack»</span>
+                            <div class="pp-pop">
+                                <h5>🛡️ La clave: la contracción anticipada</h5>
+                                <ul>
+                                    <li>El gesto más útil en tu caso: contrae el suelo pélvico <strong>justo antes</strong> de cualquier esfuerzo (toser, estornudar, reír, agacharte o levantar peso).</li>
+                                    <li>Da soporte extra y <strong>reduce los escapes</strong>.</li>
+                                    <li>Practícalo hasta que te salga de forma <strong>automática</strong>: es tu mejor defensa.</li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </article>
+                <article class="pp-fase" data-fase="2">
+                    <header class="pp-fase-cab"><span class="pp-fase-num">2</span><div><strong>Cuida tus hábitos</strong><small>Medidas que protegen tu suelo pélvico</small></div></header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⚖️</span> Peso y alimentación</span>
+                            <div class="pp-pop"><h5>⚖️ Peso y alimentación</h5><ul>
+                                <li>Controla tu <strong>peso</strong>: dieta rica en fruta, verdura, cereales y legumbres.</li>
+                                <li>Combate el <strong>estreñimiento</strong> con dieta equilibrada y abundante fibra.</li>
+                                <li>Bebe con moderación: <strong>1,5-2 L/día</strong> repartidos; reduce 3-4 h antes de dormir.</li>
+                            </ul></div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">💧</span> Vejiga e intestino</span>
+                            <div class="pp-pop"><h5>💧 Cuida tu vejiga y tu intestino</h5><ul>
+                                <li>Reduce los <strong>irritantes</strong>: café, té, alcohol, chocolate, picantes y grasas.</li>
+                                <li>Postura al defecar: rodillas por encima de las caderas, codos sobre las rodillas, exhala sin apnea.</li>
+                                <li>Higiene íntima: solo con agua, de delante hacia atrás.</li>
+                            </ul></div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🏊‍♀️</span> Movimiento y vida diaria</span>
+                            <div class="pp-pop"><h5>🏊‍♀️ Muévete y cuida tu día a día</h5><ul>
+                                <li><strong>Bajo impacto</strong> (nadar, elíptica, bici de paseo, hipopresivos o un paseo diario). Evita el impacto (correr, crossfit, spinning).</li>
+                                <li><strong>No fumes</strong>: irrita la vejiga y la tos crónica debilita el suelo pélvico.</li>
+                                <li>Evita la ropa que oprima el abdomen y no abuses del tacón.</li>
+                                <li><strong>Revisa tu medicación con tu médico de cabecera</strong> (diuréticos, antihipertensivos o fármacos con actividad anticolinérgica).</li>
+                            </ul></div>
+                        </li>
+                    </ul>
+                </article>
+                <article class="pp-fase pp-fase--izq" data-fase="3">
+                    <header class="pp-fase-cab"><span class="pp-fase-num">3</span><div><strong>Vigila</strong><small>Cuándo pedir ayuda</small></div></header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema pp-tema--alerta" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⚠️</span> Cuándo consultar</span>
+                            <div class="pp-pop pp-pop--rojo"><h5>⚠️ Consulta si…</h5><ul>
+                                <li>Los escapes <strong>no mejoran</strong> tras varias semanas de ejercicios bien hechos.</li>
+                                <li>Tienes dudas sobre si <strong>activas bien</strong> la musculatura (valora fisioterapia de suelo pélvico).</li>
+                                <li>Los escapes <strong>afectan mucho</strong> a tu vida diaria.</li>
+                            </ul></div>
+                        </li>
+                    </ul>
+                </article>
+            </div>
+            <a class="diag-ejer-banner" href="/suelo-pelvico/ejercicios">
+                <span class="diag-ejer-ico" aria-hidden="true">🏋️‍♀️</span>
+                <span class="diag-ejer-txt">
+                    <strong>Entrena tu suelo pélvico</strong>
+                    <small>Ejercicios guiados con cronómetro y simulador</small>
+                </span>
+                <span class="diag-ejer-flecha" aria-hidden="true">→</span>
+            </a>
+
+            <div class="diag-pie">
+                <a class="diag-pdf" href="/static/pdf/esfuerzo.pdf" download><span aria-hidden="true">⬇️</span> Descargar instrucciones en PDF</a>
+                <a class="diag-diario" href="/suelo-pelvico/diario"><span aria-hidden="true">📋</span> Diario miccional</a>
+                <span class="borrador">Borrador — pendiente de revisión clínica</span>
+                <button type="button" class="estim-volver" data-modal="contenido-diag">← Volver a los diagnósticos</button>
+            </div>
+        </section>
+
+        <!-- ====== Ventana de diagnóstico: INCONTINENCIA DE URGENCIA ====== -->
+        <section class="modal-seccion posparto diag-win diag-win--cielo" id="diag-urgencia"
+                 aria-label="Incontinencia de orina de urgencia" hidden>
+            <div class="pp-cabecera">
+                <span class="pp-eyebrow">Vejiga hiperactiva · Información para la paciente</span>
+                <h3>Incontinencia de orina de urgencia</h3>
+                <p class="pp-lema"><strong>¿Qué es?</strong> Necesidad repentina e intensa de orinar, difícil de aguantar, a veces con escapes (vejiga hiperactiva). <strong>Reeducando la vejiga</strong>, la mayoría mejora en unas semanas.</p>
+            </div>
+            <div class="pp-recorrido">
+                <article class="pp-fase" data-fase="1">
+                    <header class="pp-fase-cab"><span class="pp-fase-num">1</span><div><strong>Reeduca y entrena</strong><small>Recupera el control de tu vejiga</small></div></header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema pp-tema--destaca" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⏱️</span> Entrenamiento vesical</span>
+                            <div class="pp-pop"><h5>⏱️ Reeduca tu vejiga con horario</h5><ul>
+                                <li>Orina con <strong>horario fijo y puntualidad</strong>, sin adelantar ni retrasar (aunque sean 5 min).</li>
+                                <li>Empieza cada <strong>30 min</strong> y espacia <strong>15 min por semana</strong>: 45 min, 1 h, 1 h 15, 1 h 30, 1 h 45, 2 h… hasta <strong>3 h</strong>.</li>
+                                <li>Acude tengas o no ganas; mejor <strong>aplazar o mojar la compresa</strong> que alterar el horario.</li>
+                                <li>Orina nada más levantarte; acuéstate y levántate a horas similares.</li>
+                            </ul></div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⚡</span> Controla la urgencia</span>
+                            <div class="pp-pop"><h5>⚡ Cuando te entren ganas urgentes</h5><ul>
+                                <li>Detén la actividad: <strong>quédate quieta y respira lento</strong> (más tranquila, más control).</li>
+                                <li><strong>Contrae</strong> el suelo pélvico varias veces.</li>
+                                <li>Concéntrate y <strong>cuenta hasta 100</strong>; cuando ceda, ve despacio al baño, sin correr.</li>
+                                <li>Distráete (la lista de la compra, números…).</li>
+                            </ul></div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⛺</span> Ejercicios de Kegel</span>
+                            <div class="pp-pop"><h5>⛺ Ejercicios del suelo pélvico</h5><ul>
+                                <li><strong>Localiza</strong> la musculatura: tumbada boca arriba, rodillas flexionadas (luego sentada o de pie). Contrae hacia dentro y arriba, como para aguantar la orina y un gas a la vez.</li>
+                                <li><strong>Lento:</strong> contrae 5 s soltando el aire y descansa 10 s. 10 repeticiones.</li>
+                                <li><strong>Rápido:</strong> contrae 1 s y descansa 1 s. 10 repeticiones.</li>
+                                <li><strong>2-3 veces/día</strong>; con soltura, alarga el lento y sube las repeticiones del rápido.</li>
+                                <li><strong>Claves:</strong> suelta el aire (nunca en apnea), respeta el descanso y no aprietes barriga, piernas ni glúteos.</li>
+                            </ul></div>
+                        </li>
+                    </ul>
+                </article>
+                <article class="pp-fase" data-fase="2">
+                    <header class="pp-fase-cab"><span class="pp-fase-num">2</span><div><strong>Cuida tus hábitos</strong><small>Medidas que ayudan a tu vejiga</small></div></header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">☕</span> Bebida e irritantes</span>
+                            <div class="pp-pop"><h5>☕ Bebida e irritantes de la vejiga</h5><ul>
+                                <li>Reduce los <strong>irritantes</strong>: café, té, alcohol, chocolate, picantes y grasas.</li>
+                                <li>Bebe con moderación: <strong>1,5-2 L/día</strong> repartidos; reduce 3-4 h antes de dormir.</li>
+                            </ul></div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⚖️</span> Peso y alimentación</span>
+                            <div class="pp-pop"><h5>⚖️ Peso y alimentación</h5><ul>
+                                <li>Controla tu <strong>peso</strong>: dieta rica en fruta, verdura, cereales y legumbres.</li>
+                                <li>Combate el <strong>estreñimiento</strong> con dieta equilibrada y abundante fibra.</li>
+                            </ul></div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🏊‍♀️</span> Movimiento y vida diaria</span>
+                            <div class="pp-pop"><h5>🏊‍♀️ Muévete y cuida tu día a día</h5><ul>
+                                <li><strong>Bajo impacto</strong> (nadar, andar, bici de paseo); evita correr/saltar.</li>
+                                <li><strong>Postura al defecar:</strong> rodillas por encima de las caderas, codos sobre las rodillas y exhala soplando, sin apnea.</li>
+                                <li><strong>No fumes</strong> y evita la <strong>ropa apretada</strong>.</li>
+                                <li><strong>Revisa tu medicación con tu médico de cabecera</strong> (diuréticos, antihipertensivos o fármacos con actividad anticolinérgica): algunos pueden aumentar la urgencia o los escapes.</li>
+                            </ul></div>
+                        </li>
+                    </ul>
+                </article>
+                <article class="pp-fase pp-fase--izq" data-fase="3">
+                    <header class="pp-fase-cab"><span class="pp-fase-num">3</span><div><strong>Vigila</strong><small>Cuándo pedir ayuda</small></div></header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema pp-tema--alerta" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⚠️</span> Cuándo consultar</span>
+                            <div class="pp-pop pp-pop--rojo"><h5>⚠️ Consulta si…</h5><ul>
+                                <li><strong>Escozor o dolor</strong> al orinar, o <strong>sangre</strong> en la orina (posible infección).</li>
+                                <li>La urgencia <strong>no mejora</strong> pese a la reeducación.</li>
+                                <li>Si te han pautado medicación, consúltanos dudas: <strong>no te automediques</strong>.</li>
+                            </ul></div>
+                        </li>
+                    </ul>
+                </article>
+            </div>
+            <a class="diag-ejer-banner" href="/suelo-pelvico/ejercicios">
+                <span class="diag-ejer-ico" aria-hidden="true">🏋️‍♀️</span>
+                <span class="diag-ejer-txt">
+                    <strong>Entrena tu suelo pélvico</strong>
+                    <small>Ejercicios guiados con cronómetro y simulador</small>
+                </span>
+                <span class="diag-ejer-flecha" aria-hidden="true">→</span>
+            </a>
+
+            <div class="diag-pie">
+                <a class="diag-pdf" href="/static/pdf/urgencia.pdf" download><span aria-hidden="true">⬇️</span> Descargar instrucciones en PDF</a>
+                <a class="diag-diario" href="/suelo-pelvico/diario"><span aria-hidden="true">📋</span> Diario miccional</a>
+                <span class="borrador">Borrador — pendiente de revisión clínica</span>
+                <button type="button" class="estim-volver" data-modal="contenido-diag">← Volver a los diagnósticos</button>
+            </div>
+        </section>
+
+        <!-- ====== Ventana de diagnóstico: INCONTINENCIA MIXTA ====== -->
+        <section class="modal-seccion posparto diag-win diag-win--menta" id="diag-mixta"
+                 aria-label="Incontinencia de orina mixta" hidden>
+            <div class="pp-cabecera">
+                <span class="pp-eyebrow">Esfuerzo + urgencia · Información para la paciente</span>
+                <h3>Incontinencia de orina mixta</h3>
+                <p class="pp-lema"><strong>¿Qué es?</strong> Escapes de esfuerzo (toser, reír, cargar peso) + urgencia (necesidad repentina). Se trabajan los dos a la vez: <strong>fortalecer el suelo pélvico y reeducar la vejiga</strong>.</p>
+            </div>
+            <div class="pp-recorrido">
+                <article class="pp-fase" data-fase="1">
+                    <header class="pp-fase-cab"><span class="pp-fase-num">1</span><div><strong>Fortalece y protege</strong><small>El componente de esfuerzo</small></div></header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema pp-tema--destaca" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⛺</span> Ejercicios de Kegel</span>
+                            <div class="pp-pop"><h5>⛺ Ejercicios del suelo pélvico</h5><ul>
+                                <li><strong>Localiza</strong> la musculatura: tumbada boca arriba, rodillas flexionadas (luego sentada o de pie). Contrae hacia dentro y arriba, como para aguantar la orina y un gas a la vez.</li>
+                                <li><strong>Lento:</strong> contrae 5 s soltando el aire y descansa 10 s. 10 repeticiones.</li>
+                                <li><strong>Rápido:</strong> contrae 1 s y descansa 1 s. 10 repeticiones.</li>
+                                <li><strong>2-3 veces/día</strong>; con soltura, alarga el lento y sube las repeticiones del rápido.</li>
+                                <li><strong>Claves:</strong> suelta el aire (nunca en apnea), respeta el descanso y no aprietes barriga, piernas ni glúteos.</li>
+                            </ul></div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🛡️</span> Protege con el «knack»</span>
+                            <div class="pp-pop"><h5>🛡️ La contracción anticipada</h5><ul>
+                                <li>Contrae el suelo pélvico <strong>justo antes</strong> de toser, estornudar, reír o levantar peso.</li>
+                                <li>Da soporte extra y reduce los escapes. Practícalo hasta que salga <strong>automático</strong>.</li>
+                            </ul></div>
+                        </li>
+                    </ul>
+                </article>
+                <article class="pp-fase" data-fase="2">
+                    <header class="pp-fase-cab"><span class="pp-fase-num">2</span><div><strong>Reeduca la vejiga</strong><small>El componente de urgencia</small></div></header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⚡</span> Controla la urgencia</span>
+                            <div class="pp-pop"><h5>⚡ Cuando te entren ganas urgentes</h5><ul>
+                                <li>Detente, <strong>quédate quieta y respira lento</strong>.</li>
+                                <li><strong>Contrae</strong> el suelo pélvico varias veces y cuenta hasta 100; cuando ceda, ve despacio, sin correr.</li>
+                            </ul></div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⏱️</span> Entrenamiento vesical</span>
+                            <div class="pp-pop"><h5>⏱️ Reeduca tu vejiga con horario</h5><ul>
+                                <li>Orina con <strong>horario fijo y puntualidad</strong>, sin adelantar ni retrasar.</li>
+                                <li>Empieza cada 30 min y espacia 15 min/semana hasta llegar a <strong>2-3 h</strong>.</li>
+                                <li>Mejor aplazar o mojar la compresa que alterar el horario.</li>
+                            </ul></div>
+                        </li>
+                    </ul>
+                </article>
+                <article class="pp-fase pp-fase--izq" data-fase="3">
+                    <header class="pp-fase-cab"><span class="pp-fase-num">3</span><div><strong>Cuida y vigila</strong><small>Hábitos y señales</small></div></header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">☀️</span> Hábitos que cuidan tu suelo pélvico</span>
+                            <div class="pp-pop"><h5>☀️ Medidas generales</h5><ul>
+                                <li>Controla el <strong>peso</strong> (fruta, verdura, fibra) y combate el estreñimiento.</li>
+                                <li>Reduce <strong>irritantes</strong> (café, té, alcohol, picantes) y bebe 1,5-2 L/día.</li>
+                                <li><strong>Bajo impacto</strong> (nadar, andar); evita correr/saltar y no fumes.</li>
+                                <li><strong>Postura al defecar</strong> (rodillas altas, sin apnea), higiene de delante a atrás y <strong>evita la ropa apretada</strong>.</li>
+                                <li><strong>Revisa tu medicación con tu médico de cabecera</strong> (diuréticos, antihipertensivos o anticolinérgicos).</li>
+                            </ul></div>
+                        </li>
+                        <li class="pp-tema pp-tema--alerta" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⚠️</span> Cuándo consultar</span>
+                            <div class="pp-pop pp-pop--rojo"><h5>⚠️ Consulta si…</h5><ul>
+                                <li>Los escapes o la urgencia <strong>no mejoran</strong> tras varias semanas.</li>
+                                <li><strong>Escozor, dolor</strong> al orinar o <strong>sangre</strong> en la orina.</li>
+                                <li>Dudas sobre la técnica de los ejercicios (valora fisioterapia).</li>
+                            </ul></div>
+                        </li>
+                    </ul>
+                </article>
+            </div>
+            <a class="diag-ejer-banner" href="/suelo-pelvico/ejercicios">
+                <span class="diag-ejer-ico" aria-hidden="true">🏋️‍♀️</span>
+                <span class="diag-ejer-txt">
+                    <strong>Entrena tu suelo pélvico</strong>
+                    <small>Ejercicios guiados con cronómetro y simulador</small>
+                </span>
+                <span class="diag-ejer-flecha" aria-hidden="true">→</span>
+            </a>
+
+            <div class="diag-pie">
+                <a class="diag-pdf" href="/static/pdf/mixta.pdf" download><span aria-hidden="true">⬇️</span> Descargar instrucciones en PDF</a>
+                <a class="diag-diario" href="/suelo-pelvico/diario"><span aria-hidden="true">📋</span> Diario miccional</a>
+                <span class="borrador">Borrador — pendiente de revisión clínica</span>
+                <button type="button" class="estim-volver" data-modal="contenido-diag">← Volver a los diagnósticos</button>
+            </div>
+        </section>
+
+        <!-- ====== Ventana de diagnóstico: INCONTINENCIA FECAL Y DE GASES ====== -->
+        <section class="modal-seccion posparto diag-win diag-win--ambar" id="diag-fecal"
+                 aria-label="Incontinencia fecal o a gases" hidden>
+            <div class="pp-cabecera">
+                <span class="pp-eyebrow">Guía de cuidados · Información para la paciente</span>
+                <h3>Incontinencia fecal o a gases</h3>
+                <p class="pp-lema"><strong>¿Qué es?</strong> La dificultad para controlar las heces o los gases, por debilidad o lesión del esfínter y del suelo pélvico. Es más frecuente de lo que se piensa y <strong>tiene tratamiento</strong>: regular las heces, el hábito y la musculatura mejora el control.</p>
+            </div>
+            <div class="pp-recorrido">
+                <article class="pp-fase" data-fase="1">
+                    <header class="pp-fase-cab"><span class="pp-fase-num">1</span><div><strong>Entrena el esfínter</strong><small>Refuerza el control</small></div></header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema pp-tema--destaca" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⛺</span> Ejercicios de Kegel</span>
+                            <div class="pp-pop"><h5>⛺ Ejercicios del suelo pélvico</h5><ul>
+                                <li><strong>Localiza</strong> la musculatura: tumbada boca arriba, rodillas flexionadas (luego sentada o de pie). Contrae hacia dentro y arriba, como para aguantar la orina y un gas a la vez.</li>
+                                <li><strong>Lento:</strong> contrae 5 s soltando el aire y descansa 10 s. 10 repeticiones.</li>
+                                <li><strong>Rápido:</strong> contrae 1 s y descansa 1 s. 10 repeticiones.</li>
+                                <li><strong>2-3 veces/día</strong>; con soltura, alarga el lento y sube las repeticiones del rápido.</li>
+                                <li><strong>Claves:</strong> suelta el aire (nunca en apnea), respeta el descanso y no aprietes barriga, piernas ni glúteos.</li>
+                            </ul></div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🛡️</span> Anticipa el escape</span>
+                            <div class="pp-pop"><h5>🛡️ Anticípate al escape</h5><ul>
+                                <li>Si notas que va a salir un gas, o ante un esfuerzo, <strong>contrae el esfínter</strong> con fuerza unos segundos hasta que pase la sensación.</li>
+                            </ul></div>
+                        </li>
+                    </ul>
+                </article>
+                <article class="pp-fase" data-fase="2">
+                    <header class="pp-fase-cab"><span class="pp-fase-num">2</span><div><strong>Regula y cuida</strong><small>Heces, hábito y hábitos</small></div></header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema pp-tema--destaca" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🍐</span> Regula tus heces y tu hábito</span>
+                            <div class="pp-pop"><h5>🍐 Regula tus heces y tu hábito intestinal</h5><ul>
+                                <li><strong>Consistencia adecuada</strong> (ni muy duras ni muy líquidas): ajusta la fibra y los líquidos.</li>
+                                <li><strong>Horario regular</strong>: intenta defecar a una hora similar, aprovechando el reflejo tras las comidas.</li>
+                                <li><strong>No te aguantes</strong> cuando notes la necesidad, pero tampoco fuerces.</li>
+                                <li>Postura: rodillas más altas que las caderas, tronco adelante y exhala soplando sin apnea.</li>
+                                <li>Reduce lo que te dispara gases o diarrea (cafeína, picantes, exceso de grasa, edulcorantes).</li>
+                            </ul></div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">☀️</span> Hábitos que cuidan tu suelo pélvico</span>
+                            <div class="pp-pop"><h5>☀️ Medidas generales</h5><ul>
+                                <li>Controla el <strong>peso</strong> (fruta, verdura, fibra) y bebe 1,5-2 L/día.</li>
+                                <li><strong>Bajo impacto</strong> (nadar, andar); evita correr/saltar y no fumes.</li>
+                                <li>Higiene íntima de delante a atrás y evita la ropa apretada.</li>
+                                <li><strong>Revisa tu medicación con tu médico de cabecera</strong> (diuréticos, antihipertensivos o anticolinérgicos).</li>
+                            </ul></div>
+                        </li>
+                    </ul>
+                </article>
+                <article class="pp-fase pp-fase--izq" data-fase="3">
+                    <header class="pp-fase-cab"><span class="pp-fase-num">3</span><div><strong>Vigila</strong><small>Cuándo pedir ayuda</small></div></header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema pp-tema--alerta" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⚠️</span> Cuándo consultar</span>
+                            <div class="pp-pop pp-pop--rojo"><h5>⚠️ Consulta si…</h5><ul>
+                                <li>Pérdida de control <strong>nueva o que empeora</strong>, sobre todo tras un parto con desgarro.</li>
+                                <li><strong>Sangre en las heces</strong>, dolor o cambios persistentes del ritmo intestinal.</li>
+                                <li>El control no mejora pese a las medidas (valora fisioterapia y biofeedback).</li>
+                            </ul></div>
+                        </li>
+                    </ul>
+                </article>
+            </div>
+            <a class="diag-ejer-banner" href="/suelo-pelvico/ejercicios">
+                <span class="diag-ejer-ico" aria-hidden="true">🏋️‍♀️</span>
+                <span class="diag-ejer-txt">
+                    <strong>Entrena tu suelo pélvico</strong>
+                    <small>Ejercicios guiados con cronómetro y simulador</small>
+                </span>
+                <span class="diag-ejer-flecha" aria-hidden="true">→</span>
+            </a>
+
+            <div class="diag-pie">
+                <a class="diag-pdf" href="/static/pdf/fecal.pdf" download><span aria-hidden="true">⬇️</span> Descargar instrucciones en PDF</a>
+                <span class="borrador">Borrador — pendiente de revisión clínica</span>
+                <button type="button" class="estim-volver" data-modal="contenido-diag">← Volver a los diagnósticos</button>
+            </div>
+        </section>
+
+        <!-- ====== Sección: Urodinamia (instrucciones) ====== -->
+        <section class="modal-seccion articulo" id="contenido-urodinamia"
+                 aria-label="Urodinamia: instrucciones" hidden>
+
+            <!-- Imagen de fondo (difuminada, estilo del resto de ventanas) -->
+            <div class="uro-deco" aria-hidden="true"></div>
+
+            <div class="uro-cabecera">
+                <span class="uro-eyebrow">Información para la paciente · Hospital Son Llàtzer</span>
+                <h3>La prueba de urodinamia</h3>
+            </div>
+
+            <div class="uro-cols">
+
+                <!-- ===== Columna 1: qué es + cómo se realiza ===== -->
+                <div class="uro-col">
+                    <h4>¿Qué es y para qué sirve?</h4>
+                    <p>
+                        La urodinamia es una prueba que estudia cómo funcionan tu vejiga
+                        y tu uretra. Durante el examen se miden las presiones de los
+                        órganos que intervienen en la micción y el flujo de orina. Con
+                        esos resultados, tu médico podrá orientar mejor tu diagnóstico y
+                        tratamiento.
+                    </p>
+                    <p>Se realiza sobre todo cuando hay:</p>
+                    <div class="uro-chips">
+                        <span class="uro-chip">💧 Pérdidas de orina</span>
+                        <span class="uro-chip">🚽 Dificultad para orinar</span>
+                        <span class="uro-chip">⏳ Urgencia o casos complejos</span>
+                    </div>
+
+                    <h4>¿Cómo se realiza? <small>· 30-45 min</small></h4>
+                    <p>
+                        Es una prueba <strong>ambulatoria</strong>. No es dolorosa,
+                        aunque puede resultar algo molesta o embarazosa; cuidaremos tu
+                        intimidad en todo momento.
+                    </p>
+                    <ol class="uro-pasos">
+                        <li>
+                            <span class="uro-paso-num">1</span>
+                            <span>Te pediremos que <strong>orines</strong> en un espacio privado.</span>
+                        </li>
+                        <li>
+                            <span class="uro-paso-num">2</span>
+                            <span>Colocaremos unos <strong>catéteres muy finos</strong> a través de la uretra y el recto, y llenaremos la vejiga con un líquido estéril.</span>
+                        </li>
+                        <li>
+                            <span class="uro-paso-num">3</span>
+                            <span>Durante el llenado nos irás contando tus <strong>sensaciones</strong> y te pediremos que <strong>tosas</strong> en algún momento.</span>
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- ===== Columna 2: cómo me preparo ===== -->
+                <div class="uro-col">
+                    <h4>¿Cómo me preparo?</h4>
+                    <div class="uro-tarjeta">
+                        <span class="uro-tarjeta-ico" aria-hidden="true">🧪</span>
+                        <p>Realiza el <strong>análisis de orina / urocultivo</strong> en tu centro de salud. Te entregaremos las peticiones necesarias.</p>
+                    </div>
+
+                    <div class="uro-dia">
+                        <p class="uro-dia-titulo">📅 El día de la prueba</p>
+                        <ul>
+                            <li><span aria-hidden="true">💧</span> <span>Acude con <strong>ganas de orinar</strong>: bebe medio litro de agua (2-3 vasos) <strong>2 horas antes</strong> y no orines durante ese tiempo.</span></li>
+                            <li><span aria-hidden="true">🍽️</span> <span>No necesitas venir en ayunas, pero <strong>evita las comidas pesadas</strong>.</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="uro-puntualidad">
+                        <span class="uro-reloj" aria-hidden="true">⏱️</span>
+                        <div>
+                            <strong>Sé puntual, por favor</strong>
+                            <p>Dedicamos bastante tiempo a cada paciente. Si llegas a tu hora, evitamos retrasos para las demás. Gracias también por tu comprensión si en algún momento hay espera.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ===== Columna 3: AVISOS + después + contacto ===== -->
+                <div class="uro-col">
+                    <h4>Avísanos antes si…</h4>
+                    <div class="uro-aviso">
+                        <span aria-hidden="true">⚠️</span>
+                        <p><strong>Tienes la menstruación:</strong> la prueba puede realizarse igualmente, pero si prefieres cambiar la cita, llámanos unos días antes.</p>
+                    </div>
+                    <div class="uro-aviso">
+                        <span aria-hidden="true">⚠️</span>
+                        <p><strong>Notas síntomas de infección de orina</strong> los días previos (escozor o dolor al orinar, orinar muchas veces…): avísanos, porque quizá haya que aplazar la prueba.</p>
+                    </div>
+
+                    <h4>¿Y después de la prueba?</h4>
+                    <div class="uro-tras">
+                        <p><span aria-hidden="true">🚶‍♀️</span> Puedes retomar tu <strong>vida normal</strong> inmediatamente.</p>
+                        <p><span aria-hidden="true">💧</span> Bebe <strong>agua abundante</strong> a lo largo del día.</p>
+                        <p><span aria-hidden="true">🌸</span> Es normal notar algo de <strong>escozor</strong> o la orina <strong>rosada</strong> unas horas.</p>
+                        <p><span aria-hidden="true">💊</span> Si no ceden y no eres alérgica: <strong>Paracetamol 1 g cada 8 h</strong>.</p>
+                    </div>
+
+                    <p class="destacado">
+                        📞 ¿Dudas o cambiar tu cita? Llámanos a
+                        <strong>871 202 066</strong> (citas) o <strong>871 201 037</strong> (consultas).
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ====== Sección: Recupérate tras el parto ====== -->
+        <section class="modal-seccion posparto" id="contenido-parto"
+                 aria-label="Recupérate tras el parto" hidden>
+
+            <!-- Cabecera elegante -->
+            <div class="pp-cabecera">
+                <h3>Tu cuerpo ha hecho algo extraordinario</h3>
+                <p class="pp-lema">Recupera <strong>fuerza, control y confianza</strong> a tu ritmo, mientras disfrutas de tu maternidad.</p>
+            </div>
+
+            <!-- Calculadora: ¿en qué fase estoy? -->
+            <div class="pp-fecha">
+                <label for="pp-input-fecha">🍼 ¿Cuándo fue tu parto?</label>
+                <input type="date" id="pp-input-fecha" aria-describedby="pp-resultado">
+                <output id="pp-resultado" class="pp-resultado" aria-live="polite">Introduce la fecha y te diremos en qué fase estás y qué puedes hacer.</output>
+            </div>
+
+            <!-- Recorrido por fases · pasa el ratón por cada ventana -->
+            <div class="pp-recorrido">
+
+                <!-- FASE 1 -->
+                <article class="pp-fase" data-fase="1">
+                    <header class="pp-fase-cab">
+                        <span class="pp-fase-num">1</span>
+                        <div>
+                            <strong>Primeras 6 semanas</strong>
+                            <small>Cuídate y empieza a recuperarte</small>
+                        </div>
+                    </header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">💧</span> Vejiga: buenos hábitos</span>
+                            <div class="pp-pop">
+                                <h5>💧 Hábitos saludables de vejiga</h5>
+                                <ul>
+                                    <li>Bebe <strong>2-3 litros</strong> al día (6-10 vasos); si das el pecho, acércate a los 3 L.</li>
+                                    <li>Limita el gas y la cafeína (té, café, cola): irritan la vejiga. El agua es lo mejor.</li>
+                                    <li>Los <strong>primeros días</strong>, vacía cada 2-3 h: tus sensaciones pueden estar reducidas y quizá no notes cuándo está llena.</li>
+                                    <li>Al orinar <strong>no empujes</strong>; mantén el abdomen blando. Abrir un grifo o frotar la cara interna de los muslos ayuda a relajarla.</li>
+                                    <li>Ve al baño en cuanto notes la necesidad, sin retrasarlo.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🌿</span> Intestino y buena defecación</span>
+                            <div class="pp-pop">
+                                <h5>🌿 Cuida tu intestino al ir al baño</h5>
+                                <ul>
+                                    <li>Evita el <strong>estreñimiento</strong>: fibra (fruta, verdura, integrales) y camina con regularidad.</li>
+                                    <li>Siéntate en el inodoro (no en suspensión). Taburete con las <strong>rodillas más altas que las caderas</strong> y piernas separadas.</li>
+                                    <li>Espalda recta e inclinada hacia delante, con los codos sobre los muslos.</li>
+                                    <li>No hagas fuerza ni aguantes la respiración: <strong>sopla suave</strong> como por una pajita relajando el abdomen.</li>
+                                    <li><strong>Cesárea:</strong> apoya las manos o una toalla sobre la herida. <strong>Parto vaginal con puntos:</strong> sujeta la zona con una compresa o papel delante del ano.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🧡</span> Espalda y cargar peso</span>
+                            <div class="pp-pop">
+                                <h5>🧡 Cuida tu espalda al cargar peso</h5>
+                                <ul>
+                                    <li>No lleves al bebé siempre en la <strong>misma cadera</strong>: tensa la espalda.</li>
+                                    <li>No levantes nada más pesado que tu bebé las <strong>primeras 4-6 semanas</strong>.</li>
+                                    <li>Para levantar: dobla las <strong>rodillas</strong> (no la espalda), objeto cerca, activa el suelo pélvico y empuja con las piernas.</li>
+                                    <li>Cuida la postura al coger al bebé y al dar el pecho; espalda recta y reparte el peso entre las dos nalgas.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">✨</span> Higiene y cicatriz</span>
+                            <div class="pp-pop">
+                                <h5>✨ Higiene y cuidado de la cicatriz</h5>
+                                <ul>
+                                    <li>Higiene íntima cuidadosa, sobre todo con desgarro o episiotomía. Límpiate <strong>de delante hacia atrás</strong>.</li>
+                                    <li>Una vez reabsorbidos o retirados los puntos, <strong>trabaja la cicatriz</strong>: mírala, tócala, frótala, pellízcala y masajéala para que no se adhiera ni duela.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema pp-tema--destaca" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⚡</span> Activa suelo pélvico y faja <em>(¡día 1!)</em></span>
+                            <div class="pp-pop pp-pop--arriba">
+                                <h5>⚡ Actívalos desde el primer día tras el parto</h5>
+                                <div class="pp-sub">
+                                    <strong>🌸 Suelo pélvico</strong>
+                                    <p>Contracción <strong>suave</strong>, mantenida unos segundos y <strong>sin dolor</strong>. Ayúdate mirándote a un espejo o tocándote la vagina con los dedos: nota cómo, al contraer, la vagina y el ano se cierran sutilmente.</p>
+                                </div>
+                                <div class="pp-sub">
+                                    <strong>🎈 Faja abdominal</strong>
+                                    <p>Tumbada boca arriba, inspira por la nariz y saca el aire por la boca con los <strong>labios fruncidos</strong>, lento y prolongado, llevando la parte baja del abdomen hacia dentro (imagina que afinas tu cintura). Los abdominales tradicionales están <strong>contraindicados</strong> en esta fase.</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </article>
+
+                <!-- FASE 2 -->
+                <article class="pp-fase" data-fase="2">
+                    <header class="pp-fase-cab">
+                        <span class="pp-fase-num">2</span>
+                        <div>
+                            <strong>A partir de las 6 semanas</strong>
+                            <small>Progresa y refuerza</small>
+                        </div>
+                    </header>
+                    <p class="pp-condicion">✔️ Cuando tus heridas hayan cicatrizado y te sientas cómoda.</p>
+                    <ul class="pp-temas">
+                        <li class="pp-tema pp-tema--destaca" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⚡</span> Progresa el suelo pélvico</span>
+                            <div class="pp-pop">
+                                <h5>⚡ Lleva tus contracciones más lejos</h5>
+                                <ul>
+                                    <li><strong>Largas:</strong> empieza apretando 5 s y relajando 5 s, 5 veces; progresa hasta sostener <strong>10 s con 10 repeticiones</strong>.</li>
+                                    <li><strong>Rápidas:</strong> 5-10 contracciones, relajando por completo entre cada una.</li>
+                                    <li>Frecuencia: <strong>3-5 veces al día</strong>. Asócialas a una rutina (dar el pecho, cambiar el pañal).</li>
+                                    <li>Contrae también al <strong>toser, estornudar o levantar peso</strong>, para dar soporte extra.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🤸‍♀️</span> Ejercicios de recuperación</span>
+                            <div class="pp-pop">
+                                <h5>🤸‍♀️ Recupera abdomen y espalda</h5>
+                                <ul>
+                                    <li><strong>Activación abdominal profunda:</strong> boca arriba, rodillas flexionadas, lleva el ombligo hacia dentro. Aprieta 5 s y relaja 5 s, 5 veces.</li>
+                                    <li><strong>Báscula pélvica:</strong> exhala inclinando la pelvis atrás para aplanar la lumbar; inhala al relajar. 10 veces.</li>
+                                    <li><strong>Rotación de rodillas:</strong> rodillas juntas, déjalas caer a un lado y a otro girando la cabeza al lado contrario. 10 veces.</li>
+                                    <li><strong>3 veces al día</strong> + paseos de 10-20 min: aceleran tu recuperación y reducen la rigidez.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🏃‍♀️</span> Vuelve al ejercicio</span>
+                            <div class="pp-pop">
+                                <h5>🏃‍♀️ Retoma el ejercicio con seguridad</h5>
+                                <ul>
+                                    <li>Ejercicio normal: a las <strong>6 semanas</strong> (parto vaginal) y a las <strong>10-12 semanas</strong> (cesárea).</li>
+                                    <li>El <strong>alto impacto</strong> (correr, saltar, levantar peso) puede requerir más tiempo.</li>
+                                    <li>Antes, valora tu abdomen y tu suelo pélvico —idealmente con fisioterapia— y reintrodúcelo solo si no hay escapes, pesadez ni dolor.</li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </article>
+
+                <!-- FASE 3 -->
+                <article class="pp-fase pp-fase--izq pp-fase--libre" data-fase="libre">
+                    <header class="pp-fase-cab">
+                        <span class="pp-fase-num pp-fase-num--libre">💗</span>
+                        <div>
+                            <strong>Recupera tu vida plena</strong>
+                            <small>Cuando te sientas lista · a tu ritmo</small>
+                        </div>
+                    </header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">💕</span> Relaciones sexuales</span>
+                            <div class="pp-pop">
+                                <h5>💕 Relaciones sexuales</h5>
+                                <ul>
+                                    <li>Reanúdalas cuando te sientas preparada, a tu ritmo. <strong>Nunca deben doler.</strong></li>
+                                    <li>Es normal cierta sequedad, sobre todo con la lactancia: usa lubricante (hidrosoluble si empleas preservativo).</li>
+                                    <li>Redescubre tu nueva sexualidad sin prisa.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">📘</span> Sigue aprendiendo</span>
+                            <div class="pp-pop">
+                                <h5>📘 Sigue cuidándote</h5>
+                                <ul>
+                                    <li>A partir de la 8.ª semana, repasa los <a href="/suelo-pelvico/ejercicios">ejercicios con cronómetro</a> para seguir entrenando.</li>
+                                    <li>Recupera el control y la confianza: <strong>el primer paso lo das tú.</strong></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </article>
+            </div>
+
+            <!-- Enlace directo a la página de ejercicios -->
+            <a class="diag-ejer-banner" href="/suelo-pelvico/ejercicios">
+                <span class="diag-ejer-ico" aria-hidden="true">🏋️‍♀️</span>
+                <span class="diag-ejer-txt">
+                    <strong>Entrena tu suelo pélvico</strong>
+                    <small>Ejercicios guiados con cronómetro y simulador</small>
+                </span>
+                <span class="diag-ejer-flecha" aria-hidden="true">→</span>
+            </a>
+
+            <!-- Pie: curiosidad + alerta -->
+            <div class="pp-pie">
+                <p class="pp-sabias">
+                    <strong>¿Sabías que…?</strong> el estiramiento del músculo elevador del ano durante el parto no
+                    tiene comparación con ninguna otra estructura del cuerpo, y el nervio pudendo transmite las
+                    sensaciones placenteras. Cuidar tu suelo pélvico es cuidar tu bienestar y tu sexualidad.
+                </p>
+                <div class="pp-tema pp-alerta" tabindex="0">
+                    <span class="pp-tema-cab"><span class="pp-ico">⚠️</span> Cuándo consultar sin demora</span>
+                    <div class="pp-pop pp-pop--alerta">
+                        <h5>⚠️ Acude sin esperar si aparece…</h5>
+                        <ul>
+                            <li><strong>Fiebre</strong>, o herida del periné con dolor creciente, enrojecimiento, hinchazón, mal olor o supuración.</li>
+                            <li><strong>Pérdida de control</strong> de heces o gases, o urgencia muy intensa de defecar (sobre todo tras un desgarro).</li>
+                            <li><strong>Imposibilidad de orinar</strong>, dolor al orinar o escapes que no mejoran.</li>
+                            <li><strong>Sangrado vaginal abundante</strong>, con coágulos grandes o mal olor.</li>
+                            <li>Sensación de <strong>bulto o peso</strong> que asoma por la vagina.</li>
+                            <li><strong>Dolor en las relaciones</strong> que no desaparece, o tristeza/ansiedad profundas y persistentes.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== Sección: Consejos durante el embarazo ====== -->
+        <section class="modal-seccion posparto" id="contenido-embarazo"
+                 aria-label="Consejos durante el embarazo" hidden>
+
+            <!-- Cabecera -->
+            <div class="pp-cabecera">
+                <h3>Tu cuerpo se prepara para un gran día</h3>
+                <p class="pp-lema">Bastan <strong>unos minutos al día</strong>: integra estos cuidados en tu rutina y ensaya las posturas con tiempo. El día del parto es tarde para descubrirlas.</p>
+            </div>
+
+            <!-- Calculadora: ¿en qué trimestre estoy? -->
+            <div class="pp-fecha">
+                <label for="emb-input-fpp">🤰 ¿Cuál es tu fecha probable de parto?</label>
+                <input type="date" id="emb-input-fpp" aria-describedby="emb-resultado">
+                <output id="emb-resultado" class="pp-resultado" aria-live="polite">Es la fecha de las 40 semanas. Introdúcela y te diremos en qué trimestre estás y qué trabajar.</output>
+            </div>
+
+            <!-- Recorrido por trimestres -->
+            <div class="pp-recorrido">
+
+                <!-- TRIMESTRE 1 -->
+                <article class="pp-fase" data-tri="1">
+                    <header class="pp-fase-cab">
+                        <span class="pp-fase-num">1</span>
+                        <div>
+                            <strong>Primer trimestre</strong>
+                            <small>Semanas 1 – 12 · conoce y estabiliza</small>
+                        </div>
+                    </header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🧭</span> Estabiliza tu pelvis</span>
+                            <div class="pp-pop">
+                                <h5>🧭 Estabiliza tu pelvis</h5>
+                                <ul>
+                                    <li>Con los cambios hormonales la pelvis puede volverse algo inestable: pueden aparecer molestias en el pubis (sínfisis) o en la zona baja de la espalda (sacroilíacas), que a veces irritan el ciático.</li>
+                                    <li>Refuerza la <strong>musculatura glútea</strong> para estabilizarla, y mantén ese trabajo hasta el final del embarazo.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema pp-tema--destaca" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⚡</span> Despierta tu suelo pélvico</span>
+                            <div class="pp-pop">
+                                <h5>⚡ Toma conciencia de tu suelo pélvico</h5>
+                                <ul>
+                                    <li>Empieza con una <strong>activación suave</strong>: aprieta de forma suave y mantenida unos segundos, sin dolor.</li>
+                                    <li><strong>Regla de oro:</strong> relaja siempre por completo después de cada contracción.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🌿</span> Hidratación e intestino</span>
+                            <div class="pp-pop">
+                                <h5>🌿 Cuida tu intestino</h5>
+                                <ul>
+                                    <li>El embarazo favorece el <strong>estreñimiento</strong>. Cuídalo desde el principio con hidratación, fibra y movimiento.</li>
+                                    <li>Mantén tonificada la zona del recto y el ano.</li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </article>
+
+                <!-- TRIMESTRE 2 -->
+                <article class="pp-fase" data-tri="2">
+                    <header class="pp-fase-cab">
+                        <span class="pp-fase-num">2</span>
+                        <div>
+                            <strong>Segundo trimestre</strong>
+                            <small>Semanas 13 – 26 · tonifica y entrena</small>
+                        </div>
+                    </header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema pp-tema--destaca" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">⚡</span> Entrena tu suelo pélvico</span>
+                            <div class="pp-pop">
+                                <h5>⚡ Entrena tu suelo pélvico</h5>
+                                <ul>
+                                    <li>El cambio hormonal afloja los tejidos y el peso del útero recae sobre el periné: mantenerlo fuerte previene la distensión y lo prepara para el parto.</li>
+                                    <li><strong>Frecuencia:</strong> bloques de 5-7 min al día, integrados en tu rutina. 3 veces al día.</li>
+                                    <li><strong>Lentas:</strong> aprieta como para aguantar la orina, sostén hasta 10 s y relaja el doble. 10 veces.</li>
+                                    <li><strong>Rápidas:</strong> «activar y soltar» con ritmo claro, 10 veces.</li>
+                                    <li><strong>Con la respiración:</strong> suelta el aire al contraer e inspira al relajar.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">💧</span> Cuida tu vejiga</span>
+                            <div class="pp-pop">
+                                <h5>💧 Vejiga</h5>
+                                <ul>
+                                    <li>Desde el <strong>4.º mes</strong> el útero comprime la vejiga y aumentan las ganas de orinar.</li>
+                                    <li>Ve cuando lo necesites, pero <strong>vacía por completo y sin pujar</strong> (aunque sea poca cantidad) para conservar el reflejo natural de la micción.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🍑</span> Refuerza tus glúteos</span>
+                            <div class="pp-pop">
+                                <h5>🍑 Glúteos · estabilidad de la pelvis</h5>
+                                <ul>
+                                    <li><strong>Puente:</strong> boca arriba, eleva la pelvis apretando glúteos y baja despacio. 10 rep · 2 series.</li>
+                                    <li><strong>Almeja:</strong> de lado, abre la rodilla de arriba sin rodar la pelvis. 12 rep · cada lado.</li>
+                                    <li><strong>Sentadilla con apoyo:</strong> baja con el peso en los talones y sube apretando glúteos. 8-10 rep · 2 series.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🤸‍♀️</span> Moviliza tu pelvis</span>
+                            <div class="pp-pop">
+                                <h5>🤸‍♀️ Movilidad de la pelvis</h5>
+                                <ul>
+                                    <li><strong>Báscula pélvica:</strong> a cuatro patas, lleva la pelvis adelante y atrás. 10 lentas.</li>
+                                    <li><strong>Círculos sobre fitball:</strong> sentada en la pelota, dibuja círculos lentos. 5 · cada sentido.</li>
+                                    <li><strong>Gato-camello suave:</strong> redondea la espalda al exhalar y vuelve a neutra al inspirar. 8-10 ciclos.</li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </article>
+
+                <!-- TRIMESTRE 3 -->
+                <article class="pp-fase pp-fase--izq" data-tri="3">
+                    <header class="pp-fase-cab">
+                        <span class="pp-fase-num">3</span>
+                        <div>
+                            <strong>Tercer trimestre</strong>
+                            <small>Semanas 27 – 40 · prepárate para el parto</small>
+                        </div>
+                    </header>
+                    <ul class="pp-temas">
+                        <li class="pp-tema pp-tema--destaca" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🌬️</span> Respiración y pujo</span>
+                            <div class="pp-pop">
+                                <h5>🌬️ Coordina respiración, abdomen y pujo</h5>
+                                <ul>
+                                    <li>Aprender a <strong>dirigir el pujo</strong> antes del parto es muy valioso: practícalo para reconocerlo casi por instinto.</li>
+                                    <li>En el expulsivo, dirige «<strong>entre los dos orificios</strong>». Evita el empuje brusco «como para defecar», que daña el periné posterior. Puede ayudarte a <strong>evitar una episiotomía</strong>.</li>
+                                    <li><strong>Si valoras peridural:</strong> memoriza antes las sensaciones de contracción y estiramiento y ponles nombre, para participar activa aunque las notes atenuadas.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🪑</span> Posturas que ayudan al bebé</span>
+                            <div class="pp-pop">
+                                <h5>🪑 Tus posturas colocan al bebé</h5>
+                                <ul>
+                                    <li>En las últimas semanas, tu forma de sentarte influye en cómo se coloca el bebé.</li>
+                                    <li><strong>Evita</strong> recostarte mucho hacia atrás (sofá muy reclinado, hamaca): tiende a dejar al bebé «de cara hacia adelante».</li>
+                                    <li><strong>Favorece</strong> el tronco inclinado hacia delante: ayuda a que se oriente de cara hacia tu sacro, la posición que menos lesiona el periné.</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="pp-tema" tabindex="0">
+                            <span class="pp-tema-cab"><span class="pp-ico">🧘‍♀️</span> Ensaya posturas de parto</span>
+                            <div class="pp-pop">
+                                <h5>🧘‍♀️ Ensaya posturas para el parto</h5>
+                                <ul>
+                                    <li>Prueba y haz tuyas distintas posturas, con apoyos o accesorios; aprende cuáles te alivian más.</li>
+                                    <li>Llegado el parto, sabrás buscar con facilidad la <strong>posición más cómoda</strong>.</li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </article>
+            </div>
+
+            <!-- Enlace directo a la página de ejercicios -->
+            <a class="diag-ejer-banner" href="/suelo-pelvico/ejercicios">
+                <span class="diag-ejer-ico" aria-hidden="true">🏋️‍♀️</span>
+                <span class="diag-ejer-txt">
+                    <strong>Entrena tu suelo pélvico</strong>
+                    <small>Ejercicios guiados con cronómetro y simulador</small>
+                </span>
+                <span class="diag-ejer-flecha" aria-hidden="true">→</span>
+            </a>
+
+            <!-- Pie: curiosidad + nota de seguridad -->
+            <div class="pp-pie">
+                <p class="pp-sabias">
+                    <strong>¿Sabías que…?</strong> el suelo pélvico se entrena mejor dentro del <strong>movimiento global</strong>
+                    del cuerpo (respiración, posturas, gestos cotidianos) y no como un ejercicio aislado. Integrarlo en tu
+                    día a día es la forma más eficaz de preparar tu periné para el parto.
+                </p>
+                <div class="pp-tema pp-alerta" tabindex="0">
+                    <span class="pp-tema-cab"><span class="pp-ico">⚠️</span> Para y consulta si…</span>
+                    <div class="pp-pop pp-pop--alerta">
+                        <h5>⚠️ Detente y coméntalo con tu matrona si…</h5>
+                        <ul>
+                            <li>Notas <strong>dolor o pesadez</strong> al ejercitar el suelo pélvico.</li>
+                            <li>Aparecen molestias en el pubis o la espalda que no ceden.</li>
+                            <li>Tienes dudas sobre qué ejercicios son adecuados para ti.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+          </div><!-- /modal-cuerpo -->
+
+          <!-- Logo del hospital, arriba a la derecha: también vuelve atrás un paso -->
+          <button type="button" class="modal-firma" aria-label="Volver atrás">
+            <img src="/static/images/logo-son-llatzer.png" alt="Hospital Universitari Son Llàtzer — volver atrás">
+          </button>
+        </div><!-- /modal-dialog -->
+      </div><!-- /modal-overlay -->
+
+      <!-- Overlay a pantalla completa para las animaciones (reutilizable) -->
+      <div class="anim-overlay" id="anim-overlay" hidden>
+        <button type="button" class="anim-overlay-cerrar" id="anim-overlay-cerrar" aria-label="Cerrar">×</button>
+        <iframe class="anim-overlay-frame" id="anim-overlay-frame" title="Animación educativa"></iframe>
+      </div>
+
+        <p class="nota-pie">
+            Información general para pacientes. Esta página tiene fines
+            informativos y no sustituye la consulta con un profesional.
+        </p>
+
+        <p class="volver"><a href="/">← Volver al inicio</a></p>
+
+    </article>
+
+    <!--
+      ====== Lógica de las notas post-it ======
+      Cada nota abre un PANEL que aparece debajo y empuja el resto de la página
+      (no se solapa con nada). En escritorio se abre al pasar el ratón; al hacer
+      clic se "fija" (queda abierto). En móvil se abre/cierra al tocar.
+      Se cierra con la "×", tocando fuera, o con la tecla Esc.
+    -->
+    <script>
+    (function () {
+        const triggers = document.querySelectorAll(".postit");
+        const panel    = document.getElementById("postit-panel");
+        const detalles = document.querySelectorAll(".postit-detalle");
+        const bloque   = document.querySelector(".bloque-postits");
+        if (!panel) return;
+        const cerrarBtn = panel.querySelector(".postit-cerrar");
+
+        let fijado = false;   // ¿se ha dejado abierto con un clic?
+
+        function abrir(id) {
+            detalles.forEach(function (d) { d.classList.toggle("activo", d.id === id); });
+            panel.hidden = false;
+            triggers.forEach(function (t) {
+                t.setAttribute("aria-expanded", t.dataset.target === id ? "true" : "false");
+            });
+        }
+
+        function cerrar() {
+            panel.hidden = true;
+            fijado = false;
+            triggers.forEach(function (t) { t.setAttribute("aria-expanded", "false"); });
+        }
+
+        function estaActivo(id) {
+            return !panel.hidden && document.getElementById(id).classList.contains("activo");
+        }
+
+        triggers.forEach(function (t) {
+            const id = t.dataset.target;
+
+            // Solo clic/toque: abre, o cierra si ya estaba activo.
+            t.addEventListener("click", function () {
+                if (estaActivo(id)) {
+                    cerrar();
+                } else {
+                    abrir(id);
+                    const reducir = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+                    t.scrollIntoView({ behavior: reducir ? "auto" : "smooth", block: "start" });
+                }
+            });
+
+            // Teclado (Enter o Espacio).
+            t.addEventListener("keydown", function (e) {
+                if (e.key === "Enter" || e.key === " ") { e.preventDefault(); t.click(); }
+            });
+        });
+
+        // Botón "×".
+        cerrarBtn.addEventListener("click", cerrar);
+
+        // Cerrar al tocar fuera del bloque (pero NO si el clic es en la ventana de animación).
+        document.addEventListener("click", function (e) {
+            if (e.target.closest(".anim-overlay")) return;
+            if (!e.target.closest(".bloque-postits")) cerrar();
+        });
+
+        // Cerrar con Escape (salvo que haya una animación abierta: esa se cierra sola).
+        document.addEventListener("keydown", function (e) {
+            const animAbierta = document.getElementById("anim-overlay") && !document.getElementById("anim-overlay").hidden;
+            if (e.key === "Escape" && !animAbierta) cerrar();
+        });
+    })();
+
+    // ====== Menú de la portada: abre una VENTANA con solo esa sección ======
+    (function () {
+        const overlay   = document.getElementById("modal-secciones");
+        const triggers  = document.querySelectorAll("[data-modal]");
+        if (!overlay || !triggers.length) return;
+        const secciones = overlay.querySelectorAll(".modal-seccion");
+        // Los dos logos (PSSP arriba-izquierda y Son Llàtzer arriba-derecha) vuelven atrás.
+        const volverBtns = overlay.querySelectorAll(".modal-volver, .modal-firma");
+
+        let pila = [];   // historial de secciones abiertas (para volver 1 paso)
+
+        function seccionActual() {
+            let cur = null;
+            secciones.forEach(function (s) { if (!s.hidden) cur = s.id; });
+            return cur;
+        }
+        function mostrar(id) {
+            secciones.forEach(function (s) { s.hidden = (s.id !== id); });
+            overlay.hidden = false;
+            document.body.classList.add("modal-abierto");   // bloquea el scroll del fondo
+        }
+        function abrir(id) {
+            if (overlay.hidden) {
+                pila = [];                                   // se abre desde la portada
+            } else {
+                const cur = seccionActual();
+                if (pila.length && pila[pila.length - 1] === id) {
+                    pila.pop();                              // es una navegación "hacia atrás"
+                } else if (cur && cur !== id) {
+                    pila.push(cur);                          // avanzamos: recordamos de dónde venimos
+                }
+            }
+            mostrar(id);
+        }
+        function cerrar() {
+            overlay.hidden = true;
+            document.body.classList.remove("modal-abierto");
+            pila = [];
+        }
+        function volver() {                                  // un solo paso atrás
+            if (pila.length) mostrar(pila.pop());
+            else cerrar();
+        }
+
+        triggers.forEach(function (t) {
+            t.addEventListener("click", function () { abrir(t.dataset.modal); });
+        });
+        volverBtns.forEach(function (b) { b.addEventListener("click", volver); });
+        // Pulsar fuera de la ventana (fondo oscuro) cierra del todo.
+        overlay.addEventListener("click", function (e) {
+            if (e.target === overlay) cerrar();
+        });
+        // Escape: vuelve un paso (y al final cierra). No actúa si hay una animación abierta.
+        document.addEventListener("keydown", function (e) {
+            const animAbierta = document.getElementById("anim-overlay") && !document.getElementById("anim-overlay").hidden;
+            if (e.key === "Escape" && !overlay.hidden && !animAbierta) volver();
+        });
+    })();
+
+    // ====== Posparto: calcula la fase según la fecha del parto ======
+    (function () {
+        const input  = document.getElementById("pp-input-fecha");
+        const salida = document.getElementById("pp-resultado");
+        if (!input || !salida) return;
+        const fases = document.querySelectorAll(".pp-recorrido .pp-fase");
+
+        // No permitir fechas futuras
+        const hoy = new Date();
+        input.max = hoy.toISOString().slice(0, 10);
+
+        function calcular() {
+            fases.forEach(function (f) { f.classList.remove("pp-activa"); });
+            if (!input.value) {
+                salida.textContent = "Introduce la fecha y te diremos en qué fase estás y qué puedes hacer.";
+                salida.className = "pp-resultado";
+                return;
+            }
+            const parto = new Date(input.value + "T00:00:00");
+            const ahora = new Date();
+            const dias  = Math.floor((ahora - parto) / (1000 * 60 * 60 * 24));
+
+            if (dias < 0) {
+                salida.textContent = "Esa fecha aún no ha llegado 🙂. Vuelve cuando hayas dado a luz.";
+                salida.className = "pp-resultado pp-resultado--aviso";
+                return;
+            }
+
+            const semanas = Math.floor(dias / 7);
+            let fase, texto;
+            if (semanas < 6) {
+                fase = "1";
+                texto = "estás en las <strong>primeras 6 semanas</strong>: cuida tu postura, la cicatriz, la vejiga y el intestino, y empieza ya la <strong>activación suave</strong> del suelo pélvico.";
+            } else {
+                fase = "2";
+                texto = "ya superas las <strong>6 semanas</strong>: si tus heridas han cicatrizado, puedes iniciar el <strong>entrenamiento estructurado</strong>. Y, cuando te sientas lista, recupera tu vida plena a tu ritmo.";
+            }
+
+            const lbl = semanas === 0
+                ? "Tu bebé tiene pocos días"
+                : "Han pasado <strong>" + semanas + (semanas === 1 ? " semana" : " semanas") + "</strong>";
+            salida.innerHTML = "👉 " + lbl + ": " + texto;
+            salida.className = "pp-resultado pp-resultado--ok pp-resultado--fase" + fase;
+            fases.forEach(function (f) {
+                if (f.dataset.fase === fase) f.classList.add("pp-activa");
+            });
+        }
+
+        input.addEventListener("change", calcular);
+        input.addEventListener("input", calcular);
+    })();
+
+    // ====== Embarazo: calcula el trimestre a partir de la fecha probable de parto ======
+    (function () {
+        const input  = document.getElementById("emb-input-fpp");
+        const salida = document.getElementById("emb-resultado");
+        if (!input || !salida) return;
+        const fases = document.querySelectorAll(".pp-recorrido .pp-fase[data-tri]");
+
+        function calcular() {
+            fases.forEach(function (f) { f.classList.remove("pp-activa"); });
+            if (!input.value) {
+                salida.textContent = "Es la fecha de las 40 semanas. Introdúcela y te diremos en qué trimestre estás y qué trabajar.";
+                salida.className = "pp-resultado";
+                return;
+            }
+            const MS = 1000 * 60 * 60 * 24;
+            // Trabajamos en UTC (a mediodía) para que el cálculo de días no se vea
+            // afectado por los cambios de horario de verano/invierno.
+            const partes = input.value.split("-");
+            const fppMs = Date.UTC(+partes[0], +partes[1] - 1, +partes[2]);
+            const hoyObj = new Date();
+            const hoyMs = Date.UTC(hoyObj.getFullYear(), hoyObj.getMonth(), hoyObj.getDate());
+            // El embarazo dura 280 días (40 semanas). El primer día de la última
+            // regla = FPP − 280 días. La edad gestacional son los días transcurridos
+            // desde ese punto hasta hoy, divididos entre 7 (resto = días sueltos).
+            const fumMs = fppMs - 280 * MS;
+            const diasGest = Math.round((hoyMs - fumMs) / MS);
+
+            if (diasGest < 0) {
+                salida.innerHTML = "Esa fecha está aún muy lejos 🙂. Revisa que sea tu <strong>fecha probable de parto</strong> (la de las 40 semanas).";
+                salida.className = "pp-resultado pp-resultado--aviso";
+                return;
+            }
+
+            const semanas = Math.floor(diasGest / 7);
+            const dias = diasGest % 7;
+
+            if (semanas > 40) {
+                salida.innerHTML = "🌸 Tu fecha probable de parto ya pasó: quizá tu bebé ya esté en camino o en tus brazos. ¡Mucha fuerza!";
+                salida.className = "pp-resultado pp-resultado--aviso";
+                return;
+            }
+
+            let tri, texto;
+            if (semanas <= 12) {
+                tri = "1";
+                texto = "estás en el <strong>primer trimestre</strong> (se forman los órganos del bebé y es normal notar más fatiga y náuseas): conoce tu cuerpo, estabiliza la pelvis y empieza a <strong>despertar tu suelo pélvico</strong> con suavidad.";
+            } else if (semanas <= 26) {
+                tri = "2";
+                texto = "estás en el <strong>segundo trimestre</strong> (la etapa de mayor bienestar: el bebé crece rápido y notarás sus primeros movimientos): es el momento de <strong>tonificar y entrenar</strong> el suelo pélvico, los glúteos y la movilidad de la pelvis.";
+            } else {
+                tri = "3";
+                texto = "estás en el <strong>tercer trimestre</strong> (el bebé madura los pulmones y gana peso, y tú ganas volumen y alguna molestia): prepárate para el parto con la <strong>respiración, el pujo y las posturas</strong> que ayudan a tu bebé y protegen tu periné.";
+            }
+
+            const diasTxt = dias === 0
+                ? ""
+                : " y <strong>" + dias + (dias === 1 ? " día" : " días") + "</strong>";
+            salida.innerHTML = "👉 Estás de <strong>" + semanas + (semanas === 1 ? " semana" : " semanas") + "</strong>" + diasTxt + ": " + texto;
+            salida.className = "pp-resultado pp-resultado--ok pp-resultado--fase" + tri;
+            fases.forEach(function (f) {
+                if (f.dataset.tri === tri) f.classList.add("pp-activa");
+            });
+        }
+
+        input.addEventListener("change", calcular);
+        input.addEventListener("input", calcular);
+    })();
+
+    // ====== Casillas de "leído" en cada punto de las ventanas de diagnóstico ======
+    (function () {
+        const KEY = "diag-leido-v1";
+        let estado = {};
+        try { estado = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) {}
+        function guardar() { try { localStorage.setItem(KEY, JSON.stringify(estado)); } catch (e) {} }
+
+        document.querySelectorAll(".diag-win").forEach(function (win) {
+            win.querySelectorAll(".pp-tema").forEach(function (tema, i) {
+                const cab = tema.querySelector(".pp-tema-cab");
+                if (!cab) return;
+                const key = win.id + ":" + i;
+                const cb = document.createElement("input");
+                cb.type = "checkbox";
+                cb.className = "pp-leido";
+                cb.title = "Marcar como leído";
+                cb.setAttribute("aria-label", "Marcar como leído");
+                if (estado[key]) { cb.checked = true; tema.classList.add("pp-tema--leido"); }
+                // El clic en la casilla no debe activar/abrir la tarjeta.
+                cb.addEventListener("click", function (e) { e.stopPropagation(); });
+                cb.addEventListener("change", function () {
+                    estado[key] = cb.checked;
+                    tema.classList.toggle("pp-tema--leido", cb.checked);
+                    guardar();
+                });
+                cab.insertBefore(cb, cab.firstChild);
+            });
+        });
+    })();
+
+    // ===== Popups de temas: solo clic =====
+    (function () {
+        function cerrarTodos() {
+            document.querySelectorAll(".pp-tema--abierto").forEach(function (t) {
+                t.classList.remove("pp-tema--abierto");
+                t.querySelector(".pp-tema-cab").setAttribute("aria-expanded", "false");
+            });
+        }
+        document.querySelectorAll(".pp-tema-cab").forEach(function (cab) {
+            const tema = cab.closest(".pp-tema");
+            if (!tema) return;
+            const pop = tema.querySelector(".pp-pop");
+            if (!pop) return;
+            // Añadir atributos de accesibilidad
+            cab.setAttribute("role", "button");
+            cab.setAttribute("aria-expanded", "false");
+            pop.setAttribute("role", "tooltip");
+            // Clic: abre/cierra
+            cab.addEventListener("click", function (e) {
+                e.stopPropagation();
+                const estaAbierto = tema.classList.contains("pp-tema--abierto");
+                cerrarTodos();
+                if (!estaAbierto) {
+                    tema.classList.add("pp-tema--abierto");
+                    cab.setAttribute("aria-expanded", "true");
+                }
+            });
+            // Teclado
+            cab.addEventListener("keydown", function (e) {
+                if (e.key === "Enter" || e.key === " ") { e.preventDefault(); cab.click(); }
+                if (e.key === "Escape") cerrarTodos();
+            });
+        });
+        // Clic fuera cierra todos
+        document.addEventListener("click", function (e) {
+            if (!e.target.closest(".pp-tema")) cerrarTodos();
+        });
+    })();
+
+    // ===== Explorador anatómico =====
+    (function() {
+        const sec = document.getElementById('contenido-conoce');
+        if (!sec) return;
+        let actId = 'elevador';
+
+        function update() {
+            sec.querySelectorAll('.anat-dot').forEach(d =>
+                d.classList.toggle('anat-dot--act', d.dataset.id === actId));
+            sec.querySelectorAll('.anat-struct').forEach(r => {
+                const on = r.dataset.id === actId;
+                r.classList.toggle('anat-struct--act', on);
+                const desc = r.querySelector('.anat-struct-desc');
+                if (desc) desc.hidden = !on;
+            });
+        }
+
+        sec.querySelectorAll('.anat-dot').forEach(d =>
+            d.addEventListener('click', () => { actId = d.dataset.id; update(); }));
+
+        sec.querySelectorAll('.anat-struct').forEach(r =>
+            r.addEventListener('click', () => { actId = r.dataset.id; update(); }));
+
+        sec.querySelectorAll('.anat-tab').forEach(t =>
+            t.addEventListener('click', () => {
+                const tab = t.dataset.tab;
+                sec.querySelectorAll('.anat-tab').forEach(x => {
+                    x.classList.toggle('anat-tab--act', x.dataset.tab === tab);
+                    x.setAttribute('aria-selected', x.dataset.tab === tab ? 'true' : 'false');
+                });
+                sec.querySelectorAll('.anat-tab-pane').forEach(p => {
+                    p.hidden = p.id !== 'anat-pane-' + tab;
+                });
+            }));
+
+        sec.querySelectorAll('.anat-disorder-head').forEach(h =>
+            h.addEventListener('click', () => {
+                const body = h.nextElementSibling;
+                const wasOpen = !body.hidden;
+                sec.querySelectorAll('.anat-disorder-body').forEach(b => { b.hidden = true; });
+                sec.querySelectorAll('.anat-dis-sign').forEach(s => { s.textContent = '+'; });
+                if (!wasOpen) {
+                    body.hidden = false;
+                    h.querySelector('.anat-dis-sign').textContent = '–';
+                }
+            }));
+
+        update();
+    })();
+
+    // ===== Animaciones a pantalla completa (botones [data-anim]) =====
+    (function () {
+        const overlay = document.getElementById("anim-overlay");
+        const frame   = document.getElementById("anim-overlay-frame");
+        const cerrar  = document.getElementById("anim-overlay-cerrar");
+        if (!overlay || !frame) return;
+
+        let fitTimer = null;
+
+        // Escala el contenido de la animación para que se vea LO MÁS GRANDE
+        // posible sin tener que desplazarse: lo agranda hasta llenar el ancho o
+        // el alto disponible (lo que primero se alcance). El iframe es del mismo
+        // origen (/static), así que podemos medir y ajustar su contenido.
+        function ajustar() {
+            let doc;
+            try { doc = frame.contentDocument; } catch (e) { return; }
+            if (!doc || !doc.body) return;
+            const root = doc.querySelector(".sc-host") || doc.body;
+            root.style.transformOrigin = "top center";
+            root.style.transform = "none";                 // medir tamaño natural
+            doc.body.style.margin = "0";
+            // En MÓVIL no escalamos: la animación se ve a tamaño completo y se
+            // desplaza verticalmente dentro del visor (el botón × queda encima).
+            if (window.innerWidth < 700) {
+                doc.documentElement.style.overflow = "";
+                doc.body.style.overflow = "";
+                return;
+            }
+            doc.documentElement.style.overflow = "hidden";
+            doc.body.style.overflow = "hidden";
+            const dispH = frame.clientHeight || window.innerHeight;
+            const dispW = frame.clientWidth || window.innerWidth;
+            const natH = root.scrollHeight, natW = root.scrollWidth;
+            if (!natH || !natW) return;
+            // Sin tope en 1: si sobra espacio, agranda la animación para llenarlo.
+            const escala = Math.min(dispH / natH, dispW / natW);
+            root.style.transform = Math.abs(escala - 1) < 0.01 ? "none" : "scale(" + escala + ")";
+        }
+        // Agranda las etiquetas pequeñas de los esquemas (Vejiga, Uretra, m. detrusor,
+        // ANT./POST.…) para que se lean con más facilidad. Solo toca el texto pequeño
+        // del SVG; el título grande no se modifica.
+        function agrandarEtiquetas() {
+            let doc;
+            try { doc = frame.contentDocument; } catch (e) { return; }
+            if (!doc) return;
+            doc.querySelectorAll("svg text").forEach(function (t) {
+                if (t.dataset.pspBig) return;                 // ya ampliado (evita acumular)
+                const fs = parseFloat(getComputedStyle(t).fontSize);
+                if (fs && fs <= 18) {
+                    t.style.fontSize = (fs * 1.45).toFixed(1) + "px";
+                    t.style.fontWeight = "600";
+                }
+                t.dataset.pspBig = "1";
+            });
+        }
+
+        // Repetimos un rato: el contenido se dibuja por JS después de "load".
+        function reajustar() {
+            agrandarEtiquetas();
+            ajustar();
+            let n = 0;
+            clearInterval(fitTimer);
+            fitTimer = setInterval(function () { agrandarEtiquetas(); ajustar(); if (++n > 14) clearInterval(fitTimer); }, 200);
+        }
+
+        function abrir(src) {
+            frame.setAttribute("src", src);
+            overlay.hidden = false;
+            document.body.classList.add("modal-abierto");
+            if (overlay.requestFullscreen) overlay.requestFullscreen().catch(function () {});
+        }
+        function ocultar() {
+            clearInterval(fitTimer);
+            if (document.fullscreenElement) { document.exitFullscreen().catch(function () {}); }
+            overlay.hidden = true;
+            document.body.classList.remove("modal-abierto");
+            frame.setAttribute("src", "about:blank");
+        }
+
+        frame.addEventListener("load", reajustar);
+        window.addEventListener("resize", function () { if (!overlay.hidden) ajustar(); });
+
+        document.querySelectorAll("[data-anim]").forEach(function (b) {
+            b.addEventListener("click", function () { abrir(b.dataset.anim); });
+        });
+        cerrar.addEventListener("click", ocultar);
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && !overlay.hidden) ocultar();
+        });
+        document.addEventListener("fullscreenchange", function () {
+            if (!document.fullscreenElement && !overlay.hidden) ocultar();
+            else if (!overlay.hidden) reajustar();   // al entrar a pantalla completa, reajusta
+        });
+    })();
+    </script>
+{% endblock %}

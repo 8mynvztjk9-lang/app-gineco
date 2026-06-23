@@ -1,0 +1,14 @@
+# Archivos que NO se deben guardar en el control de versiones.
+
+# Archivos temporales que genera Python
+__pycache__/
+*.pyc
+
+# El entorno virtual (se recrea con requirements.txt)
+.venv/
+
+# La base de datos local (se crea sola al arrancar; no debe ir al repo)
+*.db
+
+# Archivos del sistema de macOS
+.DS_Store

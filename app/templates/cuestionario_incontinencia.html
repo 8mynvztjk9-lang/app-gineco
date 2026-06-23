@@ -1,0 +1,440 @@
+<!--
+  cuestionario_incontinencia.html
+  -------------------------------
+  Cuestionario combinado de incontinencia / vejiga que rellena la PACIENTE:
+    · CACV — Cuestionario de Autoevaluación del Control de la Vejiga
+             (cribado de vejiga hiperactiva): síntomas 0-12 y molestia 0-12.
+             Versión española validada (Espuña-Pons et al., Actas Urol Esp 2006;
+             B-SAQ, Basra et al., Eur Urol 2007).
+    · ICIQ-IU-SF — gravedad e impacto de la incontinencia urinaria (0-21) + tipo.
+             Versión española validada (Espuña-Pons et al., Med Clin 2004).
+
+  Flujo pregunta a pregunta (mismo motor y estilo que el cuestionario POP).
+  Al terminar genera un informe combinado con interpretación y lo guarda en BD
+  asociado al NHC. Solo datos ficticios de prueba.
+-->
+{% extends "base.html" %}
+
+{% block contenido %}
+<div class="cpop-wrap">
+
+    <!-- ============ Pantalla 1: datos de la paciente ============ -->
+    <div class="cpop-card" id="cpop-intro">
+        <h1>Cuestionario de vejiga e incontinencia</h1>
+        <p class="cpop-muted">
+            Une dos cuestionarios breves (CACV e ICIQ-IU-SF). Al finalizar se genera
+            un informe que tu profesional podrá consultar con tu NHC.
+        </p>
+
+        <div class="cpop-grid">
+            <label class="cpop-field">NHC (Nº de Historia Clínica)
+                <input type="text" id="nhc" placeholder="Ej.: NHC-0001" autocomplete="off">
+            </label>
+            <label class="cpop-field">Nombre y apellidos
+                <input type="text" id="nombre" autocomplete="off">
+            </label>
+            <label class="cpop-field">Fecha
+                <input type="date" id="fecha">
+            </label>
+        </div>
+        <p class="cpop-error" id="cpop-error-datos" hidden>Introduce al menos el NHC para continuar.</p>
+
+        <div class="cpop-info">
+            <h3>Información para la paciente</h3>
+            <p>Estas preguntas valoran cómo funciona tu vejiga y cómo te afectan los
+               escapes de orina. Piensa en <strong>las últimas 4 semanas</strong>.</p>
+            <p class="cpop-muted">No hay respuestas correctas o incorrectas.
+               Responde según tu experiencia. Puedes saltar cualquier pregunta.</p>
+        </div>
+
+        <div class="cpop-actions">
+            <button type="button" class="boton" id="cpop-start">Comenzar</button>
+        </div>
+    </div>
+
+    <!-- ============ Pantalla 2: preguntas ============ -->
+    <div class="cpop-card cpop-hidden" id="cpop-question">
+        <div class="cpop-progress-wrap">
+            <div class="cpop-progress"><div class="cpop-progress-bar" id="cpop-bar"></div></div>
+            <div class="cpop-progress-text" id="cpop-progress-text"></div>
+        </div>
+
+        <div class="cpop-pill" id="cpop-pill"></div>
+
+        <div class="cpop-question">
+            <div class="cpop-qtitle" id="cpop-qtitle"></div>
+            <div class="cpop-qsub cpop-muted" id="cpop-qsub"></div>
+            <div class="cpop-scale" id="cpop-scale"></div>
+            <div class="cpop-options" id="cpop-options"></div>
+            <button type="button" class="boton cpop-multi-cont cpop-hidden" id="cpop-multi-cont">Continuar →</button>
+        </div>
+
+        <div class="cpop-actions cpop-actions--nav">
+            <button type="button" class="boton boton--sec" id="cpop-back">← Volver atrás</button>
+            <button type="button" class="boton boton--sec" id="cpop-skip">Saltar →</button>
+        </div>
+    </div>
+
+    <!-- ============ Pantalla 3: informe ============ -->
+    <div class="cpop-card cpop-hidden" id="cpop-reportcard">
+        <h2>Resumen para historia clínica</h2>
+        <p class="cpop-saved" id="cpop-saved" hidden>✓ Cuestionario guardado. Tu profesional podrá verlo buscando tu NHC.</p>
+        <p class="cpop-error" id="cpop-save-error" hidden>No se pudo guardar en el servidor. Puedes copiar el informe manualmente.</p>
+        <pre class="cpop-report" id="cpop-report"></pre>
+        <div class="cpop-actions">
+            <button type="button" class="boton boton--sec" id="cpop-restart">Volver a empezar</button>
+            <button type="button" class="boton boton--sec" id="cpop-copy">📑 Copiar informe</button>
+            <button type="button" class="boton" id="cpop-email">✉️ Enviar por email</button>
+        </div>
+        <p class="cpop-copiado" id="cpop-copiado" hidden>✓ Copiado al portapapeles</p>
+    </div>
+
+</div>
+
+<script>
+(function () {
+    "use strict";
+
+    // ----- Opciones reutilizables del CACV (escala 0-3) -----
+    const CACV_OPTS = [["0","En absoluto"],["1","Un poco"],["2","Bastante"],["3","Mucho"]];
+    const CACV_SCALE = "En absoluto (0) · Un poco (1) · Bastante (2) · Mucho (3)";
+
+    // ----- Definición del cuestionario (CACV + ICIQ-IU-SF) -----
+    const FLOW = [
+        // ---- CACV: 4 síntomas, cada uno con su "molestia" ----
+        {id:"CACV_1_sint", section:"CACV", subtitle:"Síntoma", scaleText:CACV_SCALE,
+         title:"1. ¿Le resulta difícil retener la orina cuando siente la necesidad urgente de orinar?", options:CACV_OPTS},
+        {id:"CACV_1_mol",  section:"CACV", subtitle:"¿Cuánto le molesta?", scaleText:CACV_SCALE,
+         title:"1. Esa dificultad para retener la orina, ¿en qué medida le molesta?", options:CACV_OPTS},
+
+        {id:"CACV_2_sint", section:"CACV", subtitle:"Síntoma", scaleText:CACV_SCALE,
+         title:"2. ¿Necesita ir al lavabo con demasiada frecuencia durante el día?", options:CACV_OPTS},
+        {id:"CACV_2_mol",  section:"CACV", subtitle:"¿Cuánto le molesta?", scaleText:CACV_SCALE,
+         title:"2. Ir al lavabo con demasiada frecuencia durante el día, ¿en qué medida le molesta?", options:CACV_OPTS},
+
+        {id:"CACV_3_sint", section:"CACV", subtitle:"Síntoma", scaleText:CACV_SCALE,
+         title:"3. ¿Se despierta por la noche con la necesidad urgente de orinar?", options:CACV_OPTS},
+        {id:"CACV_3_mol",  section:"CACV", subtitle:"¿Cuánto le molesta?", scaleText:CACV_SCALE,
+         title:"3. Despertarse por la noche con necesidad de orinar, ¿en qué medida le molesta?", options:CACV_OPTS},
+
+        {id:"CACV_4_sint", section:"CACV", subtitle:"Síntoma", scaleText:CACV_SCALE,
+         title:"4. ¿Tiene pérdidas de orina?", options:CACV_OPTS},
+        {id:"CACV_4_mol",  section:"CACV", subtitle:"¿Cuánto le molesta?", scaleText:CACV_SCALE,
+         title:"4. Esas pérdidas de orina, ¿en qué medida le molestan?", options:CACV_OPTS},
+
+        // ---- ICIQ-IU-SF ----
+        {id:"ICIQ_3", section:"ICIQ-IU-SF", subtitle:"Frecuencia", scaleText:"",
+         title:"¿Con qué frecuencia pierde orina?",
+         options:[["0","Nunca"],["1","Una vez a la semana o menos"],["2","Dos o tres veces a la semana"],
+                  ["3","Una vez al día"],["4","Varias veces al día"],["5","Continuamente"]]},
+        {id:"ICIQ_4", section:"ICIQ-IU-SF", subtitle:"Cantidad", scaleText:"Piense en la cantidad habitual, lleve o no protección.",
+         title:"¿Qué cantidad de orina cree que se le escapa habitualmente?",
+         options:[["0","No se me escapa nada"],["2","Muy poca cantidad"],["4","Una cantidad moderada"],["6","Mucha cantidad"]]},
+        {id:"ICIQ_5", section:"ICIQ-IU-SF", subtitle:"Impacto en la vida diaria", scaleText:"0 = no me afectan nada · 10 = me afectan mucho",
+         title:"¿Cuánto afectan estos escapes de orina a su vida diaria?",
+         options:[["0","0"],["1","1"],["2","2"],["3","3"],["4","4"],["5","5"],["6","6"],["7","7"],["8","8"],["9","9"],["10","10"]]},
+        {id:"ICIQ_6", section:"ICIQ-IU-SF", subtitle:"¿Cuándo pierde orina?", type:"multi",
+         scaleText:"Marque TODO lo que le ocurra y pulse «Continuar».",
+         title:"¿Cuándo pierde orina?",
+         options:[["nunca","Nunca pierde orina"],["antes_wc","Antes de llegar al WC"],
+                  ["tos","Cuando tose o estornuda"],["dormir","Mientras duerme"],
+                  ["esfuerzo","Al hacer esfuerzos físicos / ejercicio"],
+                  ["postmiccional","Al acabar de orinar y ya vestida"],
+                  ["sin_motivo","Sin un motivo evidente"],["continua","De forma continua"]]}
+    ];
+
+    // ----- Estado -----
+    let answers = {};
+    let current = -1;
+    const historyStack = [];
+    let scores = {};
+
+    const $ = (id) => document.getElementById(id);
+
+    // ----- Navegación -----
+    function nextIndex(from) { return (from + 1 < FLOW.length) ? from + 1 : -1; }
+    function currentPosition() { return current + 1; }
+
+    function renderQuestion() {
+        if (current === -1) current = nextIndex(-1);
+        if (current === -1) { finish(); return; }
+
+        const item = FLOW[current];
+        $("cpop-pill").textContent = item.section;
+        $("cpop-qtitle").textContent = item.title;
+        $("cpop-qsub").textContent = item.subtitle || "";
+        $("cpop-scale").textContent = item.scaleText || "";
+
+        const box = $("cpop-options");
+        box.innerHTML = "";
+        const multiCont = $("cpop-multi-cont");
+
+        if (item.type === "multi") {
+            // Selección múltiple: alterna opciones, confirma con "Continuar".
+            const sel = new Set(answers[item.id] || []);
+            item.options.forEach(opt => {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "cpop-opt cpop-opt--multi";
+                if (sel.has(opt[0])) btn.classList.add("cpop-opt--sel");
+                btn.textContent = opt[1];
+                btn.onclick = () => {
+                    // "Nunca pierde orina" es excluyente
+                    if (opt[0] === "nunca") { sel.clear(); sel.add("nunca"); }
+                    else { sel.delete("nunca"); sel.has(opt[0]) ? sel.delete(opt[0]) : sel.add(opt[0]); }
+                    answers[item.id] = [...sel];
+                    renderQuestion();
+                };
+                box.appendChild(btn);
+            });
+            multiCont.classList.remove("cpop-hidden");
+            multiCont.onclick = () => {
+                historyStack.push(current);
+                current = nextIndex(current);
+                if (current === -1) finish(); else renderQuestion();
+            };
+        } else {
+            multiCont.classList.add("cpop-hidden");
+            item.options.forEach(opt => {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "cpop-opt";
+                if (answers[item.id] === opt[0]) btn.classList.add("cpop-opt--sel");
+                btn.textContent = opt[1];
+                btn.onclick = () => {
+                    answers[item.id] = opt[0];
+                    historyStack.push(current);
+                    current = nextIndex(current);
+                    if (current === -1) finish(); else renderQuestion();
+                };
+                box.appendChild(btn);
+            });
+        }
+
+        const total = FLOW.length;
+        $("cpop-progress-text").textContent = currentPosition() + " / " + total;
+        $("cpop-bar").style.width = (current / total * 100) + "%";
+        $("cpop-back").disabled = historyStack.length === 0;
+    }
+
+    function skipQuestion() {
+        if (current === -1) return;
+        delete answers[FLOW[current].id];
+        historyStack.push(current);
+        current = nextIndex(current);
+        if (current === -1) finish(); else renderQuestion();
+    }
+    function goBack() {
+        if (!historyStack.length) return;
+        current = historyStack.pop();
+        renderQuestion();
+    }
+
+    // ----- Utilidades -----
+    function val(name) { return answers[name] || ""; }
+    function num(name) { const v = answers[name]; return v === undefined || v === "" ? null : Number(v); }
+
+    function bandaCACV(x) {
+        if (x === 0) return "sin molestias";
+        if (x <= 3)  return "leve";
+        if (x <= 6)  return "moderado";
+        if (x <= 9)  return "importante";
+        return "grave";
+    }
+    function gravedadICIQ(t) {
+        if (t === 0) return "sin incontinencia";
+        if (t <= 5)  return "leve";
+        if (t <= 12) return "moderada";
+        if (t <= 18) return "grave";
+        return "muy grave";
+    }
+    const TXT_Q3 = {0:"Nunca",1:"Una vez a la semana o menos",2:"Dos o tres veces a la semana",
+                    3:"Una vez al día",4:"Varias veces al día",5:"Continuamente"};
+    const TXT_Q4 = {0:"No se le escapa nada",2:"Muy poca cantidad",4:"Una cantidad moderada",6:"Mucha cantidad"};
+
+    function clasificarTipo(set) {
+        if (!set || !set.length || set.includes("nunca")) return {tipo:"sin pérdidas referidas", notas:[]};
+        const esf = set.includes("tos") || set.includes("esfuerzo");
+        const urg = set.includes("antes_wc") || set.includes("sin_motivo");
+        const notas = [];
+        if (set.includes("dormir")) notas.push("escapes durante el sueño (posible enuresis nocturna)");
+        if (set.includes("postmiccional")) notas.push("goteo postmiccional");
+        let tipo;
+        if (set.includes("continua")) tipo = "continua (posible causa extrauretral/fístula a descartar)";
+        else if (esf && urg) tipo = "mixta (esfuerzo + urgencia)";
+        else if (esf) tipo = "de esfuerzo";
+        else if (urg) tipo = "de urgencia";
+        else tipo = "no clasificable con los datos marcados";
+        return {tipo, notas};
+    }
+
+    // ----- Generar informe -----
+    function finish() {
+        $("cpop-question").classList.add("cpop-hidden");
+        $("cpop-reportcard").classList.remove("cpop-hidden");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        // CACV: síntomas (sint) y molestia (mol), 0-12 cada una
+        let cacvSint = 0, cacvMol = 0, cacvSintN = 0, cacvMolN = 0;
+        for (let i = 1; i <= 4; i++) {
+            const s = num("CACV_" + i + "_sint"), m = num("CACV_" + i + "_mol");
+            if (s != null) { cacvSint += s; cacvSintN++; }
+            if (m != null) { cacvMol += m; cacvMolN++; }
+        }
+        const cacvSintOK = cacvSintN === 4, cacvMolOK = cacvMolN === 4;
+
+        // ICIQ: Q3+Q4+Q5 (0-21)
+        const q3 = num("ICIQ_3"), q4 = num("ICIQ_4"), q5 = num("ICIQ_5");
+        const iciqOK = (q3 != null && q4 != null && q5 != null);
+        const iciqTotal = iciqOK ? (q3 + q4 + q5) : null;
+        const tipoInfo = clasificarTipo(answers["ICIQ_6"]);
+
+        scores = {
+            cacv_sintomas: cacvSintOK ? cacvSint : null,
+            cacv_molestia: cacvMolOK ? cacvMol : null,
+            iciq_total: iciqTotal,
+            iciq_tipo: tipoInfo.tipo
+        };
+
+        // --- Interpretación clínica integrada ---
+        const interp = [];
+        const obAlta = cacvSintOK && cacvSint >= 4;
+        if (iciqTotal != null && iciqTotal > 0) {
+            let frase = "Incontinencia urinaria " + gravedadICIQ(iciqTotal) + " (ICIQ " + iciqTotal + "/21)";
+            if (tipoInfo.tipo && tipoInfo.tipo !== "sin pérdidas referidas") frase += ", de patrón " + tipoInfo.tipo;
+            frase += ".";
+            interp.push(frase);
+        } else if (iciqOK) {
+            interp.push("Sin incontinencia urinaria referida en el ICIQ-IU-SF.");
+        }
+        if (obAlta) {
+            interp.push("Síntomas de vejiga sugestivos de vejiga hiperactiva (CACV síntomas " + cacvSint + "/12, ≥4), con molestia "
+                + (cacvMolOK ? bandaCACV(cacvMol) + " (" + cacvMol + "/12)" : "no valorada") + ".");
+        } else if (cacvSintOK) {
+            interp.push("CACV de síntomas bajo (" + cacvSint + "/12), sin cribado positivo de vejiga hiperactiva.");
+        }
+        tipoInfo.notas.forEach(n => interp.push("Hallazgo añadido: " + n + "."));
+
+        // Sugerencia orientativa según gravedad
+        let sug = "Correlacionar con el diario miccional y la exploración del suelo pélvico.";
+        if (iciqTotal != null) {
+            if (iciqTotal >= 13) sug = "Gravedad alta: se sugiere valoración uroginecológica prioritaria. " + sug;
+            else if (iciqTotal >= 6) sug = "Se sugiere valoración especializada y rehabilitación del suelo pélvico. " + sug;
+            else if (iciqTotal >= 1) sug = "Se sugieren medidas conservadoras y entrenamiento del suelo pélvico. " + sug;
+        }
+        if (!interp.length) interp.push("Datos insuficientes para una interpretación (cuestionario incompleto).");
+
+        // Datos de cabecera
+        const nombre = $("nombre").value.trim() || "No consta";
+        const nhc = $("nhc").value.trim() || "No consta";
+        const fecha = $("fecha").value || "No consta";
+
+        const lines = [
+            "RESUMEN PARA HISTORIA CLÍNICA — VEJIGA E INCONTINENCIA",
+            "NHC: " + nhc,
+            "Paciente: " + nombre,
+            "Fecha: " + fecha,
+            "",
+            "CACV — Autoevaluación del control de la vejiga (cribado de vejiga hiperactiva)",
+            "- Puntuación de síntomas: " + (cacvSintOK ? cacvSint + "/12 (" + bandaCACV(cacvSint) + ")" : "incompleto"),
+            "- Puntuación de molestia: " + (cacvMolOK ? cacvMol + "/12 (" + bandaCACV(cacvMol) + ")" : "incompleto"),
+            "- Cribado: " + (cacvSintOK
+                ? (cacvSint >= 4 ? "síntomas ≥4 → sugiere disfunción del tracto urinario inferior / vejiga hiperactiva."
+                                 : "síntomas <4 → cribado negativo.")
+                  + (cacvMolOK && cacvMol >= 1 ? " Molestia ≥1 → puede beneficiarse de consulta." : "")
+                : "no valorable."),
+            "",
+            "ICIQ-IU-SF — gravedad e impacto de la incontinencia urinaria",
+            "- Frecuencia de los escapes: " + (q3 != null ? TXT_Q3[q3] : "no consta"),
+            "- Cantidad que se escapa: " + (q4 != null ? TXT_Q4[q4] : "no consta"),
+            "- Impacto en la vida diaria: " + (q5 != null ? q5 + "/10" : "no consta"),
+            "- Puntuación ICIQ: " + (iciqTotal != null ? iciqTotal + "/21 (gravedad " + gravedadICIQ(iciqTotal) + ")" : "incompleto"),
+            "- Tipo de pérdida referido: " + tipoInfo.tipo,
+            "",
+            "INTERPRETACIÓN CLÍNICA:",
+            ...interp.map(s => "- " + s),
+            "- Sugerencia orientativa: " + sug
+        ];
+        $("cpop-report").textContent = lines.join("\n");
+
+        guardarEnServidor();
+    }
+
+    // ----- Guardado -----
+    function guardarEnServidor() {
+        const datos = new FormData();
+        datos.append("nhc", $("nhc").value.trim());
+        datos.append("nombre", $("nombre").value.trim());
+        datos.append("fecha", $("fecha").value);
+        datos.append("informe", $("cpop-report").textContent);
+        datos.append("respuestas_json", JSON.stringify(answers));
+        if (scores.cacv_sintomas != null) datos.append("cacv_sintomas", scores.cacv_sintomas);
+        if (scores.cacv_molestia != null) datos.append("cacv_molestia", scores.cacv_molestia);
+        if (scores.iciq_total != null) datos.append("iciq_total", scores.iciq_total);
+        if (scores.iciq_tipo) datos.append("iciq_tipo", scores.iciq_tipo);
+
+        fetch("/cuestionario-incontinencia", { method: "POST", body: datos })
+            .then(r => r.json())
+            .then(res => {
+                if (res && res.ok) { $("cpop-saved").hidden = false; $("cpop-save-error").hidden = true; }
+                else { $("cpop-save-error").hidden = false; }
+            })
+            .catch(() => { $("cpop-save-error").hidden = false; });
+    }
+
+    // ----- Acciones del informe -----
+    function copiar() {
+        const txt = $("cpop-report").textContent;
+        const ok = () => { $("cpop-copiado").hidden = false; setTimeout(() => { $("cpop-copiado").hidden = true; }, 2500); };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(txt).then(ok, () => fallback(txt, ok));
+        } else { fallback(txt, ok); }
+    }
+    function fallback(txt, ok) {
+        const ta = document.createElement("textarea");
+        ta.value = txt; document.body.appendChild(ta); ta.select();
+        try { document.execCommand("copy"); ok(); } catch (e) {}
+        document.body.removeChild(ta);
+    }
+    function enviarEmail() {
+        const texto = $("cpop-report").textContent;
+        if (!texto.trim()) return;
+        const email = prompt("Introduce el email de destino:");
+        if (!email) return;
+        window.location.href = "mailto:" + email
+            + "?subject=" + encodeURIComponent("Informe cuestionario de incontinencia")
+            + "&body=" + encodeURIComponent(texto);
+    }
+    function resetAll() {
+        answers = {}; historyStack.length = 0; current = -1; scores = {};
+        $("cpop-reportcard").classList.add("cpop-hidden");
+        $("cpop-question").classList.add("cpop-hidden");
+        $("cpop-intro").classList.remove("cpop-hidden");
+        $("cpop-saved").hidden = true; $("cpop-save-error").hidden = true;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // ----- Conexión de botones -----
+    $("cpop-start").onclick = () => {
+        if (!$("nhc").value.trim()) {
+            $("cpop-error-datos").hidden = false;
+            $("nhc").scrollIntoView({ behavior: "smooth", block: "center" });
+            $("nhc").focus({ preventScroll: true });
+            $("nhc").classList.add("cpop-resaltado");
+            setTimeout(() => $("nhc").classList.remove("cpop-resaltado"), 1600);
+            return;
+        }
+        $("cpop-error-datos").hidden = true;
+        historyStack.length = 0; current = -1;
+        $("cpop-intro").classList.add("cpop-hidden");
+        $("cpop-question").classList.remove("cpop-hidden");
+        renderQuestion();
+    };
+    $("cpop-back").onclick = goBack;
+    $("cpop-skip").onclick = skipQuestion;
+    $("cpop-restart").onclick = resetAll;
+    $("cpop-copy").onclick = copiar;
+    $("cpop-email").onclick = enviarEmail;
+})();
+</script>
+{% endblock %}

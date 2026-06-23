@@ -1,0 +1,223 @@
+<!--
+  dashboard.html
+  --------------
+  Panel privado del profesional. Muestra:
+   - un banner con el algoritmo de incontinencia urinaria (ayuda diagnóstica),
+   - un buscador por NHC que recupera los cuestionarios y el diario de la paciente.
+-->
+{% extends "base.html" %}
+
+{% block contenido %}
+    <div class="cabecera-panel">
+        <h1>Panel del profesional</h1>
+        <p>Sesión iniciada como: <strong>{{ usuario.nombre }}</strong>
+           · <a href="/logout">Cerrar sesión</a></p>
+    </div>
+
+    <!-- ================================================================
+         Banner: algoritmo de ayuda diagnóstica (incontinencia urinaria)
+         ================================================================ -->
+    <div class="panel-banners">
+        <a class="algoritmo-banner" href="/panel/algoritmo-iu">
+            <span class="algoritmo-banner-ico" aria-hidden="true">🧭</span>
+            <span class="algoritmo-banner-txt">
+                <strong>Algoritmo de incontinencia urinaria en la mujer</strong>
+                <small>Ayuda al diagnóstico y manejo en consulta · Primaria y ginecología general</small>
+            </span>
+            <span class="algoritmo-banner-flecha" aria-hidden="true">→</span>
+        </a>
+
+        <!-- Banner: calculadora POP-Q (cuantificación del prolapso) -->
+        <a class="algoritmo-banner algoritmo-banner--popq" href="/panel/popq">
+            <span class="algoritmo-banner-ico" aria-hidden="true">📐</span>
+            <span class="algoritmo-banner-txt">
+                <strong>Calculadora POP-Q · cuantificación del prolapso</strong>
+                <small>Calcula el estadio (0–IV) y regístralo por NHC para seguir la evolución</small>
+            </span>
+            <span class="algoritmo-banner-flecha" aria-hidden="true">→</span>
+        </a>
+    </div>
+
+    <!-- ================================================================
+         Cuestionario POP: enlace para la paciente + buscador por NHC
+         ================================================================ -->
+    <section class="cpop-buscador">
+        <h2>📋 Cuestionarios y diario de la paciente</h2>
+        <p class="ayuda">
+            La paciente rellena, indicando su NHC, el
+            <a href="/cuestionario-pop" target="_blank" rel="noopener"><code>cuestionario POP</code></a>,
+            el <a href="/cuestionario-incontinencia" target="_blank" rel="noopener"><code>de incontinencia</code></a>
+            o envía su <a href="/suelo-pelvico/diario" target="_blank" rel="noopener"><code>diario miccional</code></a>.
+            Aquí lo recuperas buscando por NHC o por nombre y apellidos.
+        </p>
+
+        <form method="get" action="/panel">
+            <label>Buscar por NHC o nombre
+                <input type="text" name="nhc" value="{{ nhc_buscado or '' }}"
+                       placeholder="Ej.: NHC-0001 · o «García Ana»" autocomplete="off">
+            </label>
+            <button type="submit" class="boton">Buscar</button>
+        </form>
+
+        {% if nhc_buscado %}
+            {% if resumen_integrado %}
+                <article class="cpop-resultado cpop-resultado--destacado">
+                    <div class="cpop-resultado-cab">
+                        <strong>🧩 Resumen integrado</strong>
+                        <span class="cpop-fecha">síntesis de todo lo registrado para {{ nhc_buscado }}</span>
+                    </div>
+                    <pre>{{ resumen_integrado }}</pre>
+                </article>
+            {% else %}
+                <p class="cpop-vacio" style="margin-top:0.9rem;">
+                    No hay nada guardado para el NHC «{{ nhc_buscado }}».
+                </p>
+            {% endif %}
+
+            {% if evolucion %}
+                <article class="cpop-resultado cpop-evolucion">
+                    <div class="cpop-resultado-cab">
+                        <strong>📈 Evolución en el tiempo</strong>
+                        <span class="cpop-fecha">comparación de los cuestionarios repetidos</span>
+                    </div>
+                    {% for b in evolucion %}
+                        <h4 class="cpop-evo-titulo">{{ b.titulo }}</h4>
+                        <div class="cpop-evo-scroll">
+                            <table class="cpop-evo-tabla">
+                                <thead>
+                                    <tr>
+                                        <th>Indicador</th>
+                                        {% for p in b.filas[0].puntos %}<th>{{ p.fecha }}</th>{% endfor %}
+                                        <th>Tendencia</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for f in b.filas %}
+                                        <tr>
+                                            <td class="cpop-evo-ind">{{ f.etiqueta }}</td>
+                                            {% for p in f.puntos %}<td>{{ p.valor }}</td>{% endfor %}
+                                            <td><span class="cpop-evo-badge cpop-evo--{{ f.clase }}">{{ f.tendencia }}</span></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endfor %}
+                    <p class="cpop-evo-nota">Tendencia: compara el registro más antiguo con el más reciente. Verde = mejora · rojo = empeora.</p>
+                </article>
+            {% endif %}
+
+            {% if cuestionarios %}
+                <h3 class="cpop-grupo">Cuestionario POP (prolapso / suelo pélvico)</h3>
+                {% for c in cuestionarios %}
+                    <article class="cpop-resultado">
+                        <div class="cpop-resultado-cab">
+                            <strong>{{ c.nombre }} {{ c.apellidos }}</strong>
+                            <span class="cpop-fecha">
+                                {{ c.fecha or c.creado_en.strftime("%d/%m/%Y") }} ·
+                                recibido {{ c.creado_en.strftime("%d/%m/%Y %H:%M") }}
+                            </span>
+                        </div>
+                        <div class="cpop-chips">
+                            {% if c.pfdi_total %}<span class="cpop-chip">PFDI-20: {{ c.pfdi_total }}/300</span>{% endif %}
+                            {% if c.pfiq_total %}<span class="cpop-chip">PFIQ-7: {{ c.pfiq_total }}/300</span>{% endif %}
+                        </div>
+                        <pre>{{ c.informe }}</pre>
+                    </article>
+                {% endfor %}
+            {% endif %}
+
+            {% if valoraciones_popq %}
+                {% set romano = {"0": "0", "1": "I", "2": "II", "3": "III", "4": "IV"} %}
+                <h3 class="cpop-grupo">POP-Q · cuantificación del prolapso</h3>
+                {% for v in valoraciones_popq %}
+                    <article class="cpop-resultado">
+                        <div class="cpop-resultado-cab">
+                            <strong>{{ v.nombre or "Valoración POP-Q" }}</strong>
+                            <span class="cpop-fecha">
+                                {{ v.momento }} ·
+                                {{ v.fecha or v.creado_en.strftime("%d/%m/%Y") }} ·
+                                registrada {{ v.creado_en.strftime("%d/%m/%Y %H:%M") }}
+                            </span>
+                        </div>
+                        <div class="cpop-chips">
+                            {% if v.estadio is not none %}<span class="cpop-chip cpop-chip--popq">Estadio {{ romano.get(v.estadio, v.estadio) }}</span>{% endif %}
+                            {% if v.borde %}<span class="cpop-chip">Punto más distal: {{ v.borde }} cm</span>{% endif %}
+                            {% if v.con_utero %}<span class="cpop-chip">{{ "Con útero" if v.con_utero == "si" else "Sin útero" }}</span>{% endif %}
+                        </div>
+                        <pre>{{ v.informe }}</pre>
+                    </article>
+                {% endfor %}
+            {% endif %}
+
+            {% if incontinencias %}
+                <h3 class="cpop-grupo">Vejiga e incontinencia (CACV · ICIQ-IU-SF)</h3>
+                {% for c in incontinencias %}
+                    <article class="cpop-resultado">
+                        <div class="cpop-resultado-cab">
+                            <strong>{{ c.nombre }} {{ c.apellidos }}</strong>
+                            <span class="cpop-fecha">
+                                {{ c.fecha or c.creado_en.strftime("%d/%m/%Y") }} ·
+                                recibido {{ c.creado_en.strftime("%d/%m/%Y %H:%M") }}
+                            </span>
+                        </div>
+                        <div class="cpop-chips">
+                            {% if c.cacv_sintomas %}<span class="cpop-chip">CACV sínt.: {{ c.cacv_sintomas }}/12</span>{% endif %}
+                            {% if c.cacv_molestia %}<span class="cpop-chip">CACV mol.: {{ c.cacv_molestia }}/12</span>{% endif %}
+                            {% if c.iciq_total %}<span class="cpop-chip">ICIQ: {{ c.iciq_total }}/21</span>{% endif %}
+                        </div>
+                        <pre>{{ c.informe }}</pre>
+                    </article>
+                {% endfor %}
+            {% endif %}
+
+            {% if diarios %}
+                <h3 class="cpop-grupo">Diario miccional</h3>
+                {% for d in diarios %}
+                    <article class="cpop-resultado">
+                        <div class="cpop-resultado-cab">
+                            <strong>{{ d.nombre or "Diario" }}</strong>
+                            <span class="cpop-fecha">recibido {{ d.creado_en.strftime("%d/%m/%Y %H:%M") }}</span>
+                        </div>
+                        <pre>{{ d.informe }}</pre>
+                    </article>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+    </section>
+
+    <script>
+    // ===== Botón "Copiar" en cada informe del profesional =====
+    (function () {
+        document.querySelectorAll(".cpop-resultado").forEach(function (art) {
+            const pre = art.querySelector("pre");
+            if (!pre) return;  // p. ej. el bloque de evolución (tabla) no se copia
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "cpop-copy-btn";
+            btn.innerHTML = "📋 Copiar";
+            btn.addEventListener("click", function () {
+                const txt = pre.textContent;
+                const ok = function () {
+                    btn.innerHTML = "✓ Copiado";
+                    btn.classList.add("cpop-copy-btn--ok");
+                    setTimeout(function () {
+                        btn.innerHTML = "📋 Copiar";
+                        btn.classList.remove("cpop-copy-btn--ok");
+                    }, 1800);
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(txt).then(ok, function () { fallback(txt, ok); });
+                } else { fallback(txt, ok); }
+            });
+            art.appendChild(btn);
+        });
+        function fallback(txt, ok) {
+            const ta = document.createElement("textarea");
+            ta.value = txt; document.body.appendChild(ta); ta.select();
+            try { document.execCommand("copy"); ok(); } catch (e) {}
+            document.body.removeChild(ta);
+        }
+    })();
+    </script>
+{% endblock %}
