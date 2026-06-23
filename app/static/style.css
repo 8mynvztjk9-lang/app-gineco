@@ -809,6 +809,39 @@ p.nota-pie {
 }
 
 /* ============================================================
+   LOGO que aparece donde estaban las cifras (al desaparecer ~21 s)
+   + BANNER de ejercicios al final de la portada.
+   ============================================================ */
+/* El logo sustituto solo se muestra en móvil (donde las cifras dejan un hueco
+   claro al desaparecer). En escritorio el contenido llena el centro y un logo
+   se solaparía, así que ahí se mantiene oculto. */
+.portada-logo-rev { display: none; }
+
+/* Banner de ejercicios, empujado al final de la portada */
+.portada-ejer-banner {
+    margin-top: auto; align-self: center;
+    width: 100%; max-width: 680px;
+    position: relative; z-index: 3;
+}
+
+/* En móvil/tablet: el logo va en el flujo (centrado, tras las cifras) y el
+   banner queda al final, ambos visibles sin esperar la animación. */
+@media (max-width: 900px) {
+    .portada-logo-rev {
+        display: block !important;
+        position: static; transform: none;
+        margin: 0.4rem auto 0.2rem; width: clamp(140px, 42vw, 200px);
+        opacity: 0.9; animation: none;
+    }
+    .portada-ejer-banner { margin-top: 1rem; }
+}
+/* En móvil, al desvanecerse las cifras COLAPSAN su espacio (no dejan hueco). */
+@media (max-width: 900px) and (prefers-reduced-motion: no-preference) {
+    .cifras-pins { animation: cifrasColapsa 0.6s ease 20.5s both; overflow: hidden; }
+    @keyframes cifrasColapsa { from { max-height: 800px; } to { max-height: 0; margin: 0; padding: 0; opacity: 0; } }
+}
+
+/* ============================================================
    BLOQUE DE CIFRAS CLAVE (adaptado a la paleta pastel)
    ============================================================ */
 .cifras { margin: 0.5rem 0 2.8rem; }
