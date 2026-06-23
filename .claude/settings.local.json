@@ -41,7 +41,10 @@
       "Bash(grep -oiE 'position:\\\\s*\\(absolute|fixed\\)[^\"]{0,80}' anim-incontinencia-urgencia.html)",
       "Bash(grep -oiE 'display:\\\\s*grid[^\"]{0,90}|grid-template-columns:[^\";]{0,80}|display:\\\\s*flex[^\"]{0,60}' simulador-kegel.html)",
       "Bash(grep -oE '.{120}🏃[^<]{0,10}' anim-incontinencia-urgencia.html)",
-      "Bash(grep -oE '<div[^>]*>[^<]*🏃[^<]*<[^>]*>[^<]{0,60}' anim-incontinencia-urgencia.html)"
+      "Bash(grep -oE '<div[^>]*>[^<]*🏃[^<]*<[^>]*>[^<]{0,60}' anim-incontinencia-urgencia.html)",
+      "Bash(python3 -)",
+      "Bash(.venv/bin/python -)",
+      "Bash(git commit -q -m 'Móvil: '\\\\''Estimula tu suelo pélvico'\\\\'' a 1 columna; popup urgencia reducido a solo emoji \\(clase urge-popup en las 3 animaciones\\) *)"
     ]
   }
 }

@@ -2578,6 +2578,9 @@ body.inicio main {
 .estim-eyebrow { display: block; font-style: italic; color: #9a93b8; font-size: 0.98rem; margin-bottom: 0.15rem; }
 #contenido-estimulacion .estim-cab h3 { margin: 0; }
 .estim-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; margin-top: 1.1rem; align-items: start; }
+/* En móvil/tablet "Estimula tu suelo pélvico" se apila (vertical), como urodinamia. */
+@media (max-width: 900px) { .estim-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .estim-grid { grid-template-columns: 1fr; } }
 .estim-card {
     background: #fff; border: 1px solid #ece8f7; border-top: 4px solid #c4b3ef;
     border-radius: 16px; padding: 1.1rem 1.2rem;
