@@ -817,23 +817,25 @@ p.nota-pie {
    se solaparía, así que ahí se mantiene oculto. */
 .portada-logo-rev { display: none; }
 
-/* Banner de ejercicios, empujado al final de la portada */
+/* Banner de ejercicios al final (SOLO MÓVIL; en escritorio se usa la isla). */
 .portada-ejer-banner {
+    display: none !important;   /* gana a .diag-ejer-banner (display:flex) en escritorio */
     margin-top: auto; align-self: center;
     width: 100%; max-width: 680px;
     position: relative; z-index: 3;
 }
 
-/* En móvil/tablet: el logo va en el flujo (centrado, tras las cifras) y el
-   banner queda al final, ambos visibles sin esperar la animación. */
+/* En móvil: la isla lateral se oculta; en su lugar van el logo (en el hueco de
+   las cifras) y el banner al final. */
 @media (max-width: 900px) {
+    .ejer-isla { display: none !important; }
     .portada-logo-rev {
         display: block !important;
         position: static; transform: none;
         margin: 0.4rem auto 0.2rem; width: clamp(140px, 42vw, 200px);
         opacity: 0.9; animation: none;
     }
-    .portada-ejer-banner { margin-top: 1rem; }
+    .portada-ejer-banner { display: flex !important; margin-top: 1rem; }
 }
 /* En móvil, al desvanecerse las cifras COLAPSAN su espacio (no dejan hueco). */
 @media (max-width: 900px) and (prefers-reduced-motion: no-preference) {

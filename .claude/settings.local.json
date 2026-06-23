@@ -45,7 +45,8 @@
       "Bash(python3 -)",
       "Bash(.venv/bin/python -)",
       "Bash(git commit -q -m 'Móvil: '\\\\''Estimula tu suelo pélvico'\\\\'' a 1 columna; popup urgencia reducido a solo emoji \\(clase urge-popup en las 3 animaciones\\) *)",
-      "Bash(git commit -q -m 'Portada móvil: logo en el hueco que dejan las cifras + banner de ejercicios al final *)"
+      "Bash(git commit -q -m 'Portada móvil: logo en el hueco que dejan las cifras + banner de ejercicios al final *)",
+      "Bash(git commit -q -m 'Portada: logo+banner solo en móvil; en escritorio se mantiene la isla de ejercicios como antes *)"
     ]
   }
 }
